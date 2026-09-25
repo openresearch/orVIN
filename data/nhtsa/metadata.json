@@ -1,0 +1,854 @@
+{
+  "version": "2026.09.25.2",
+  "source": {
+    "id": "nhtsa-vpic-2026-09",
+    "title": "NHTSA vPIC standalone database, September 2026",
+    "url": "https://vpic.nhtsa.dot.gov/downloads/vPICList_lite_2026_09.plain.zip",
+    "publisher": "NHTSA",
+    "retrievedOn": "2026-09-25",
+    "publicationVersion": "2026-09; published 2026-09-19",
+    "section": "WMI, manufacturer, wmi_make, make and vehicletype tables; full original database retained in snapshot.",
+    "reuse": {
+      "license": "LicenseRef-NHTSA-Public-Information",
+      "url": "https://www.nhtsa.gov/about-nhtsa/terms-use",
+      "basis": "NHTSA Ownership section permits copying and distribution of published information; upstream and third-party rights remain applicable."
+    },
+    "snapshot": "nhtsa/vPICList_lite_2026_09.plain.zip",
+    "sha256": "1ee4a1e22526a606b492ce4ab301894465afbf43dc00946df6d503c3102d5911"
+  },
+  "publicationDate": "2026-09-19",
+  "archiveBytes": 76201016,
+  "tables": {
+    "abs": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 3
+    },
+    "adaptivecruisecontrol": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 3
+    },
+    "adaptivedrivingbeam": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 3
+    },
+    "airbaglocations": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 6
+    },
+    "airbaglocfront": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 2
+    },
+    "airbaglocknee": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 3
+    },
+    "autobrake": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 3
+    },
+    "automaticpedestrainalertingsound": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 3
+    },
+    "autoreversesystem": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 3
+    },
+    "axleconfiguration": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 5
+    },
+    "batterytype": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 9
+    },
+    "bedtype": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 4
+    },
+    "blindspotintervention": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 3
+    },
+    "blindspotmonitoring": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 3
+    },
+    "bodycab": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 12
+    },
+    "bodystyle": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 71
+    },
+    "brakesystem": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 5
+    },
+    "busfloorconfigtype": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 4
+    },
+    "bustype": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 7
+    },
+    "can_aacn": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 3
+    },
+    "chargerlevel": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 3
+    },
+    "combinedbrakingsystem": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 3
+    },
+    "conversion": {
+      "columns": [
+        "id",
+        "fromelementid",
+        "toelementid",
+        "formula"
+      ],
+      "rowCount": 6
+    },
+    "coolingtype": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 2
+    },
+    "country": {
+      "columns": [
+        "id",
+        "name",
+        "displayorder"
+      ],
+      "rowCount": 199
+    },
+    "custommotorcycletype": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 21
+    },
+    "daytimerunninglight": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 3
+    },
+    "decodingoutput": {
+      "columns": [
+        "id",
+        "addedon",
+        "groupname",
+        "variable",
+        "value",
+        "keys",
+        "wmiid",
+        "patternid",
+        "vinschemaid",
+        "elementid",
+        "attributeid",
+        "createdon",
+        "code",
+        "datatype",
+        "decode",
+        "source"
+      ],
+      "rowCount": 0
+    },
+    "defaultvalue": {
+      "columns": [
+        "id",
+        "elementid",
+        "vehicletypeid",
+        "defaultvalue",
+        "createdon",
+        "updatedon"
+      ],
+      "rowCount": 186
+    },
+    "defs_body": {
+      "columns": [
+        "id",
+        "def",
+        "body_type",
+        "from_year",
+        "to_year",
+        "mode"
+      ],
+      "rowCount": 150
+    },
+    "defs_make": {
+      "columns": [
+        "id",
+        "def",
+        "ncic_code",
+        "make_type",
+        "from_year",
+        "to_year",
+        "mode"
+      ],
+      "rowCount": 110
+    },
+    "defs_model": {
+      "columns": [
+        "make",
+        "id",
+        "def",
+        "model_type",
+        "includes",
+        "from_year",
+        "to_year",
+        "mode"
+      ],
+      "rowCount": 2146
+    },
+    "destinationmarket": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 35
+    },
+    "drivetype": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 23
+    },
+    "dynamicbrakesupport": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 3
+    },
+    "ecs": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 3
+    },
+    "edr": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 3
+    },
+    "electrificationlevel": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 6
+    },
+    "element": {
+      "columns": [
+        "id",
+        "name",
+        "code",
+        "lookuptable",
+        "description",
+        "isprivate",
+        "groupname",
+        "datatype",
+        "minallowedvalue",
+        "maxallowedvalue",
+        "isqs",
+        "decode",
+        "weight"
+      ],
+      "rowCount": 160
+    },
+    "engineconfiguration": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 5
+    },
+    "enginemodel": {
+      "columns": [
+        "id",
+        "name",
+        "description"
+      ],
+      "rowCount": 346
+    },
+    "enginemodelpattern": {
+      "columns": [
+        "id",
+        "enginemodelid",
+        "elementid",
+        "attributeid",
+        "createdon",
+        "updatedon"
+      ],
+      "rowCount": 2510
+    },
+    "entertainmentsystem": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 2
+    },
+    "errorcode": {
+      "columns": [
+        "id",
+        "name",
+        "additionalerrortext",
+        "weight"
+      ],
+      "rowCount": 15
+    },
+    "evdriveunit": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 4
+    },
+    "forwardcollisionwarning": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 3
+    },
+    "fueldeliverytype": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 9
+    },
+    "fueltankmaterial": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 6
+    },
+    "fueltanktype": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 4
+    },
+    "fueltype": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 14
+    },
+    "grossvehicleweightrating": {
+      "columns": [
+        "id",
+        "name",
+        "sortorder",
+        "minrangeweight",
+        "maxrangeweight"
+      ],
+      "rowCount": 16
+    },
+    "keylessignition": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 3
+    },
+    "lanecenteringassistance": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 3
+    },
+    "lanedeparturewarning": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 3
+    },
+    "lanekeepsystem": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 3
+    },
+    "lowerbeamheadlamplightsource": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 16
+    },
+    "make": {
+      "columns": [
+        "id",
+        "name",
+        "createdon",
+        "updatedon"
+      ],
+      "rowCount": 12361
+    },
+    "make_model": {
+      "columns": [
+        "id",
+        "makeid",
+        "modelid",
+        "createdon",
+        "updatedon"
+      ],
+      "rowCount": 32009
+    },
+    "manufacturer": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 23003
+    },
+    "manufacturer_make": {
+      "columns": [
+        "id",
+        "manufacturerid",
+        "makeid"
+      ],
+      "rowCount": 13051
+    },
+    "model": {
+      "columns": [
+        "id",
+        "name",
+        "createdon",
+        "updatedon"
+      ],
+      "rowCount": 32009
+    },
+    "motorcyclechassistype": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 4
+    },
+    "motorcyclesuspensiontype": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 4
+    },
+    "nonlanduse": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 3
+    },
+    "parkassist": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 3
+    },
+    "pattern": {
+      "columns": [
+        "id",
+        "vinschemaid",
+        "keys",
+        "elementid",
+        "attributeid",
+        "createdon",
+        "updatedon"
+      ],
+      "rowCount": 1678690
+    },
+    "pedestrianautomaticemergencybraking": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 3
+    },
+    "pretensioner": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 2
+    },
+    "rearautomaticemergencybraking": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 3
+    },
+    "rearcrosstrafficalert": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 3
+    },
+    "rearvisibilitycamera": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 3
+    },
+    "seatbeltsall": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 3
+    },
+    "semiautomaticheadlampbeamswitching": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 3
+    },
+    "steering": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 2
+    },
+    "tpms": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 2
+    },
+    "tractioncontrol": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 3
+    },
+    "trailerbodytype": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 29
+    },
+    "trailertype": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 9
+    },
+    "transmission": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 12
+    },
+    "turbo": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 2
+    },
+    "valvetraindesign": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 4
+    },
+    "vehiclespecpattern": {
+      "columns": [
+        "id",
+        "vspecschemapatternid",
+        "iskey",
+        "elementid",
+        "attributeid",
+        "createdon",
+        "updatedon"
+      ],
+      "rowCount": 226001
+    },
+    "vehiclespecschema": {
+      "columns": [
+        "id",
+        "makeid",
+        "createdon",
+        "updatedon",
+        "vehicletypeid",
+        "sourcedate",
+        "tobeqced"
+      ],
+      "rowCount": 6656
+    },
+    "vehiclespecschema_model": {
+      "columns": [
+        "id",
+        "vehiclespecschemaid",
+        "modelid"
+      ],
+      "rowCount": 7550
+    },
+    "vehiclespecschema_year": {
+      "columns": [
+        "id",
+        "vehiclespecschemaid",
+        "year"
+      ],
+      "rowCount": 12882
+    },
+    "vehicletype": {
+      "columns": [
+        "id",
+        "name",
+        "displayorder",
+        "formtype",
+        "description",
+        "includeinequipplant"
+      ],
+      "rowCount": 9
+    },
+    "vindescriptor": {
+      "columns": [
+        "id",
+        "descriptor",
+        "modelyear",
+        "createdon",
+        "updatedon"
+      ],
+      "rowCount": 69
+    },
+    "vinexception": {
+      "columns": [
+        "id",
+        "vin",
+        "checkdigit",
+        "createdon",
+        "updatedon"
+      ],
+      "rowCount": 18805
+    },
+    "vinschema": {
+      "columns": [
+        "id",
+        "name",
+        "sourcewmi",
+        "createdon",
+        "updatedon",
+        "tobeqced"
+      ],
+      "rowCount": 25229
+    },
+    "vspecschemapattern": {
+      "columns": [
+        "id",
+        "schemaid"
+      ],
+      "rowCount": 17149
+    },
+    "wheelbasetype": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 6
+    },
+    "wheeliemitigation": {
+      "columns": [
+        "id",
+        "name"
+      ],
+      "rowCount": 3
+    },
+    "wmi": {
+      "columns": [
+        "id",
+        "wmi",
+        "manufacturerid",
+        "makeid",
+        "vehicletypeid",
+        "createdon",
+        "updatedon",
+        "countryid",
+        "publicavailabilitydate",
+        "trucktypeid",
+        "processedon",
+        "noncompliant",
+        "noncompliantsetbyovsc"
+      ],
+      "rowCount": 13001
+    },
+    "wmi_make": {
+      "columns": [
+        "wmiid",
+        "makeid"
+      ],
+      "rowCount": 14172
+    },
+    "wmi_vinschema": {
+      "columns": [
+        "id",
+        "wmiid",
+        "vinschemaid",
+        "yearfrom",
+        "yearto",
+        "orgid"
+      ],
+      "rowCount": 41774
+    },
+    "wmiyearvalidchars": {
+      "columns": [
+        "id",
+        "wmi",
+        "year",
+        "\"position\"",
+        "\"char\""
+      ],
+      "rowCount": 8808281
+    },
+    "wmiyearvalidchars_cacheexceptions": {
+      "columns": [
+        "\"WMI\"",
+        "\"CreatedOn\"",
+        "\"Id\""
+      ],
+      "rowCount": 0
+    }
+  },
+  "runtimeWmiCount": 12998,
+  "runtimeManufacturerCount": 11604,
+  "runtimeAssignmentCount": 14169,
+  "excludedWmis": [
+    {
+      "wmiId": "7647",
+      "wmi": "1OY",
+      "reasons": [
+        "Invalid VIN alphabet or WMI length; not silently corrected"
+      ]
+    },
+    {
+      "wmiId": "8079",
+      "wmi": "4OG",
+      "reasons": [
+        "Invalid VIN alphabet or WMI length; not silently corrected"
+      ]
+    },
+    {
+      "wmiId": "6700",
+      "wmi": "ABT",
+      "reasons": [
+        "No public-availability date"
+      ]
+    }
+  ],
+  "transformations": [
+    "Join WMI to makes via wmi_make; preserve all associated makes as candidates.",
+    "Normalize label whitespace and uppercase brand labels; preserve manufacturer spelling.",
+    "Keep manufacturer and assembly countries unknown; WMI country is not either fact.",
+    "Do not interpret administrative dates as model-year constraints.",
+    "Retain noncompliant flags as assignment notes; never silently correct malformed WMIs."
+  ],
+  "implementedDecoding": [
+    "WMI manufacturer, brand candidates and vehicle category"
+  ],
+  "archivedOnly": "Detailed pattern, model-year, enrichment and validation tables/functions are bundled but not executed by either library."
+}

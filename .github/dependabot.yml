@@ -1,0 +1,11 @@
+version: 2
+updates:
+  - package-ecosystem: maven
+    directory: /libs/java
+    schedule: {interval: monthly}
+  - package-ecosystem: pip
+    directory: /tools
+    schedule: {interval: monthly}
+  - package-ecosystem: github-actions
+    directory: /
+    schedule: {interval: monthly}

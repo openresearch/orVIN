@@ -1,0 +1,256 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]{4}\\.[0-9]{2}\\.[0-9]{2}\\.[1-9][0-9]*$"
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/source"
+      },
+      "minItems": 1
+    },
+    "manufacturers": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/manufacturer"
+      },
+      "minItems": 1
+    },
+    "assignments": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/assignment"
+      },
+      "minItems": 1
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "version",
+    "sources",
+    "manufacturers",
+    "assignments"
+  ],
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/openresearch/orvin/data/schema.json",
+  "$defs": {
+    "text": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[^\\x00-\\x1f\\x7f]+$"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*$"
+    },
+    "refs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/id"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "constraints": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "markets": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Z]{2}$"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "fromModelYear": {
+          "type": "integer",
+          "minimum": 1886,
+          "maximum": 9999
+        },
+        "toModelYear": {
+          "type": "integer",
+          "minimum": 1886,
+          "maximum": 9999
+        }
+      },
+      "required": []
+    },
+    "reuse": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "license": {
+          "$ref": "#/$defs/text"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https://"
+        },
+        "basis": {
+          "$ref": "#/$defs/text"
+        }
+      },
+      "required": [
+        "license",
+        "url",
+        "basis"
+      ]
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "title": {
+          "$ref": "#/$defs/text"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https://"
+        },
+        "publisher": {
+          "$ref": "#/$defs/text"
+        },
+        "retrievedOn": {
+          "type": "string",
+          "format": "date"
+        },
+        "publicationVersion": {
+          "$ref": "#/$defs/text"
+        },
+        "section": {
+          "$ref": "#/$defs/text"
+        },
+        "reuse": {
+          "$ref": "#/$defs/reuse"
+        },
+        "snapshot": {
+          "type": "string",
+          "pattern": "^(snapshots/[a-zA-Z0-9_-]+\\.json|nhtsa/vPICList_lite_[0-9]{4}_[0-9]{2}\\.plain\\.zip)$"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "url",
+        "publisher",
+        "retrievedOn",
+        "publicationVersion",
+        "section",
+        "reuse"
+      ],
+      "dependentRequired": {
+        "snapshot": [
+          "sha256"
+        ],
+        "sha256": [
+          "snapshot"
+        ]
+      }
+    },
+    "manufacturer": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "name": {
+          "$ref": "#/$defs/text"
+        },
+        "country": {
+          "type": "string",
+          "pattern": "^[A-Z]{2}$"
+        },
+        "sourceRefs": {
+          "$ref": "#/$defs/refs"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "sourceRefs"
+      ]
+    },
+    "assignment": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "wmi": {
+          "type": "string",
+          "pattern": "^[A-HJ-NPR-Z0-9]{3}([A-HJ-NPR-Z0-9]{3})?$"
+        },
+        "manufacturerId": {
+          "$ref": "#/$defs/id"
+        },
+        "brand": {
+          "$ref": "#/$defs/text"
+        },
+        "category": {
+          "enum": [
+            "PASSENGER_CAR",
+            "TRUCK",
+            "BUS",
+            "TRAILER",
+            "MOTORCYCLE",
+            "INCOMPLETE_VEHICLE",
+            "LOW_SPEED_VEHICLE",
+            "MULTIPURPOSE_PASSENGER_VEHICLE",
+            "OFF_ROAD_VEHICLE"
+          ]
+        },
+        "sourceRefs": {
+          "$ref": "#/$defs/refs"
+        },
+        "constraints": {
+          "$ref": "#/$defs/constraints"
+        },
+        "notes": {
+          "$ref": "#/$defs/text"
+        },
+        "ambiguityGroup": {
+          "$ref": "#/$defs/id"
+        },
+        "ambiguityReason": {
+          "$ref": "#/$defs/text"
+        }
+      },
+      "required": [
+        "id",
+        "wmi",
+        "manufacturerId",
+        "sourceRefs",
+        "constraints",
+        "notes"
+      ],
+      "dependentRequired": {
+        "ambiguityGroup": [
+          "ambiguityReason"
+        ],
+        "ambiguityReason": [
+          "ambiguityGroup"
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,12 @@
+* text=auto
+*.json text eol=lf
+*.java text eol=lf
+*.py text eol=lf
+*.md text eol=lf
+*.tsv text eol=lf
+*.sh text eol=lf
+*.gz binary
+# Empty final columns are significant in the generated WMI table.
+libs/java/src/main/resources/com/openresearch/orvin/dataset.tsv whitespace=-blank-at-eol
+mvnw text eol=lf
+mvnw.cmd text eol=crlf

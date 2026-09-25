@@ -1,0 +1,66 @@
+[
+  {
+    "assignmentId": "wmi-1hg",
+    "vin": "1HGAAAAAAAAAAAAAA",
+    "manufacturerId": "american-honda",
+    "wmi": "1HG",
+    "brand": "HONDA",
+    "category": "PASSENGER_CAR"
+  },
+  {
+    "assignmentId": "wmi-jtd",
+    "vin": "JTDAAAAAAAAAAAAAA",
+    "manufacturerId": "toyota-motor",
+    "wmi": "JTD",
+    "brand": "TOYOTA",
+    "category": "PASSENGER_CAR"
+  },
+  {
+    "assignmentId": "wmi-wba",
+    "vin": "WBAAAAAAAAAAAAAAA",
+    "manufacturerId": "bmw-ag",
+    "wmi": "WBA",
+    "brand": "BMW",
+    "category": "PASSENGER_CAR"
+  },
+  {
+    "assignmentId": "wmi-wvw",
+    "vin": "WVWAAAAAAAAAAAAAA",
+    "manufacturerId": "volkswagen-ag",
+    "wmi": "WVW",
+    "brand": "VOLKSWAGEN",
+    "category": "PASSENGER_CAR"
+  },
+  {
+    "assignmentId": "wmi-1fd",
+    "vin": "1FDAAAAAAAAAAAAAA",
+    "manufacturerId": "ford-motor",
+    "wmi": "1FD",
+    "brand": "FORD",
+    "category": "INCOMPLETE_VEHICLE"
+  },
+  {
+    "assignmentId": "wmi-1h9333",
+    "vin": "1H9AAAAAAAA333AAA",
+    "manufacturerId": "hombilt-trailers",
+    "wmi": "1H9333",
+    "brand": "HOMBILT TRAILERS",
+    "category": "TRAILER"
+  },
+  {
+    "assignmentId": "wmi-5yj",
+    "vin": "5YJAAAAAAAAAAAAAA",
+    "manufacturerId": "nhtsa-manufacturer-955",
+    "wmi": "5YJ",
+    "brand": "TESLA",
+    "category": "PASSENGER_CAR"
+  },
+  {
+    "assignmentId": "wmi-wdd",
+    "vin": "WDDAAAAAAAAAAAAAA",
+    "manufacturerId": "nhtsa-manufacturer-1042",
+    "wmi": "WDD",
+    "brand": "MERCEDES-BENZ",
+    "category": "PASSENGER_CAR"
+  }
+]

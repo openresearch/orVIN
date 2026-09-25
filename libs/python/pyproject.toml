@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=77,<83"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "orvin"
+version = "0.1.0.dev0"
+description = "Offline VIN manufacturer and German HSN/TSN lookup with sourced reference data"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "Apache-2.0"
+authors = [{name = "OPENRESEARCH contributors"}]
+dependencies = []
+
+[project.urls]
+Repository = "https://github.com/openresearch/orvin"
+
+[project.scripts]
+orvin = "orvin.__main__:main"
+
+[tool.setuptools]
+packages = ["orvin"]

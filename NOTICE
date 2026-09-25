@@ -1,0 +1,26 @@
+Orvin
+Copyright 2026 OPENRESEARCH contributors
+
+Code and original documentation are licensed under the Apache License, Version 2.0.
+The Maven Wrapper scripts are from the Apache Maven project and retain their Apache notices.
+
+The bundled dataset has separate terms. See META-INF/orvin/LICENSE.md and
+META-INF/orvin/CC0-1.0.txt in the Java artifact, or data/LICENSE.md in the repository.
+Imported facts, the complete September 2026 standalone database ZIP (including source SQL),
+and historical API snapshots come from the US National Highway Traffic Safety
+Administration (NHTSA) vPIC. Each active source is identified in data/dataset.json.
+The original ZIP is unmodified. Runtime projection joins WMI/make associations, normalizes
+label whitespace, uppercases brands and records exclusions; see data/nhtsa/metadata.json.
+These upstream materials are not relicensed under Orvin's Apache or CC0 licenses.
+NHTSA's published-information reuse statement permits distribution and copying:
+https://www.nhtsa.gov/about-nhtsa/terms-use
+No endorsement by NHTSA or any vehicle manufacturer is implied.
+
+German HSN/TSN data: Kraftfahrt-Bundesamt (KBA), FZ Hersteller Handelsnamen Kfz.
+Reference date 2026-01-01; retrieved 2026-09-25. License: dl-de/by-2-0.
+https://www.govdata.de/dl-de/by-2-0
+https://data.gov.de/suche/daten/fz-hersteller-handelsnamen-kfz?ids=c1e3a0b6-0d34-4e99-8181-91bdfb639208
+Modified for Orvin: selected one reference date, renamed columns, sorted rows and
+represented nulls as \N; original labels, counts and statistical markers are unchanged.
+See data/kba/metadata.json and data/LICENSE.md for provenance and attribution.
+No endorsement by KBA is implied.

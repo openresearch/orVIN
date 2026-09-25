@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.openresearch</groupId>
+  <artifactId>orvin</artifactId>
+  <version>0.1.0-SNAPSHOT</version>
+  <name>Orvin</name>
+  <description>Offline VIN manufacturer identification and German HSN/TSN lookup with sourced reference datasets.</description>
+  <url>https://github.com/openresearch/orvin</url>
+  <licenses>
+    <license><name>Apache License 2.0 (code)</name><url>https://www.apache.org/licenses/LICENSE-2.0</url></license>
+    <license><name>Data: original contributions CC0; upstream notices apply</name><url>https://github.com/openresearch/orvin/blob/main/data/LICENSE.md</url></license>
+  </licenses>
+  <developers><developer><id>openresearch</id><name>OPENRESEARCH contributors</name><url>https://github.com/openresearch</url></developer></developers>
+  <scm>
+    <connection>scm:git:https://github.com/openresearch/orvin.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/openresearch/orvin.git</developerConnection>
+    <url>https://github.com/openresearch/orvin</url>
+    <tag>HEAD</tag>
+  </scm>
+  <properties>
+    <maven.compiler.release>17</maven.compiler.release>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.build.outputTimestamp>2026-09-25T00:00:00Z</project.build.outputTimestamp>
+    <python>python3</python>
+  </properties>
+  <dependencies>
+    <dependency><groupId>org.junit.jupiter</groupId><artifactId>junit-jupiter</artifactId><version>5.12.2</version><scope>test</scope></dependency>
+  </dependencies>
+  <build>
+    <testResources><testResource><directory>target/generated-test-resources</directory></testResource></testResources>
+    <resources>
+      <resource><directory>src/main/resources</directory></resource>
+      <resource><directory>../../data</directory><targetPath>META-INF/orvin</targetPath></resource>
+      <resource><directory>../..</directory><targetPath>META-INF</targetPath><includes><include>LICENSE</include><include>NOTICE</include></includes></resource>
+    </resources>
+    <plugins>
+      <plugin><groupId>org.codehaus.mojo</groupId><artifactId>exec-maven-plugin</artifactId><version>3.5.0</version>
+        <executions>
+          <execution><id>validate-shared-data</id><phase>generate-resources</phase><goals><goal>exec</goal></goals><configuration>
+            <executable>${python}</executable><arguments><argument>../../tools/dataset.py</argument><argument>--output</argument><argument>target/generated-resources/com/openresearch/orvin/dataset.tsv</argument></arguments>
+          </configuration></execution>
+          <execution><id>test-data-validation</id><phase>test</phase><goals><goal>exec</goal></goals><configuration>
+            <executable>${python}</executable><arguments><argument>-m</argument><argument>unittest</argument><argument>discover</argument><argument>-s</argument><argument>../../tools</argument><argument>-p</argument><argument>test_*.py</argument></arguments>
+          </configuration></execution>
+        </executions>
+      </plugin>
+      <plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-clean-plugin</artifactId><version>3.4.1</version></plugin>
+      <plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-resources-plugin</artifactId><version>3.3.1</version></plugin>
+      <plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-compiler-plugin</artifactId><version>3.14.0</version><configuration><compilerArgs><arg>-Xlint:all</arg><arg>-Werror</arg></compilerArgs></configuration></plugin>
+      <plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-surefire-plugin</artifactId><version>3.5.3</version></plugin>
+      <plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-jar-plugin</artifactId><version>3.4.2</version><configuration><archive><manifestEntries><Automatic-Module-Name>com.openresearch.orvin</Automatic-Module-Name></manifestEntries></archive></configuration></plugin>
+      <plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-source-plugin</artifactId><version>3.3.1</version><executions><execution><id>sources</id><goals><goal>jar-no-fork</goal></goals></execution></executions></plugin>
+      <plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-javadoc-plugin</artifactId><version>3.11.2</version><configuration><doclint>all,-missing</doclint></configuration><executions><execution><id>javadoc</id><goals><goal>jar</goal></goals></execution></executions></plugin>
+      <plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-install-plugin</artifactId><version>3.1.4</version></plugin>
+      <plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-deploy-plugin</artifactId><version>3.1.4</version></plugin>
+    </plugins>
+  </build>
+  <profiles>
+    <profile><id>github-packages</id><distributionManagement><repository><id>github</id><url>https://maven.pkg.github.com/openresearch/orvin</url></repository></distributionManagement></profile>
+  </profiles>
+</project>
