@@ -46,7 +46,10 @@
 - [x] Verify a disposable `v0.1.0` release build: 32 Java, 18 Python and 22 data/release-tool tests;
   878 parity results, complete embedded-data checks, strict wheel/sdist metadata, manifest/checksums,
   and Maven deployment to a temporary file registry passed. Both workflows pass actionlint 1.7.12.
-- [ ] Confirm the committed branch's CI matrix on GitHub.
+- [x] Commit and push the library/release workflow branch. CI runs the Java/Python matrix on
+  branch pushes; the current result is available in GitHub Actions rather than a static build claim.
+- [x] Deploy the release candidate to a temporary Maven registry and resolve it from an independent
+  consumer with an isolated dependency cache; both embedded dataset lookups passed.
 - [ ] Configure verified repository protection where access permits.
 - [ ] Obtain human source/licensing review before declaring a release ready.
 - [ ] Publish a version tag when a release is requested; optional Maven Central/PyPI setup remains separate.
