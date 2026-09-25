@@ -28,8 +28,15 @@ or digits. Normalization only trims ASCII spaces and uppercases ASCII letters. L
 2.2 codes are not silently truncated. An absent type remains unknown: the KBA snapshot records
 the stock at one reference date, not every type ever assigned. VIN cannot determine HSN/TSN.
 
-From a checkout, install with `python3 -m pip install ./libs/python`. No package has been published
-yet. The repository's `vin.sh` and `hsntsn.sh` need no installation. After installation, use
+Install the [0.1.0 release](https://github.com/openresearch/orvin/releases/tag/v0.1.0) wheel:
+
+```sh
+python3 -m pip install https://github.com/openresearch/orvin/releases/download/v0.1.0/orvin-0.1.0-py3-none-any.whl
+```
+
+The wheel/sdist are GitHub Release assets; the package is not published on PyPI.
+From a checkout, install with `python3 -m pip install ./libs/python` for the development version.
+The repository's `vin.sh` and `hsntsn.sh` need no installation. After installation, use
 `orvin vin <vin>` / `orvin hsntsn <hsn> <tsn>` or `python3 -m orvin` with the same arguments.
 Commands show a readable summary by default. Append `--json` for the complete library result;
 the dictionary-based library APIs are unchanged.

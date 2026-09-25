@@ -79,7 +79,7 @@ virtual-environment path. Java CI covers 17, 21 and 25.
 <dependency>
   <groupId>com.openresearch</groupId>
   <artifactId>orvin</artifactId>
-  <version>0.1.0-SNAPSHOT</version>
+  <version>0.1.0</version>
 </dependency>
 ```
 
@@ -94,8 +94,11 @@ System.out.println(result.value().flatMap(HsnTsnLookup.TypeEntry::tradeName));
 System.out.println(result.dataset().referenceDate());
 ```
 
-Kotlin uses the same artifact: `implementation("com.openresearch:orvin:0.1.0-SNAPSHOT")`.
-**No Python or Java release has been published yet.** These examples use a local checkout/install.
+Kotlin uses the same artifact: `implementation("com.openresearch:orvin:0.1.0")`.
+**[Version 0.1.0 is released](https://github.com/openresearch/orvin/releases/tag/v0.1.0).**
+Java is published to GitHub Packages; configure its repository and authentication using the
+[Maven/Gradle instructions](docs/releasing.md). Python wheel/sdist downloads are release assets.
+Local source builds still use the development versions `0.1.0-SNAPSHOT` / `0.1.0.dev0`.
 
 GitHub Actions builds both libraries. Pushing a stable `vX.Y.Z` tag runs the CI matrix, publishes
 `com.openresearch:orvin:X.Y.Z` to GitHub Packages, and attaches Java artifacts plus Python

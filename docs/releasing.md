@@ -2,7 +2,10 @@
 
 Java and Python releases share a `vMAJOR.MINOR.PATCH` tag and version. Development descriptors
 remain `0.1.0-SNAPSHOT` and `0.1.0.dev0`; the workflow stamps build copies from the tag.
-No release has been published yet. Pushing the code/CI branch does not publish packages.
+[Version 0.1.0](https://github.com/openresearch/orvin/releases/tag/v0.1.0) was published on
+2026-09-25 from commit `4641b5c61af219ff18c937685d5ba2e3ddc5198e`; its
+[release workflow passed](https://github.com/openresearch/orvin/actions/runs/36189579018).
+Pushing a code/CI branch does not publish packages.
 
 ## GitHub Actions
 
@@ -35,11 +38,11 @@ Stable releases only are supported; prerelease/build-metadata tags fail validati
 ## Publish a version
 
 Merge the reviewed implementation/workflows into `main`, confirm CI is green, then tag the
-specific reviewed commit. When ready to publish the first version, for example:
+specific reviewed commit. For example, for the next patch release:
 
 ```sh
-git tag -a v0.1.0 <reviewed-commit-sha> -m "Orvin 0.1.0"
-git push origin v0.1.0
+git tag -a v0.1.1 <reviewed-commit-sha> -m "Orvin 0.1.1"
+git push origin v0.1.1
 ```
 
 The tag push triggers publication. Confirm both the GitHub package and release assets exist
@@ -53,8 +56,8 @@ distributions also include data. Dataset versions/hashes remain independent of l
 
 ## Use Java from Gradle or Maven
 
-These examples apply **after `v0.1.0` publishes successfully**. Nothing in Tourfold is changed
-by this setup. Both build systems consume the same `com.openresearch:orvin:0.1.0` artifact.
+These examples consume the published **0.1.0** release. Nothing in Tourfold is changed by this
+setup. Both build systems consume the same `com.openresearch:orvin:0.1.0` artifact.
 
 GitHub requires authentication for Maven/Gradle packages, including public ones. Set
 `ORVIN_GITHUB_USER` to your username and `ORVIN_GITHUB_TOKEN` to a classic PAT with
@@ -114,7 +117,7 @@ Server in your user-level `~/.m2/settings.xml`:
 </settings>
 ```
 
-Before the first release, `mvn install` and Gradle's `mavenLocal()` remain available locally.
+For development snapshots, `mvn install` and Gradle's `mavenLocal()` remain available locally.
 Consuming the JAR needs Java 17+, without Python, a database or runtime network calls.
 
 ## Python distribution

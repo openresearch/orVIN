@@ -52,7 +52,13 @@
   consumer with an isolated dependency cache; both embedded dataset lookups passed.
 - [ ] Configure verified repository protection where access permits.
 - [ ] Obtain human source/licensing review before declaring a release ready.
-- [ ] Publish a version tag when a release is requested; optional Maven Central/PyPI setup remains separate.
+- [x] Fast-forward `main` and publish annotated tag `v0.1.0` at `4641b5c` on 2026-09-25.
+  Release workflow 36189579018 passed the complete CI matrix, published Java to GitHub Packages,
+  and created the GitHub Release with Java/Python artifacts, source manifest and checksums.
+  Optional Maven Central/PyPI setup remains separate.
+- [x] Download the published JAR/wheel, verify checksums and all 17 shared data files, compare
+  878 complete Java/Python results, and run both libraries outside the checkout. The published
+  wheel installs offline as version 0.1.0; both VIN and HSN/TSN lookups pass.
 
 Decisions: Apache-2.0 code; CC0 only for Orvin-owned data contributions; NHTSA-derived facts retain
 their source notice; KBA data retains dl-de/by-2-0. WMI JSON and KBA TSV with JSON metadata are
