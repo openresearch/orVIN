@@ -12,6 +12,32 @@ Read [CONTRIBUTING.md](CONTRIBUTING.md) for the contribution workflow and
 [data/LICENSE.md](data/LICENSE.md) for existing source-specific rights and notices.
 `CLAUDE.md` imports this file; maintain shared rules here rather than duplicating them.
 
+## Plans, research and documentation
+
+- Keep ORvin documentation in this repository's `docs/`. These conventions apply
+  to standalone checkouts; do not depend on a parent repository's instructions or
+  store ORvin plans and research in another project's documentation tree.
+- Store new implementation plans and design notes under
+  `docs/plans/<feature-or-initiative>/`. Keep cross-cutting plans together across
+  the dataset, tooling, Python, Java and release workflows. Continue updating
+  existing plans in place rather than creating competing copies.
+- Keep plans current as work progresses: record status, decisions, completed and
+  deferred work, validation results, open questions and implementation gotchas.
+  Clearly distinguish proposals from implemented behavior and verified results.
+- Store research reports, source investigations, coverage worklists and supporting
+  research metadata under `docs/research/<topic>/`. Follow the source, licensing
+  and attribution rules below, including precise citations and unresolved limits.
+  Update the relevant research index and citation inventory when adding reports;
+  VIN-rule research uses `docs/research/vin-rules/sources.json` and the explicit
+  research-file inventory in `tools/provenance.py`.
+- Keep architecture, API usage, source/import guides, coverage reports and
+  operational documentation in `docs/`, with relative links between related
+  documents. Keep the root README concise and link to those guides. Package-local
+  READMEs may explain package-specific usage.
+- Research documents do not replace runtime provenance. Reviewed production data,
+  rules, fixtures, source records and notices remain in `data/`; generated API
+  references belong with their owning library rather than in `docs/plans/`.
+
 ## Mandatory source traceability
 
 - Every imported record and decoding rule must resolve to an identifiable source.
