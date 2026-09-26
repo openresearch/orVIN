@@ -8,7 +8,7 @@ changed by this report.
 The requested scope is all BMW passenger-car families, including numbered Series,
 X, Z, i and distinct M models, with European applicability. Finding a family in a
 source does not establish every generation, engine, market or model year. The
-Subaru follow-up concerns the owner's reported Legacy Kombi / C22 and the `JF1BG5`
+Subaru follow-up concerns the user-reported Legacy Kombi / C22 and the `JF1BG5`
 prefix. Complete contributed VINs and their identifying serial suffixes were not
 submitted to external searches or services.
 
@@ -220,10 +220,10 @@ xDrive18d under E84. Proposed source lineage:
 
 1. VIN-template association and catalogue variant: the exact ASTRA TG records.
 2. Normalized family X1 and E84 generation: the matched ASTRA label plus that OEM code entry.
-3. Engine candidate: the matched ASTRA record, not the price-list heading or owner attribution.
+3. Engine candidate: the matched ASTRA record, not the price-list heading or user attribution.
 4. Model year / production date: unknown; neither source gives the contributed car's date.
 
-The owner's reported X1 xDrive18d / E84 / N47 is independent validation of those
+The user-reported X1 xDrive18d / E84 / N47 is independent validation of those
 reported labels. It is not evidence for an exact build date or every engine suffix.
 Current local decoding of a synthetic continuation of this prefix returned no
 normalized model during research, despite these records already being bundled.
@@ -240,7 +240,7 @@ turbo specification must not be applied to the European case.
 
 Proposed result is Subaru / Legacy, with body and engine retained as sourced
 approval candidates where the complete matching set allows them. Preserve the
-owner's literal C22 label in fixture provenance, with no invented expansion and
+user's literal C22 label in fixture provenance, with no invented expansion and
 no conversion to a 2.2-litre engine. Owner-reported country, model year and exact
 trim must remain absent unless actually supplied or independently established.
 
@@ -312,7 +312,7 @@ was verified; links and brief review notes are the only retained material.
    approval remarks and correlated specifications. Preserve model ambiguity for
    overlapping templates. No universal BMW or Subaru year rule is proposed.
 5. **Validate behavior with independent, attributed labels.** Use the authorized
-   owner reports for their stated facts, plus independently documented examples
+   user reports for their stated facts, plus independently documented examples
    when available. Synthetic substitutions test matching and exclusions, not
    real-world correctness. Include cross-family negatives, M-performance versus
    M-model cases, electric-generation name reuse, and unknown-year assertions.
