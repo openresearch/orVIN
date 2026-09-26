@@ -108,5 +108,7 @@ jobs:
       - name: Verify installed NuGet package and all embedded bytes
         shell: pwsh
         run: |
-          dotnet restore libs/dotnet/ORvin.Checks -p:UsePackageVersion=0.3.0-dev --source "$pwd/libs/dotnet/dist" --source https://api.nuget.org/v3/index.json
+          # The SDK/reference packs were restored by pack; consume only this local package.
+          dotnet restore libs/dotnet/ORvin.Checks -p:UsePackageVersion=0.3.0-dev --source "$pwd/libs/dotnet/dist"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           dotnet run --project libs/dotnet/ORvin.Checks -c Release -p:UsePackageVersion=0.3.0-dev --no-restore -- --bundle-dir "$pwd/data/generated"
