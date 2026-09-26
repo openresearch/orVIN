@@ -3,14 +3,16 @@
 Research date: 2026-09-25. This describes possible extensions, not additional implemented decoding.
 No customer VIN was sent to research services or added to fixtures.
 
-## What Orvin currently returns
+## What ORvin currently returns
 
 Both libraries now use 12,998 WMIs from the September 2026 NHTSA bulk snapshot, replacing the
 six-assignment seed. See [import and coverage](../../nhtsa-data.md). This does not establish
 globally complete coverage of those manufacturers. They return sourced
 manufacturer/brand/category facts, candidates and explicit unknown/ambiguous/context states.
 The independent structural check assesses only length and alphabet, not checksum or authenticity.
-Model, engine, fuel, trim, production year, model year and assembly plant are not decoded yet.
+The development libraries also return supported model, engine, fuel, trim, model-year
+and plant fields from bounded NHTSA stages, plus scoped Tesla and Golf extensions.
+See [the implemented contract](../../rich-decoding.md); this is not full vPIC equivalence.
 
 The KBA operation accepts independently supplied HSN/TSN. It supplies manufacturer/model labels,
 dated registration counts and source attribution from the 2026-01-01 stock snapshot. It does not
@@ -36,7 +38,8 @@ derive those codes from a VIN and is not a VIN-to-engine or VIN-to-equipment dat
   that the same interpretation applies to European variants.
 - [Official standalone vPIC databases](https://vpic.nhtsa.dot.gov/downloads/) now supply the
   shared WMI foundation. The September 2026 ZIP is pinned and embedded in both distributions;
-  its detailed VIN decoding tables/functions are archived but not yet executed by the libraries.
+  native libraries use its reviewed public pattern stages. SQL is archived as evidence,
+  never executed; vehicle-spec/default/error-scoring stages remain unimplemented.
 
 ## Distinguish three kinds of information
 
@@ -52,7 +55,7 @@ authenticate the vehicle, and model year must remain distinct from build date or
 
 ## Proposed rule representation
 
-First implement the reviewed NHTSA matching and enrichment semantics for the archived tables.
+The first bounded NHTSA implementation is present; further enrichment stages need review.
 For manufacturer-specific gaps, extend the language-neutral data with small declarative rules.
 Each rule should identify the document/revision, source URL and page, reuse basis, applicable
 WMIs/layouts, make/model family, market and year range. Preserve source text separately from

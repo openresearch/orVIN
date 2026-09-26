@@ -60,7 +60,7 @@ final class DatasetLoader {
         } catch (IOException e) {
             throw new IllegalStateException("Cannot verify bundled dataset", e);
         }
-        return new VinDecoder(info, assignments);
+        return new VinDecoder(info, assignments, RichDecoder.load(), ApprovalDecoder.load());
     }
 
     private static Optional<String> optional(String value) {

@@ -1,0 +1,8 @@
+{
+  "version": "2026.09.26.1",
+  "sha256": "2c9cc1f453d95da061dd284d3cb9012a8c78ed31d1f9e05ef85f778601131c49",
+  "policy": "Exact make-scoped labels only; ASCII case comparison and explicit sourced aliases. No fuzzy model-family inference. Canonical display names are ORvin policy.",
+  "reviewedOn": "2026-09-26",
+  "generator": "tools/identity.py",
+  "fixturesSha256": "aa87a66bff7f6afaab0f5a4b6ce0bde1d8f3caf36009d54a2402838188da7600"
+}

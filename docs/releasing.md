@@ -1,7 +1,7 @@
 # Builds, releases and consumption
 
 Java and Python releases share a `vMAJOR.MINOR.PATCH` tag and version. Development descriptors
-remain `0.1.0-SNAPSHOT` and `0.1.0.dev0`; the workflow stamps build copies from the tag.
+are `0.2.0-SNAPSHOT` and `0.2.0.dev0`; the workflow stamps build copies from the tag.
 [Version 0.1.0](https://github.com/openresearch/orvin/releases/tag/v0.1.0) was published on
 2026-09-25 from commit `4641b5c61af219ff18c937685d5ba2e3ddc5198e`; its
 [release workflow passed](https://github.com/openresearch/orvin/actions/runs/36189579018).
@@ -21,7 +21,7 @@ reproducibility. Candidate JARs are retained for seven days.
 3. Builds/tests release artifacts, checks Python metadata, compares every embedded data file,
    compares Java/Python results, and exercises the installed wheel outside the checkout.
 4. Checks artifact coordinates/versions and creates `release.json` with source commit and dataset
-   identities, plus `SHA256SUMS` covering all release assets.
+   identities (including the rich-decoding index and source catalog), plus `SHA256SUMS` covering all release assets.
 5. Publishes the exact tested Java JAR, sources, Javadoc and POM to **GitHub Packages** at
    `https://maven.pkg.github.com/openresearch/orvin`.
 6. Creates a **GitHub Release** with those Java files, Python wheel/sdist, manifest and checksums.
@@ -41,7 +41,7 @@ Merge the reviewed implementation/workflows into `main`, confirm CI is green, th
 specific reviewed commit. For example, for the next patch release:
 
 ```sh
-git tag -a v0.1.1 <reviewed-commit-sha> -m "Orvin 0.1.1"
+git tag -a v0.1.1 <reviewed-commit-sha> -m "ORvin 0.1.1"
 git push origin v0.1.1
 ```
 
@@ -51,7 +51,8 @@ version. A failure after Maven publication can leave the package available befor
 exist; inspect the run and complete only the missing step using its verified artifacts. Blindly
 rerunning deployment can fail on existing coordinates. Use a new version for changed content.
 
-The main JAR includes the entire shared dataset and is about 74 MB. Source JARs and Python
+The current development JAR includes the entire shared dataset and is about 100 MB
+(the published 0.1.0 JAR is about 74 MB). Source JARs and Python
 distributions also include data. Dataset versions/hashes remain independent of library versions.
 
 ## Use Java from Gradle or Maven
@@ -141,7 +142,7 @@ signing have not been provisioned.
 PYTHONPATH=libs/python python3 -m unittest discover -s libs/python/tests
 .venv/bin/python -m build libs/python
 python3 tools/check_parity.py
-python3 tools/check_packages.py --jar libs/java/target/orvin-0.1.0-SNAPSHOT.jar --wheel libs/python/dist/orvin-0.1.0.dev0-py3-none-any.whl
+python3 tools/check_packages.py --jar libs/java/target/orvin-0.2.0-SNAPSHOT.jar --wheel libs/python/dist/orvin-0.2.0.dev0-py3-none-any.whl
 ```
 
 To rehearse release stamping, use a disposable copy/worktree: `python3 tools/release.py prepare

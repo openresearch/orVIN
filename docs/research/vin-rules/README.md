@@ -49,12 +49,11 @@ make-association and vehicle-category evidence. The original archive preserves
 the complete source snapshot for further work; runtime does not require a JDK
 for Python, PostgreSQL or an online VIN request.
 
-**The full rich vPIC decoder is not implemented.** Carrying its source tables and
-stored procedures inside a package does not execute those procedures or activate
-their model, engine, trim, plant and year interpretation. The bulk assessment
-documents the additional work: schema/year selection, compound pattern matching,
-conflict precedence, value dictionaries, numeric captures, derived facts,
-vehicle-specification enrichment, validation and year-cycle resolution.
+**The full rich vPIC decoder is not implemented.** The development libraries now
+execute scoped public patterns, year alternatives, numeric captures, model/make and
+engine associations, and displacement conversion. Vehicle-specification enrichment,
+defaults, VIN repair and error scoring remain outside this increment.
+See [the implemented contract](../../rich-decoding.md).
 
 WMI records also cover trailers, motorcycles, trucks and other vehicle classes;
 their count is not a count of passenger-car brands. Keep all make associations
@@ -72,10 +71,10 @@ from positions 12–14 in addition to positions 1–3.
 | Fiat type approvals and CEM-hosted OEM protocols | Narrow type/model-family associations for Fiat, Opel, Renault, Dacia, Peugeot and BYD | Shared prefixes can cover multiple models and all powertrains; applicability is not an exhaustive inverse lookup. |
 | OEM vehicle-information services | Build characteristics retrieved using a VIN | Database enrichment, not proof that the VIN directly encodes every returned field. |
 
-For the motivating historical case, **European Golf 1K around model year 2005
-remains a research gap**. Official Volkswagen archival material confirms the
-factory type, but this survey did not establish the historical European VIN
-position/year/plant rules. A 2026 US Golf chart cannot fill that gap.
+The follow-up historical review supports a **narrow European Golf 1K model-year-2005
+rule for Mosel/Wolfsburg**. It combines a Volkswagen maintenance layout, historical
+Golf profile and same-year year/plant chart; see the [Volkswagen assessment](europe.md).
+Other historical years and layouts remain gaps. A 2026 US chart is not used for them.
 
 The reports also document genuine ambiguity and changing rules: Mazda changes
 trim interpretation within one model year at stated serial boundaries; some
@@ -95,7 +94,7 @@ do not establish a universal VIN-to-HSN/TSN conversion.
 provides the source-specific copying/distribution basis for its published
 information, with accuracy and third-party-rights disclaimers. Retain the
 download URL, release date, original archive, hashes and attribution. This does
-not make imported records or stored procedures Orvin-owned CC0 material.
+not make imported records or stored procedures ORvin-owned CC0 material.
 
 That assessment must not be silently extended to every OEM PDF hosted by NHTSA
 or linked elsewhere. OEM-specific redistribution permission was not established
@@ -111,15 +110,15 @@ own recorded provenance and reuse assessment.
    WMIs, many-to-many make associations, source flags and a pinned manifest.
    Verify installed Python packages and Java JARs load their embedded resources
    without network access or the source checkout.
-2. **Implement bounded rich decoding over the shared data.** Start with explicit
+2. **Completed: bounded rich decoding over the shared data.** Use explicit
    year/market context and documented pattern stages. State which stages run;
    incomplete procedure support must not be described as full vPIC parity.
    Compare Python and Java on independent synthetic examples, ambiguity and
    out-of-scope cases.
 3. **Add European rules where evidence improves European coverage.** Prioritize
    the documented Tesla Model Y plant/year distinctions and bounded VW/Škoda
-   evidence after source-specific reuse and applicability review. Resolve the
-   historical Golf gap separately. Curate CEM/Fiat family associations only
+   evidence after source-specific reuse and applicability review. Tesla Model Y and
+   the narrow Golf MY2005 extension are implemented. Curate CEM/Fiat family associations only
    after checking overlaps, dates and reuse terms.
 4. **Keep field provenance and enrichment explicit.** Preserve unknowns and
    unresolved alternatives. Separate direct decoding, associated type facts

@@ -10,6 +10,9 @@ import re
 from jsonschema import Draft202012Validator, FormatChecker
 import kba
 import nhtsa
+import decoding
+import provenance
+import astra
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -136,12 +139,19 @@ def main():
     # Full source reconstruction covers every imported row. Behavioral fixtures
     # remain independently reviewed examples, not generated copies of the data.
     nhtsa_metadata = nhtsa.validate()
+    decoding_metadata = decoding.validate()
+    astra_metadata = astra.validate()
     fixtures = read_json(ROOT / "data/fixtures.json")
     validate_fixtures(fixtures, data, exhaustive=False)
     digest = hashlib.sha256(path.read_bytes()).hexdigest()
     kba_metadata = kba.validate()
+    provenance_counts = provenance.validate()
+    identity_metadata = read_json(ROOT / "data/identity/metadata.json")
     metadata_hash = hashlib.sha256((ROOT / "data/kba/metadata.json").read_bytes()).hexdigest()
     resources = {"dataset.tsv": render(data, digest),
+                 "identity-metadata.tsv": identity_metadata["version"] + "\t" + identity_metadata["sha256"] + "\n",
+                 "astra-metadata.tsv": astra_metadata["version"] + "\t" + astra_metadata["indexSha256"] + "\n",
+                 "decoding-metadata.tsv": decoding_metadata["version"] + "\t" + decoding_metadata["indexSha256"] + "\n",
                  "kba-metadata.tsv": kba.render_metadata(kba_metadata).rstrip("\n") + "\t" + metadata_hash + "\n"}
     for name, content in resources.items():
         resource = ROOT / "libs/java/src/main/resources/com/openresearch/orvin" / name
@@ -164,9 +174,15 @@ def main():
             raise ValueError("Unexpected KBA fixture fields")
         fixture_file.with_name("kba-fixtures.tsv").write_text("".join(
             "\t".join(kba.cell(f[k]) for k in keys) + "\n" for f in kba_fixtures), encoding="utf-8", newline="\n")
+        vehicle_fixtures = read_json(ROOT / "data/vehicle-fixtures.json")
+        fixture_file.with_name("vehicle-fixtures.tsv").write_text("".join(
+            "\t".join((f["id"], f["vin"], f["market"], code, decoding.b64(value))) + "\n"
+            for f in vehicle_fixtures for code, value in f["expected"].items()), encoding="utf-8", newline="\n")
     print(f"Validated {len(data['assignments'])} assignments; dataset {data['version']}; SHA-256 {digest}")
     print(f"Validated {kba_metadata['recordCount']} KBA entries for {kba_metadata['referenceDate']}")
     print(f"Validated complete NHTSA archive: {len(nhtsa_metadata['tables'])} tables; {nhtsa_metadata['runtimeWmiCount']} usable WMIs")
+    print("Validated provenance: " + json.dumps(provenance_counts, sort_keys=True))
+    print(f"Validated ASTRA: {astra_metadata['counts']['approvalRows']} passenger-car approval candidates")
 
 
 if __name__ == "__main__":

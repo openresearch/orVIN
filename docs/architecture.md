@@ -6,7 +6,7 @@
 the pinned NHTSA archive by `tools/nhtsa.py`. Validation reconstructs it completely and rejects
 hand edits that diverge from the source. JSON is widely supported, reviewable
 without a custom parser, and has a standard schema vocabulary. It is more verbose than YAML but
-avoids implicit type conversions and custom tags. Stable manufacturer IDs belong to Orvin;
+avoids implicit type conversions and custom tags. Stable manufacturer IDs belong to ORvin;
 manufacturer display names may change without forcing an identity change. Imported identities
 retain NHTSA numeric IDs, with six compatibility aliases for the original seed records.
 
@@ -68,9 +68,10 @@ possible candidates and marks an otherwise unique result `NEEDS_CONTEXT`. Multip
 produce `AMBIGUOUS`, while fields shared by all candidates can still be known. A field missing on
 any candidate is not treated as established. Incomplete evidence remains visible as possibilities.
 
-Manufacturer country and assembly country are separate results. Assembly country stays unknown;
-the WMI's geographic prefix is not used as a proxy. There is no model-year, engine, fuel, plant,
-general rules-engine or vehicle-history service.
+Manufacturer country and assembly country are separate results. Assembly country now comes
+from matching plant rules; the WMI's geographic prefix is never used as a proxy. Rich decoding
+has its own scope, status, provenance and model-year alternatives, described in
+[rich decoding](rich-decoding.md). Exact build dates and vehicle histories remain unavailable.
 
 ## Versioning and reproducibility
 
@@ -89,9 +90,11 @@ fresh JSON-compatible dictionary so caller mutations cannot alter subsequent loo
 
 `vin.sh` and `hsntsn.sh` locate the checkout relative to themselves, check Python 3.10+, and invoke
 the Python package. They never invoke Java, Maven, compilers, pip or network services. Their default
-summary retains uncertainty and deduplicates attribution; `--json` prints the complete Python
-library result. Java exposes equivalent record-based results. A test-only
-Java JSON adapter enables comparison of complete outputs against Python across sourced fixtures,
+output uses the normalized short projection with uncertainty and source credits;
+`--long` or `--json --long` extends it with complete evidence from the Python
+library result. Java exposes the equivalent normalized `VehicleAnswer`, typed vehicle
+fields and built-in short/long JSON serialization, alongside the existing raw records.
+A test-only Java probe enables comparison of complete outputs against Python across sourced fixtures,
 invalid input and a spread of the full WMI and KBA catalogs. The adapter loads production classes
 and resources from the built JAR. Artifact checks compare every embedded data file byte-for-byte
 against shared `data/`. Both implementations also test synthetic ambiguity and
@@ -111,8 +114,18 @@ expectations instead of generating thousands of expected outputs from the import
 Conflict checks group by WMI before comparing alternatives, avoiding quadratic work across the
 catalog. ID uniqueness is enforced by indexed checks rather than object-array comparisons.
 
-The archive includes detailed pattern and enrichment tables, but neither library interprets
-them yet. See `docs/nhtsa-data.md` for bundled data versus implemented decoding.
+`tools/decoding.py` streams the same source into a shared index and 256 deterministic gzip
+shards keyed by schema ID modulo 256. Every normal build reconstructs and compares the complete
+projection. It resolves public value dictionaries and preserves source IDs, patterns, timestamps
+and compiled matching expressions. Text cells use UTF-8/base64 so embedded newlines are lossless.
+Java and Python validate index/shard digests and retain at most eight parsed shards and 32 compiled
+schemas per decoder. Java synchronizes cache access; public results remain deeply immutable.
+Python returns fresh dictionaries. Source SQL and large validation caches are never expanded at runtime.
+
+The native stages implement explicit applicability, pattern precedence, numeric captures,
+model-to-make resolution, engine-model associations and displacement conversions. Rich results
+have a separate dataset identity: the index hash also commits to every shard and the curated OEM
+rules. See `docs/rich-decoding.md` for boundaries relative to the complete upstream procedure.
 
 ## German type data
 

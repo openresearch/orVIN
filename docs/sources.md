@@ -10,8 +10,9 @@ make/type associations: 12,998 WMIs, 11,604 manufacturer entities and 14,169 ass
 See [import, exclusions and field coverage](nhtsa-data.md).
 
 The archive retains NHTSA's published-information reuse statement and source attribution;
-it is not relabeled CC0 or Apache-2.0. Detailed VIN rules are archived but not yet implemented
-in the native libraries. The [50-make research](research/vin-rules/README.md) identifies
+it is not relabeled CC0 or Apache-2.0. The native libraries now execute a bounded projection of the public patterns,
+model/make and engine associations, displacement conversion and scoped model-year rules.
+See [rich decoding](rich-decoding.md) for stages and limits. The [50-make research](research/vin-rules/README.md) identifies
 potential scoped additions and European gaps.
 
 ## Historical seed: NHTSA vPIC API
@@ -23,7 +24,7 @@ explains that foreign vehicle coverage depends on manufacturers reporting vehicl
 US use, import or sale. Thus this is a source of specific assignments, not proof of global coverage.
 
 Original seed scope: factual manufacturer name, make and vehicle type for six exact WMI queries.
-The original JSON snapshots remain in `data/snapshots/`, retrieved 2026-09-25. They supported `Results[0]` and
+The original JSON snapshots remain in `data/snapshots/`, retrieved 2026-09-25, with per-file URLs and hashes in `data/snapshots/metadata.json`. They supported `Results[0]` and
 the fields used. The dataset preserves NHTSA's manufacturer identity separately from make/brand.
 It makes no assertions about manufacturer headquarters or assembly location.
 
@@ -71,6 +72,8 @@ Machine checks verify schema, referential integrity, snapshot digests, identifie
 overlapping assignments and tested behavior. They do not establish truth, authority, source
 completeness, ownership or sufficient reuse rights. Those are human review responsibilities.
 
-No customer VINs, vehicle records, addresses or private documents are included. All full-length
+One owner-authorized Golf 5 VIN from Austria is retained in `data/identity/fixtures.json`,
+with attribution, explicit permission and separate owner-reported versus rule-derived facts.
+It is never sent to external services. No owner address or private document is included. Other full-length
 test identifiers are synthetic; the WMI facts are public. Synthetic identifiers need not have
 a valid checksum and should never be described as actual vehicles.

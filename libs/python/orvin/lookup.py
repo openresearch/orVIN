@@ -29,7 +29,7 @@ def _normalize(value):
 
 @dataclass(frozen=True)
 class Context:
-    """Independently supplied context; never inferred from VIN position 10."""
+    """Independently supplied context; rich decoding may separately infer scoped year candidates."""
     model_year: int | None = None
     market: str | None = None
 
@@ -70,6 +70,8 @@ class VinDecoder:
     """Manufacturer lookup with independent length/alphabet assessment; not VIN authentication."""
 
     def __init__(self, data, sha256):
+        self._rich = None
+        self._approvals = None
         data = copy.deepcopy(data)
         self._dataset = {"version": data["version"], "sha256": sha256}
         sources = {}
@@ -98,11 +100,21 @@ class VinDecoder:
     @lru_cache(maxsize=1)
     def bundled(cls):
         content = (_data_directory() / "dataset.json").read_bytes()
-        return cls(json.loads(content), hashlib.sha256(content).hexdigest())
+        decoder = cls(json.loads(content), hashlib.sha256(content).hexdigest())
+        from .details import RichDecoder
+        decoder._rich = RichDecoder(_data_directory() / "decoding")
+        from .approvals import ApprovalDecoder
+        decoder._approvals = ApprovalDecoder(_data_directory() / "astra")
+        return decoder
 
     @property
     def dataset(self):
         return copy.deepcopy(self._dataset)
+
+    def decode_vehicle(self, supplied, context=None):
+        """Return one normalized answer with short() and long() JSON projections."""
+        from .answer import vin_answer
+        return vin_answer(self.decode(supplied, context))
 
     def decode(self, supplied, context=None):
         context = Context() if context is None else context
@@ -130,7 +142,17 @@ class VinDecoder:
         for name in ("manufacturer", "brand", "category"):
             result[name] = _resolve(candidates, lambda a, key=name: a[key], context)
         result["manufacturerCountry"] = _resolve(candidates, lambda a: a["manufacturer"]["country"], context)
-        result["assemblyCountry"] = {"status": "UNKNOWN", "possibilities": [], "value": None}
+        from .details import resolution, unavailable
+        result["details"] = self._rich.decode(normalized, structure, context) if self._rich else unavailable()
+        from .approvals import unavailable as approvals_unavailable
+        result["typeApprovals"] = (self._approvals.decode(normalized, structure) if self._approvals
+                                   else approvals_unavailable())
+        result["model"] = resolution(result["details"], "Model")
+        result["modelYear"] = resolution(result["details"], "ModelYear")
+        result["assemblyCountry"] = resolution(result["details"], "PlantCountry")
+        decoded_make = resolution(result["details"], "Make")
+        if decoded_make["status"] == "KNOWN":
+            result["brand"] = decoded_make
         return copy.deepcopy(result)
 
 
@@ -168,6 +190,11 @@ class HsnTsnLookup:
     @property
     def dataset(self):
         return copy.deepcopy(self._dataset)
+
+    def lookup_vehicle(self, hsn, tsn):
+        """Return the normalized, sourced answer for independently supplied codes."""
+        from .answer import hsntsn_answer
+        return hsntsn_answer(self.lookup(hsn, tsn))
 
     def lookup(self, hsn, tsn):
         normalized_hsn, normalized_tsn = _normalize(hsn), _normalize(tsn)

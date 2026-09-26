@@ -1,0 +1,72 @@
+[
+  {
+    "id": "nhtsa-vpic-2026-09",
+    "title": "NHTSA vPIC standalone database, September 2026",
+    "publisher": "NHTSA",
+    "url": "https://vpic.nhtsa.dot.gov/downloads/vPICList_lite_2026_09.plain.zip",
+    "edition": "2026-09; published 2026-09-19",
+    "section": "pattern, vinschema, wmi_vinschema, element dictionaries, make_model, engine-model and conversion tables; spvindecode_core and fvinmodelyear2 semantics",
+    "retrievedOn": "2026-09-25",
+    "reuseBasis": "NHTSA Ownership section permits copying and distribution of published information; upstream and third-party rights remain applicable.",
+    "archivePath": "nhtsa/vPICList_lite_2026_09.plain.zip",
+    "archiveSha256": "1ee4a1e22526a606b492ce4ab301894465afbf43dc00946df6d503c3102d5911",
+    "inspectedSha256": "1ee4a1e22526a606b492ce4ab301894465afbf43dc00946df6d503c3102d5911",
+    "evidencePath": "decoding/metadata.json"
+  },
+  {
+    "id": "tesla-model-y-2025-service-manual",
+    "title": "Tesla Model Y 2025+ service manual: Vehicle Identification Number",
+    "publisher": "Tesla",
+    "url": "https://service.tesla.com/docs/ModelY/ServiceManual/2025/en-au/air/GUID-BB4CE449-3F8E-4905-AF4A-96DFA87535B5.html",
+    "edition": "Model Y 2025+ service manual, reviewed 2026-09-25",
+    "section": "Vehicle Identification Number: VIN decoding table, Berlin/Shanghai layouts and positions 4–11",
+    "retrievedOn": "2026-09-25",
+    "reuseBasis": "Selected factual code associations independently structured for interoperability; no manual text, illustrations or complete restraint tables reproduced. Tesla retains rights in its documentation.",
+    "archivePath": null,
+    "archiveSha256": null,
+    "inspectedSha256": "a25eefacf38bd7d7f9b1e9f3ec5654fee9561784771a2427e4abe039aceea719",
+    "evidencePath": "europe/tesla-model-y.json"
+  },
+  {
+    "id": "vw-golf-maintenance-2009",
+    "title": "Golf 2004 / Golf Plus 2005, Maintenance, edition 11.2009",
+    "publisher": "Volkswagen AG",
+    "url": "https://manuals.plus/m/2aaea4e3144187875b261a01a103ee47e41a5d9dc30a36162ad57b78b5849a1b.pdf#page=39",
+    "edition": "Maintenance edition 11.2009",
+    "section": "3.5.4, printed page 35 (PDF page 39): European VIN layout and Golf type; page 36: separate vehicle-data sticker",
+    "retrievedOn": "2026-09-25",
+    "reuseBasis": "Selected factual associations independently structured for interoperability, with exact source attribution. No manual, PDF, illustrations or complete table is redistributed; upstream rights are retained.",
+    "archivePath": null,
+    "archiveSha256": null,
+    "inspectedSha256": null,
+    "evidencePath": "europe/vw-golf-1k-2005.json"
+  },
+  {
+    "id": "vw-golf-v-profile",
+    "title": "Golf V vehicle profile",
+    "publisher": "Volkswagen AG",
+    "url": "https://www.volkswagen-newsroom.com/en/vehicle-data-golf-5-profile-19481",
+    "edition": "Historical Golf V profile, reviewed 2026-09-25",
+    "section": "Factory type 1K and production periods; does not identify an individual engine/trim",
+    "retrievedOn": "2026-09-25",
+    "reuseBasis": "Selected factual associations independently structured for interoperability, with exact source attribution. No manual, PDF, illustrations or complete table is redistributed; upstream rights are retained.",
+    "archivePath": null,
+    "archiveSha256": null,
+    "inspectedSha256": "100361e487587b7e73ad812eff128e06a40f8481835225595258680dbc1f0fdc",
+    "evidencePath": "europe/vw-golf-1k-2005.json"
+  },
+  {
+    "id": "vw-vin-chart-2005",
+    "title": "2005 Volkswagen V.I.N. Decoder, June 2005",
+    "publisher": "Volkswagen",
+    "url": "https://meinwirt.com/webserver/vwvortex/VIN_Decoder__2005.pdf",
+    "edition": "Model year 2005, June 2005",
+    "section": "Position 10: 5=2005; position 11: P=Mosel, W=Wolfsburg. North American model/engine rules are excluded.",
+    "retrievedOn": "2026-09-25",
+    "reuseBasis": "Selected factual associations independently structured for interoperability, with exact source attribution. No manual, PDF, illustrations or complete table is redistributed; upstream rights are retained.",
+    "archivePath": null,
+    "archiveSha256": null,
+    "inspectedSha256": "c3423d9e038da407952c8dfe94db9c806d9ef13fcb65eedd81f0ed80ada6cfa4",
+    "evidencePath": "europe/vw-golf-1k-2005.json"
+  }
+]

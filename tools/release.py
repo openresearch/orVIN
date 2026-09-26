@@ -93,10 +93,13 @@ def bundle(tag, commit, root=ROOT):
     shutil.copyfile(pom, destination / f"orvin-{version}.pom")
     dataset = json.loads((root / "data/dataset.json").read_text(encoding="utf-8"))
     kba = json.loads((root / "data/kba/metadata.json").read_text(encoding="utf-8"))
+    decoding = json.loads((root / "data/decoding/metadata.json").read_text(encoding="utf-8"))
     manifest = {"version": version, "tag": tag, "commit": commit,
                 "javaCoordinates": "com.openresearch:orvin:" + version,
                 "wmiDatasetVersion": dataset["version"], "wmiDatasetSha256": sha256(root / "data/dataset.json"),
                 "kbaDatasetVersion": kba["version"], "kbaTableSha256": kba["sha256"],
+                "decodingDatasetVersion": decoding["version"], "decodingIndexSha256": decoding["indexSha256"],
+                "decodingSourcesSha256": decoding["sourcesSha256"],
                 "artifacts": {p.name: sha256(p) for p in sorted(destination.iterdir())}}
     (destination / "release.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     sums = "".join(sha256(p) + "  " + p.name + "\n" for p in sorted(destination.iterdir()))

@@ -1,5 +1,15 @@
-Orvin
+ORvin
 Copyright 2026 OPENRESEARCH contributors
+
+Swiss type-approval factual data: Swiss Federal Roads Office (ASTRA),
+Basisdaten TG ab 1995, TG-Automobil, snapshot 2026-07-30, retrieved 2026-09-26.
+https://opendata.astra.admin.ch/ivzod/2000-Typengenehmigungen_TG_TARGA/2200-Basisdaten_TG_ab_1995/TG-Automobil.txt
+ASTRA publishes these data as Open Government Data; reuse basis is Swiss EMBAG
+Art. 10(4), subject to statutory attribution requirements. Preserve attribution.
+The original bytes are gzip-compressed without changes. The projection selects
+M1/M1G rows, conservatively filters VIN templates, selects columns and partitions
+by WMI. Approval candidates do not establish an individual car's configuration.
+See data/astra/metadata.json and data/LICENSE.md. No ASTRA endorsement is implied.
 
 Code and original documentation are licensed under the Apache License, Version 2.0.
 The Maven Wrapper scripts are from the Apache Maven project and retain their Apache notices.
@@ -11,7 +21,7 @@ and historical API snapshots come from the US National Highway Traffic Safety
 Administration (NHTSA) vPIC. Each active source is identified in data/dataset.json.
 The original ZIP is unmodified. Runtime projection joins WMI/make associations, normalizes
 label whitespace, uppercases brands and records exclusions; see data/nhtsa/metadata.json.
-These upstream materials are not relicensed under Orvin's Apache or CC0 licenses.
+These upstream materials are not relicensed under ORvin's Apache or CC0 licenses.
 NHTSA's published-information reuse statement permits distribution and copying:
 https://www.nhtsa.gov/about-nhtsa/terms-use
 No endorsement by NHTSA or any vehicle manufacturer is implied.
@@ -20,7 +30,15 @@ German HSN/TSN data: Kraftfahrt-Bundesamt (KBA), FZ Hersteller Handelsnamen Kfz.
 Reference date 2026-01-01; retrieved 2026-09-25. License: dl-de/by-2-0.
 https://www.govdata.de/dl-de/by-2-0
 https://data.gov.de/suche/daten/fz-hersteller-handelsnamen-kfz?ids=c1e3a0b6-0d34-4e99-8181-91bdfb639208
-Modified for Orvin: selected one reference date, renamed columns, sorted rows and
+Modified for ORvin: selected one reference date, renamed columns, sorted rows and
 represented nulls as \N; original labels, counts and statistical markers are unchanged.
 See data/kba/metadata.json and data/LICENSE.md for provenance and attribution.
 No endorsement by KBA is implied.
+
+Native VIN rules derive from the pinned NHTSA public pattern tables and documented
+matching semantics; source rule/schema IDs and derivations remain traceable.
+Selected Tesla Model Y and Volkswagen Golf factual associations are independently
+structured from the exact sources listed in data/europe/ and data/decoding/sources.json.
+Tesla and Volkswagen retain rights in their documents; no OEM manuals, illustrations
+or complete PDF collection is redistributed. See data/LICENSE.md for the reuse
+assessment, source editions, locators and limitations. No OEM endorsement is implied.

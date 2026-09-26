@@ -19,11 +19,17 @@ public final class ParityProbe {
         try (var input = new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8))) {
             for (String line; (line = input.readLine()) != null;) {
                 String[] c = line.split("\t", -1);
-                Object result = c[0].equals("vin")
+                String[] mode = c[0].split(":");
+                Object result = mode[0].equals("vin")
                         ? VinDecoder.bundled().decode(decode(c[1]), new VinDecoder.Context(
                                 c[2].isEmpty() ? Optional.empty() : Optional.of(Integer.valueOf(c[2])),
                                 c[3].isEmpty() ? Optional.empty() : Optional.of(c[3])))
                         : HsnTsnLookup.bundled().lookup(decode(c[1]), decode(c[2]));
+                if (mode.length > 1) {
+                    VehicleAnswer answer = result instanceof VinDecoder.Result r ? VehicleAnswer.from(r)
+                            : VehicleAnswer.from((HsnTsnLookup.Result) result);
+                    result = mode[1].equals("short") ? answer.shortResult() : answer.longResult();
+                }
                 System.out.println(json(result));
             }
         }
@@ -56,9 +62,15 @@ public final class ParityProbe {
                 fields.put("category", r.category());
                 fields.put("manufacturerCountry", r.manufacturerCountry());
                 fields.put("assemblyCountry", r.assemblyCountry());
+                fields.put("model", r.model());
+                fields.put("modelYear", r.modelYear());
             }
             if (value instanceof VinDecoder.Resolution<?> r) fields.put("value", r.value());
             if (value instanceof HsnTsnLookup.Result r) fields.put("value", r.value());
+            if (value instanceof VehicleDetails.Field f) fields.put("value", f.value());
+            return json(fields);
+        }
+        if (value instanceof Map<?, ?> fields) {
             StringBuilder out = new StringBuilder("{");
             for (var field : fields.entrySet()) {
                 if (out.length() > 1) out.append(',');

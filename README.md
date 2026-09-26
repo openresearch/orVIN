@@ -1,7 +1,14 @@
-# Orvin
+# ORvin
+
+European expansion: both libraries now expose sourced Swiss type-approval
+candidates alongside direct VIN facts. See the [100-model coverage report](docs/european-coverage.md)
+for implemented fields, catalogue gaps and validation limits. Candidate
+configurations are not proof of an individual vehicle's build specification.
 
 Shared vehicle reference data with independent, offline **Python and Java** libraries.
 VIN manufacturer lookup uses **12,998 WMIs** from the September 2026 NHTSA bulk dataset.
+The development version also decodes vehicle details from **1,343,387 public VIN patterns**,
+with explicit market/year scope and separately sourced European Tesla Model Y rules.
 German HSN/TSN lookup includes **63,260 KBA entries at 2026-01-01**. Both distributions embed the
 complete NHTSA source archive and KBA snapshot. Neither library has runtime dependencies or makes network calls.
 
@@ -20,22 +27,28 @@ Only **Python 3.10+** is required. No JDK, compilation, package installation or 
 
 ```sh
 ./vin.sh 1HGAAAAAAAAAAAAAA   # synthetic VIN example
+./vin.sh 1HGCM82603A000000 --market US   # synthetic Accord configuration
+./vin.sh XP7YGAEK0TB000001 --market DE   # synthetic Berlin Model Y configuration
 ./hsntsn.sh 0005 AMQ
 ./hsntsn.sh 0603 BMT
 ./vin.sh 1HGAAAAAAAAAAAAAA --json
 ./hsntsn.sh 0005 AMQ --json
 ```
 
-Both scripts print a readable summary by default, showing match count, resolved facts, unknowns
-and one attribution per source. Add `--json` for the complete library result: supplied and normalized
-input, all candidates, known/unknown values, dataset version/hash and source details. `0005 AMQ`
-identifies KBA's `BAYER.MOT.WERKE-BMW` / `1ER REIHE`, with 1,993 registered vehicles at the
-reference date. Counts describe that dated population, not an individual vehicle.
+Both scripts print **normalized short JSON** by default. `--json` explicitly selects
+that same view; `--long` or `--json --long` adds explanations and complete evidence.
+The long response is exactly the short object plus `details`. Both include source
+attribution. See [normalized output and migration](docs/normalized-output.md).
+
+For example, `./vin.sh WVWZZZ1KZ5P000001 --json` returns VW / Golf / model year
+2005, with production year unknown. The synthetic VIN exercises the scoped European
+Golf rule. `./hsntsn.sh 0603 BMT` returns VW / Golf Sportsvan with unknown years.
+Unreviewed family aliases stay unknown; original labels and counts remain in long evidence.
 
 Scripts work from any working directory, including paths with spaces. Set `ORVIN_PYTHON` to a
 Python executable if needed. Use `--help`; VIN also accepts `--model-year` and `--market` for
 independently known context. Exit codes: `0` for completed lookups (including unknown/ambiguous),
-`2` for malformed arguments, invalid HSN/TSN or unsupported VIN length, `1` for environment/data
+`2` for malformed arguments, invalid HSN/TSN, VIN characters or unsupported VIN length, `1` for environment/data
 errors. VIN character assessment is shown separately from recognition.
 
 ## Python
@@ -44,10 +57,24 @@ Use `PYTHONPATH=libs/python` in a checkout, or install with `python3 -m pip inst
 The installed package bundles the same shared data and works outside the repository.
 
 ```python
-from orvin import HsnTsnLookup, VinDecoder
+from orvin import Context, HsnTsnLookup, VinDecoder
+
+# Normalized API in the current development checkout:
+answer = VinDecoder.bundled().decode_vehicle("WVWZZZ1KZ5P000001")
+print(answer.vehicle)  # VW / Golf / 2005; productionYear is None
+short_json_values = answer.short()
+long_json_values = answer.long()
+
+# The original source-level API is retained:
 
 vin = VinDecoder.bundled().decode("1HGAAAAAAAAAAAAAA")
 print(vin["manufacturer"]["value"]["name"])
+
+# These richer APIs require the current development version, after v0.1.0.
+vehicle = VinDecoder.bundled().decode("1HGCM82603A000000", Context(market="US"))
+print(vehicle["model"]["value"])                       # Accord
+print(vehicle["modelYear"]["value"])                   # "2003"
+print(vehicle["details"]["fields"]["PlantCity"]["value"])  # MARYSVILLE
 
 result = HsnTsnLookup.bundled().lookup("0005", "AMQ")
 if result["status"] == "RECOGNIZED":
@@ -92,13 +119,25 @@ System.out.println(vin.manufacturer().value().map(VinDecoder.Manufacturer::name)
 var result = HsnTsnLookup.bundled().lookup("0005", "AMQ");
 System.out.println(result.value().flatMap(HsnTsnLookup.TypeEntry::tradeName));
 System.out.println(result.dataset().referenceDate());
+
+// Normalized API in the current development version, after v0.1.0:
+var answer = VinDecoder.bundled().decodeVehicle("WVWZZZ1KZ5P000001");
+System.out.println(answer.vehicle().make()); // Optional[VW]
+System.out.println(answer.toShortJson());
+System.out.println(answer.toLongJson());
+
+// Original source-level detail API:
+var vehicle = VinDecoder.bundled().decode("1HGCM82603A000000",
+    new VinDecoder.Context(java.util.Optional.empty(), java.util.Optional.of("US")));
+System.out.println(vehicle.model().value());
+System.out.println(vehicle.details().field("PlantCity").value());
 ```
 
 Kotlin uses the same artifact: `implementation("com.openresearch:orvin:0.1.0")`.
 **[Version 0.1.0 is released](https://github.com/openresearch/orvin/releases/tag/v0.1.0).**
 Java is published to GitHub Packages; configure its repository and authentication using the
 [Maven/Gradle instructions](docs/releasing.md). Python wheel/sdist downloads are release assets.
-Local source builds still use the development versions `0.1.0-SNAPSHOT` / `0.1.0.dev0`.
+Local source builds still use the development versions `0.2.0-SNAPSHOT` / `0.2.0.dev0`.
 
 GitHub Actions builds both libraries. Pushing a stable `vX.Y.Z` tag runs the CI matrix, publishes
 `com.openresearch:orvin:X.Y.Z` to GitHub Packages, and attaches Java artifacts plus Python
@@ -140,21 +179,38 @@ type ever assigned. **KBA supplies no VIN-to-HSN/TSN mapping in this dataset.** 
 
 VIN structure checks length/alphabet, not checksum, authenticity or registration. A known WMI
 can coexist with invalid characters elsewhere. Unknown WMI does not prove invalidity. The
-libraries do not infer model year, engine, fuel, emissions, assembly country, plant or history.
-Manufacturer country is separately represented and remains unknown; source WMI geography is not
-promoted to a headquarters or assembly location. The archive includes 1,678,690 VIN patterns,
-but **the libraries do not yet execute the detailed vPIC decoding rules**.
+rich decoder returns model, scoped year, plant/country, engine, fuel, body, trim, drivetrain,
+transmission and other public attributes where matching rules exist. `details.fields` uses
+NHTSA variable codes; values are strings, including numeric values. Every field retains evidence.
+NHTSA results require independently known `--market US` to become unconditional; absent market
+retains conditional possibilities, and an explicit non-US market excludes those rules.
+
+European additions currently cover Berlin/Shanghai Tesla Model Y configurations documented for
+2025–2027. They return **production year**, separately from model year. Your market does not need
+to be US for these OEM rules. A separate bounded European Golf 1K model-year-2005 rule resolves Golf V, year and
+Mosel/Wolfsburg plant. Other historical years and unreviewed layouts remain unknown.
+See [source traceability and audit](docs/provenance-audit.md).
+Exact production dates, complete options, history and VIN-to-HSN/TSN remain unavailable.
+Manufacturer country stays unknown; source WMI geography is never used as assembly country.
+
+`status` and `candidates` retain the original WMI lookup outcome; `details.status` describes the
+vehicle-rule result. A decoded model can resolve `brand` while all WMI associations remain
+available for audit. Unresolved year cycles are separate `details.alternatives`; do not combine
+fields across them. See [rich decoding behavior and limits](docs/rich-decoding.md).
 
 ## Embedded datasets and updates
 
 The main JAR embeds every file in `data/` under `META-INF/orvin/`; the Python wheel includes the
 same files under `orvin/_data/`. This includes the complete 76.2 MB NHTSA ZIP (97 source tables
 and its SQL functions), normalized WMI data, KBA records, provenance, hashes and notices.
-Only the lookup indexes are loaded during normal use. No database server or SQL execution is needed.
+Runtime loads small indexes and the required compressed pattern shards through bounded caches.
+No database server or SQL execution is needed.
 
 ```sh
 # Rebuild normalized WMI data from the already bundled ZIP, offline:
 python3 tools/nhtsa.py import
+python3 tools/decoding.py import
+python3 tools/identity.py --generate
 .venv/bin/python tools/dataset.py --update-runtime
 
 # Explicitly download, verify and import the pinned official snapshot:
@@ -185,5 +241,5 @@ Read [CONTRIBUTING.md](CONTRIBUTING.md), [architecture](docs/architecture.md) an
 Code/documentation: [Apache-2.0](LICENSE). KBA data: **dl-de/by-2-0**, attributed to the
 [Kraftfahrt-Bundesamt source](https://data.gov.de/suche/daten/fz-hersteller-handelsnamen-kfz?ids=c1e3a0b6-0d34-4e99-8181-91bdfb639208)
 under its [license](https://www.govdata.de/dl-de/by-2-0). Imported NHTSA facts retain their reuse
-notice. Only Orvin-owned data contributions are CC0. Preserve [data notices](data/LICENSE.md);
+notice. Only ORvin-owned data contributions are CC0. Preserve [data notices](data/LICENSE.md);
 source data are not relicensed Apache or CC0. Names and marks do not imply endorsement.

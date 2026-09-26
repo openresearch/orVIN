@@ -1,0 +1,39 @@
+[
+  {
+    "id": "owner-golf5-austria-2026-09-26",
+    "vin": "WVWZZZ1KZ5P087443",
+    "source": {
+      "kind": "USER_CONTRIBUTION",
+      "id": "owner-golf5-austria-2026-09-26",
+      "attribution": "User-contributed Golf 5 from Austria.",
+      "permission": "The owner explicitly authorized this VIN in repository test cases and requested attribution on 2026-09-26.",
+      "reported": {
+        "model": "Golf 5",
+        "country": "AT"
+      },
+      "url": null,
+      "license": null,
+      "publisher": "Vehicle owner (user contribution)",
+      "title": "Owner-authorized Golf 5 from Austria test vehicle",
+      "edition": "Owner statement 2026-09-26",
+      "retrievedOn": "2026-09-26",
+      "section": "Owner permission to use this VIN in repository tests; owner identifies the vehicle as Golf 5 from Austria.",
+      "reuseBasis": "Explicit owner permission to include the VIN in repository tests with attribution; no standardized license asserted.",
+      "urlUnavailableReason": "Direct owner contribution in this conversation; no public source document."
+    },
+    "expected": {
+      "makeId": "vw",
+      "make": "VW",
+      "modelId": "vw:golf",
+      "model": "Golf",
+      "modelYear": 2005,
+      "productionYear": null
+    },
+    "expectationBasis": "Make/model agrees with the owner report. Model year 2005 is a rule-derived expectation, not independently confirmed by the owner. Austria is owner-reported context, not VIN-derived.",
+    "ruleSourceRefs": [
+      "vw-golf-maintenance-2009",
+      "vw-vin-chart-2005",
+      "vw-golf-v-profile"
+    ]
+  }
+]

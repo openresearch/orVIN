@@ -1,0 +1,1098 @@
+[
+  {
+    "id": "research-6e35c5d78975decc",
+    "url": "https://cdn.mgmotor.eu/manuals/1.-ZS-EV_Owners-Manual.pdf",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "americas-uk.md",
+        "section": "Sources and verified scope"
+      }
+    ]
+  },
+  {
+    "id": "research-9a31b8bd401aa61e",
+    "url": "https://cdn.polestartechhub.com/vin-decoder/Polestar+MY+2021+VIN+Decoder-Rev+1.pdf",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "americas-uk.md",
+        "section": "Sources and verified scope"
+      }
+    ]
+  },
+  {
+    "id": "research-45e1386dc66089a9",
+    "url": "https://content.fordpro.com/content/dam/fordpro/us/en-us/pdf/fleet-vehicles/vin-lookup-and-guides/2025-vin-guide.pdf",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "americas-uk.md",
+        "section": "Sources and verified scope"
+      }
+    ]
+  },
+  {
+    "id": "research-b67aa7c0dfccd028",
+    "url": "https://crashstats.nhtsa.dot.gov/Api/Public/Publication/813547",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "americas-uk.md",
+        "section": "Important implementation consequences"
+      }
+    ]
+  },
+  {
+    "id": "research-da5982e45cbf6713",
+    "url": "https://eur-lex.europa.eu/legal-content/EN/ALL/?uri=CELEX%3A32021R0535",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "framework.md",
+        "section": "Useful general primary sources"
+      }
+    ]
+  },
+  {
+    "id": "research-c137a86e6925443a",
+    "url": "https://geely.co.il/wp-content/uploads/2025/01/%D7%A1%D7%A4%D7%A8-%D7%A0%D7%94%D7%92-%D7%90%D7%A0%D7%92%D7%9C%D7%99%D7%AA-2.pdf",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "asia.md",
+        "section": "Geely — partial official description; passenger-car table not found"
+      }
+    ]
+  },
+  {
+    "id": "research-b3f3b5da56ac676a",
+    "url": "https://manuals.plus/m/2aaea4e3144187875b261a01a103ee47e41a5d9dc30a36162ad57b78b5849a1b.pdf#page=39",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "europe.md",
+        "section": "Volkswagen"
+      }
+    ]
+  },
+  {
+    "id": "research-7b3b0cd317dedc34",
+    "url": "https://meinwirt.com/webserver/vwvortex/VIN_Decoder__2005.pdf",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "europe.md",
+        "section": "Volkswagen"
+      }
+    ]
+  },
+  {
+    "id": "research-8e8de5c7e0fc2ccf",
+    "url": "https://opendata.astra.admin.ch/ivzod/2000-Typengenehmigungen_TG_TARGA/2200-Basisdaten_TG_ab_1995/2220-Datenbeschreibung/Basisdaten_TG_ab_1995.pdf",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "../astra-review.md",
+        "section": "What the VIN field means"
+      }
+    ]
+  },
+  {
+    "id": "research-8ac381ebc3a05500",
+    "url": "https://opendata.astra.admin.ch/ivzod/2000-Typengenehmigungen_TG_TARGA/2200-Basisdaten_TG_ab_1995/TG-Automobil.txt",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "../astra-review.md",
+        "section": "Inspected-byte provenance"
+      }
+    ]
+  },
+  {
+    "id": "research-6a29263fb59812d9",
+    "url": "https://opendata.astra.admin.ch/ivzod/4000-Typengenehmigungen_TAS/4250-json-Schema/govServices_TypeApproval_Schema.json",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "../astra-review.md",
+        "section": "What the VIN field means"
+      }
+    ]
+  },
+  {
+    "id": "research-741854e2e1d36399",
+    "url": "https://polestartechhub.com/resources/vin-decoder",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "americas-uk.md",
+        "section": "Sources and verified scope"
+      }
+    ]
+  },
+  {
+    "id": "research-0caaba30bb52a897",
+    "url": "https://rosap.ntl.bts.gov/view/dot/89793/dot_89793_DS1.pdf",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "europe.md",
+        "section": "Shared source and reuse observations"
+      }
+    ]
+  },
+  {
+    "id": "research-32bab3a917290b01",
+    "url": "https://service.citroen.com/aides/DOC_OI/AC/documents/fr_FR/AIDE/9889/vin_ac.html",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "europe.md",
+        "section": "Citroën"
+      }
+    ]
+  },
+  {
+    "id": "research-0f268f460316a322",
+    "url": "https://service.citroen.com/aides/DOC_OI/AC/documents/fr_FR/AIDE/9900/caracteristiques_ac.html",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "europe.md",
+        "section": "Citroën"
+      }
+    ]
+  },
+  {
+    "id": "research-0af2512d9e36851c",
+    "url": "https://service.tesla.com/docs/ModelY/ServiceManual/2025/en-au/air/GUID-BB4CE449-3F8E-4905-AF4A-96DFA87535B5.html",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "americas-uk.md",
+        "section": "Sources and verified scope"
+      }
+    ]
+  },
+  {
+    "id": "research-5523905006cdc916",
+    "url": "https://service.tesla.com/docs/ModelY/ServiceManual/en-au/air/GUID-0C797294-574D-4EE4-8017-C339A7D58411.html",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "americas-uk.md",
+        "section": "Important implementation consequences"
+      }
+    ]
+  },
+  {
+    "id": "research-f9164b47fc4790c8",
+    "url": "https://static.nhtsa.gov/nhtsa/downloads/MfrMail/01-022-N11B-8603.pdf",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "asia.md",
+        "section": "Suzuki — verified historical table, US/Canada MY2002"
+      }
+    ]
+  },
+  {
+    "id": "research-fe6beea9c718c9b3",
+    "url": "https://static.nhtsa.gov/odi/tsbs/2017/MC-10127435-9999.pdf",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "asia.md",
+        "section": "Mitsubishi — verified table, North American MY2018"
+      }
+    ]
+  },
+  {
+    "id": "research-c900344f748de71b",
+    "url": "https://static.nhtsa.gov/odi/tsbs/2025/MC-11015103-0001.pdf",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "europe.md",
+        "section": "Porsche"
+      }
+    ]
+  },
+  {
+    "id": "research-d42f24995990ff27",
+    "url": "https://vpic.nhtsa.dot.gov/",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "nhtsa-bulk.md",
+        "section": "Coverage and reuse"
+      },
+      {
+        "document": "americas-uk.md",
+        "section": "Important implementation consequences"
+      }
+    ]
+  },
+  {
+    "id": "research-8fa7e04f3cca53c9",
+    "url": "https://vpic.nhtsa.dot.gov/api/",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "framework.md",
+        "section": "Useful general primary sources"
+      },
+      {
+        "document": "nhtsa-bulk.md",
+        "section": "API option for an earlier, smaller expansion"
+      }
+    ]
+  },
+  {
+    "id": "research-d8a9532445403475",
+    "url": "https://vpic.nhtsa.dot.gov/api/vehicles/DecodeWMI/WVW?format=json",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "nhtsa-bulk.md",
+        "section": "API option for an earlier, smaller expansion"
+      }
+    ]
+  },
+  {
+    "id": "research-5fbc5d2b32a009e3",
+    "url": "https://vpic.nhtsa.dot.gov/api/vehicles/GetWMIsForManufacturer?vehicleType=2&format=json",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "nhtsa-bulk.md",
+        "section": "API option for an earlier, smaller expansion"
+      }
+    ]
+  },
+  {
+    "id": "research-46c9053403117340",
+    "url": "https://vpic.nhtsa.dot.gov/api/vehicles/GetWMIsForManufacturer?vehicleType=3&format=json",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "nhtsa-bulk.md",
+        "section": "API option for an earlier, smaller expansion"
+      }
+    ]
+  },
+  {
+    "id": "research-533ca83c53be3278",
+    "url": "https://vpic.nhtsa.dot.gov/downloads/",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "framework.md",
+        "section": "Useful general primary sources"
+      },
+      {
+        "document": "nhtsa-bulk.md",
+        "section": "Exact inspected download"
+      }
+    ]
+  },
+  {
+    "id": "research-495e358f534028d7",
+    "url": "https://vpic.nhtsa.dot.gov/downloads/vPICList_lite_2026_09.plain.zip",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "README.md",
+        "section": "Bulk foundation and runtime boundary"
+      },
+      {
+        "document": "nhtsa-bulk.md",
+        "section": "Exact inspected download"
+      }
+    ]
+  },
+  {
+    "id": "research-785b8cc7c5a09e83",
+    "url": "https://vpic.nhtsa.dot.gov/mfrportal/home/coverletter/fffb7e2c-1568-4f57-aa43-f08a9e152d7d",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "americas-uk.md",
+        "section": "Important implementation consequences"
+      }
+    ]
+  },
+  {
+    "id": "research-82b9942baf654561",
+    "url": "https://vpic.nhtsa.dot.gov/mid/",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "asia.md",
+        "section": "Shared discovery and reuse findings"
+      }
+    ]
+  },
+  {
+    "id": "research-ad10ac5c45c6efca",
+    "url": "https://vpic.nhtsa.dot.gov/mid/AjaxHandler/AjaxHandler565TopLevel",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "asia.md",
+        "section": "Shared discovery and reuse findings"
+      }
+    ]
+  },
+  {
+    "id": "research-f0f8806e76c51c1d",
+    "url": "https://vpic.nhtsa.dot.gov/mid/home/displayfile/0226b793-3f21-45ca-9697-bca085a86f68",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "asia.md",
+        "section": "Geely — partial official description; passenger-car table not found"
+      }
+    ]
+  },
+  {
+    "id": "research-4ac16eabff6b2f4b",
+    "url": "https://vpic.nhtsa.dot.gov/mid/home/displayfile/03723043-2a59-4275-80a4-e55642b61a8a",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "americas-uk.md",
+        "section": "Sources and verified scope"
+      }
+    ]
+  },
+  {
+    "id": "research-76a052d0cb5dd1c7",
+    "url": "https://vpic.nhtsa.dot.gov/mid/home/displayfile/09dda193-d8de-441e-916a-5e87d57a3d1a",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "asia.md",
+        "section": "Mazda — verified table, US MY2026 CX-30, with serial boundaries"
+      }
+    ]
+  },
+  {
+    "id": "research-5c48aafd8e439623",
+    "url": "https://vpic.nhtsa.dot.gov/mid/home/displayfile/0c69ec59-2c6a-4023-8c16-2ac89e6620e1",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "asia.md",
+        "section": "BYD — verified US commercial table; partial European family evidence"
+      }
+    ]
+  },
+  {
+    "id": "research-13fba28e4708bbaf",
+    "url": "https://vpic.nhtsa.dot.gov/mid/home/displayfile/266539cd-0b1b-481c-bd76-5ca86aebca24",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "asia.md",
+        "section": "Isuzu — verified table, US MY2025 medium/heavy incomplete vehicles"
+      }
+    ]
+  },
+  {
+    "id": "research-3c673c71e4a559c6",
+    "url": "https://vpic.nhtsa.dot.gov/mid/home/displayfile/2c3f8c25-36d4-4062-a462-5e08fad3d53b",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "europe.md",
+        "section": "BMW"
+      }
+    ]
+  },
+  {
+    "id": "research-178ad794b5f39009",
+    "url": "https://vpic.nhtsa.dot.gov/mid/home/displayfile/3060a9c9-a21b-4251-985d-8609979cf0ae",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "asia.md",
+        "section": "Hyundai — verified table, North America/Mexico MY2027 Nexo"
+      }
+    ]
+  },
+  {
+    "id": "research-de6cfbe1f73b47c9",
+    "url": "https://vpic.nhtsa.dot.gov/mid/home/displayfile/4bb6e581-1ca4-4087-a0fe-583fe6961468",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "europe.md",
+        "section": "Volkswagen"
+      }
+    ]
+  },
+  {
+    "id": "research-dd43b61ea1b26636",
+    "url": "https://vpic.nhtsa.dot.gov/mid/home/displayfile/4e404c82-7775-468b-bdcb-1a16847e9f29",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "europe.md",
+        "section": "Audi"
+      }
+    ]
+  },
+  {
+    "id": "research-d1a8e7036f39d25e",
+    "url": "https://vpic.nhtsa.dot.gov/mid/home/displayfile/5f717df1-9bfd-44d9-9d7b-8b84ca17c457",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "asia.md",
+        "section": "Daihatsu — verified scanned table, US MY1992"
+      }
+    ]
+  },
+  {
+    "id": "research-488d4c3146082a3a",
+    "url": "https://vpic.nhtsa.dot.gov/mid/home/displayfile/63e38c13-e5a1-4991-b2b9-1812f3e61d66",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "europe.md",
+        "section": "Audi"
+      }
+    ]
+  },
+  {
+    "id": "research-cc9dbd1a33fbd969",
+    "url": "https://vpic.nhtsa.dot.gov/mid/home/displayfile/72a52595-5bd6-4457-af90-39f7f8e2c3e9",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "asia.md",
+        "section": "Honda — verified table, US MY2023 CR-V"
+      }
+    ]
+  },
+  {
+    "id": "research-f20a068e33bf3439",
+    "url": "https://vpic.nhtsa.dot.gov/mid/home/displayfile/72bb4585-2803-4a75-a8dd-47b21498cc21",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "asia.md",
+        "section": "Toyota — verified table, narrow US model scope"
+      },
+      {
+        "document": "asia.md",
+        "section": "Subaru — verified tables, US MY2025"
+      }
+    ]
+  },
+  {
+    "id": "research-209aa9b795507eb0",
+    "url": "https://vpic.nhtsa.dot.gov/mid/home/displayfile/78f9a1e7-b33f-4550-b06c-a0b00b19a85f",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "asia.md",
+        "section": "Nissan — verified tables, US MY2025"
+      },
+      {
+        "document": "asia.md",
+        "section": "Infiniti — verified tables, US MY2025"
+      }
+    ]
+  },
+  {
+    "id": "research-c20eeea0ecc1df00",
+    "url": "https://vpic.nhtsa.dot.gov/mid/home/displayfile/82093ac4-eb14-4c7b-956a-803ca000db57",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "americas-uk.md",
+        "section": "Sources and verified scope"
+      }
+    ]
+  },
+  {
+    "id": "research-3c8a66b41aff948d",
+    "url": "https://vpic.nhtsa.dot.gov/mid/home/displayfile/92c482ad-0aed-48f0-93a3-0a7fe81f00f1",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "americas-uk.md",
+        "section": "Sources and verified scope"
+      }
+    ]
+  },
+  {
+    "id": "research-144c07e330ea48f0",
+    "url": "https://vpic.nhtsa.dot.gov/mid/home/displayfile/93e823b4-c342-4ae0-8546-c947a390078d",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "americas-uk.md",
+        "section": "Sources and verified scope"
+      }
+    ]
+  },
+  {
+    "id": "research-b7614e6891512dff",
+    "url": "https://vpic.nhtsa.dot.gov/mid/home/displayfile/a1a5c253-5568-4ccf-a136-b842ed51d955",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "europe.md",
+        "section": "MINI"
+      }
+    ]
+  },
+  {
+    "id": "research-a0ccb62c708dd9c6",
+    "url": "https://vpic.nhtsa.dot.gov/mid/home/displayfile/abf674e9-c74c-4b54-8109-8fdf8412e623",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "asia.md",
+        "section": "Genesis — verified table, US MY2027 G70"
+      }
+    ]
+  },
+  {
+    "id": "research-c2bf69f3d086f48e",
+    "url": "https://vpic.nhtsa.dot.gov/mid/home/displayfile/b5f541b7-8157-415d-889c-7f63628e9e66",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "americas-uk.md",
+        "section": "Sources and verified scope"
+      }
+    ]
+  },
+  {
+    "id": "research-ac46e5b30d6ff7b4",
+    "url": "https://vpic.nhtsa.dot.gov/mid/home/displayfile/cb5fa075-7db5-45f4-8f77-d6aac7cb02ed",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "asia.md",
+        "section": "Kia — verified table, US-built MY2025 EV6"
+      }
+    ]
+  },
+  {
+    "id": "research-1006527ec8d61ad8",
+    "url": "https://vpic.nhtsa.dot.gov/mid/home/displayfile/d511b7b9-2cea-4576-9899-f113bee1c71b",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "asia.md",
+        "section": "Acura — verified table, US MY2026 RDX"
+      }
+    ]
+  },
+  {
+    "id": "research-acbbc9dd974586e8",
+    "url": "https://vpic.nhtsa.dot.gov/mid/home/displayfile/dc5b88a3-b353-47d9-827b-088b758dee47",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "europe.md",
+        "section": "Mercedes-Benz"
+      },
+      {
+        "document": "europe.md",
+        "section": "smart"
+      }
+    ]
+  },
+  {
+    "id": "research-039fd1f5f81b5383",
+    "url": "https://vpic.nhtsa.dot.gov/mid/home/displayfile/e62fe25d-d6e3-4d9a-b6e7-563121fd6c45",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "asia.md",
+        "section": "Lexus — verified table, US MY2022 IS"
+      }
+    ]
+  },
+  {
+    "id": "research-cf14540b25d7f899",
+    "url": "https://www.astra.admin.ch/dam/de/sd-web/7fPLSFMqD6JR/informationsprodukte_typengenehmigungsdaten.pdf",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "../astra-review.md",
+        "section": "Reuse basis"
+      }
+    ]
+  },
+  {
+    "id": "research-ed27b19f71682f2d",
+    "url": "https://www.astra.admin.ch/dam/de/sd-web/BakiDqfaJMx8/01%20%C3%9Cbersicht%20Informationsprodukte%20Fahrzeugdaten-20260701.pdf",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "../astra-review.md",
+        "section": "Reuse basis"
+      }
+    ]
+  },
+  {
+    "id": "research-283cb0088739f258",
+    "url": "https://www.astra.admin.ch/de/fahrzeugdaten",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "../astra-review.md",
+        "section": "Reuse basis"
+      }
+    ]
+  },
+  {
+    "id": "research-593a591c9dc29b98",
+    "url": "https://www.astra.admin.ch/de/faq-fahrzeugdaten",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "../astra-review.md",
+        "section": "What the VIN field means"
+      }
+    ]
+  },
+  {
+    "id": "research-e6eb26fc8511e564",
+    "url": "https://www.astra.admin.ch/de/news-homologation",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "../astra-review.md",
+        "section": "Reuse basis"
+      }
+    ]
+  },
+  {
+    "id": "research-4c63af9ed3eacb02",
+    "url": "https://www.cem.es/es/aviso-legal",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "europe.md",
+        "section": "Shared source and reuse observations"
+      }
+    ]
+  },
+  {
+    "id": "research-821c9f22962c876b",
+    "url": "https://www.cem.es/es/content/tax%C3%ADmetros",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "europe.md",
+        "section": "Shared source and reuse observations"
+      }
+    ]
+  },
+  {
+    "id": "research-cd7ca4f52cc3bbea",
+    "url": "https://www.cem.es/es/node/9456",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "asia.md",
+        "section": "BYD — verified US commercial table; partial European family evidence"
+      }
+    ]
+  },
+  {
+    "id": "research-a59791dd7c0bad25",
+    "url": "https://www.cem.es/sites/default/files/2023-04/04_protocolo_dacia_sandero_djf_rev.00.pdf",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "europe.md",
+        "section": "Dacia"
+      }
+    ]
+  },
+  {
+    "id": "research-af2f29fe31f1afa0",
+    "url": "https://www.cem.es/sites/default/files/2023-04/04_protocolo_scenic.pdf",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "europe.md",
+        "section": "Renault"
+      }
+    ]
+  },
+  {
+    "id": "research-946d261e9b962c69",
+    "url": "https://www.cem.es/sites/default/files/2023-11/20231124_aut_cat_preinstallacio_taximetre_peugeot_rifter_e-rifter_e-rev1_csv.pdf",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "europe.md",
+        "section": "Peugeot"
+      }
+    ]
+  },
+  {
+    "id": "research-6e65f1665b6a41a6",
+    "url": "https://www.cem.es/sites/default/files/2025-04/05_preinstalacion_opel_astra_f.pdf",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "europe.md",
+        "section": "Opel"
+      }
+    ]
+  },
+  {
+    "id": "research-87ce414d1f2c411a",
+    "url": "https://www.cem.es/sites/default/files/2025-10/05_protocolo_taximetro_byd_seal_eke_cam_00_signed_0.pdf",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "../astra-review.md",
+        "section": "Independent public check"
+      }
+    ]
+  },
+  {
+    "id": "research-bac803c4ad2d4bb5",
+    "url": "https://www.cem.es/sites/default/files/2026-09/20260721_aut_cat_preinstallacio_taximetre_byd_seal_6_dm-i_hk-rev0_csv.pdf",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "asia.md",
+        "section": "BYD — verified US commercial table; partial European family evidence"
+      }
+    ]
+  },
+  {
+    "id": "research-0a17a4d874beb694",
+    "url": "https://www.cupra.com/content/dam/public/cupra-website/owners/your-cupra/cupra-cars-manuals/brochures/cupra-ateca/CUPRA_ATECA_11_2018_EN.pdf",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "europe.md",
+        "section": "CUPRA"
+      }
+    ]
+  },
+  {
+    "id": "research-1ddee27fc764899b",
+    "url": "https://www.cupra.com/en/faqs/cupra-connect/gen-4-general-information",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "europe.md",
+        "section": "CUPRA"
+      }
+    ]
+  },
+  {
+    "id": "research-f9c2a008d05ebd9a",
+    "url": "https://www.ecfr.gov/current/title-49/subtitle-B/chapter-V/part-565/subpart-B/section-565.15",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "framework.md",
+        "section": "Useful general primary sources"
+      }
+    ]
+  },
+  {
+    "id": "research-69ce5c8b065daadf",
+    "url": "https://www.ecfr.gov/current/title-49/subtitle-B/chapter-V/part-565/subpart-B/section-565.16",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "framework.md",
+        "section": "Useful general primary sources"
+      }
+    ]
+  },
+  {
+    "id": "research-e43c9e9b69268e36",
+    "url": "https://www.fedlex.admin.ch/eli/cc/2023/682/de",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "../astra-review.md",
+        "section": "Reuse basis"
+      }
+    ]
+  },
+  {
+    "id": "research-047bf89e48f5f188",
+    "url": "https://www.fedlex.admin.ch/filestore/fedlex.data.admin.ch/eli/cc/2023/682/20250501/de/pdf-a/fedlex-data-admin-ch-eli-cc-2023-682-20250501-de-pdf-a.pdf",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "../astra-review.md",
+        "section": "Reuse basis"
+      }
+    ]
+  },
+  {
+    "id": "research-5984b18d945074e2",
+    "url": "https://www.geelyauto.eu/geely-manuals",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "asia.md",
+        "section": "Geely — partial official description; passenger-car table not found"
+      }
+    ]
+  },
+  {
+    "id": "research-3efb628969202fa4",
+    "url": "https://www.govdata.de/dl-de/by-2-0",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "../europe-priority/README.md",
+        "section": "Source scope and reuse"
+      }
+    ]
+  },
+  {
+    "id": "research-0d514e71284cbbe8",
+    "url": "https://www.jato.com/hubfs/Top%2050%20best-selling%20models%202024.jpg",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "../europe-priority/README.md",
+        "section": "Source scope and reuse"
+      }
+    ]
+  },
+  {
+    "id": "research-8a92f2303857cf2c",
+    "url": "https://www.jato.com/resources/media-and-press-releases/european-new-car-market-growth-in-2024-driven-by-hybrids-and-chinese-brands",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "../europe-priority/README.md",
+        "section": "Source scope and reuse"
+      }
+    ]
+  },
+  {
+    "id": "research-ff1de660678468da",
+    "url": "https://www.jato.com/term-of-use",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "../europe-priority/README.md",
+        "section": "Source scope and reuse"
+      }
+    ]
+  },
+  {
+    "id": "research-c0e97f0fdc7a6f79",
+    "url": "https://www.kba.de/SharedDocs/Downloads/DE/Statistik/Fahrzeuge/FZ10/fz10_2025_12.xlsx?__blob=publicationFile&v=2",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "../europe-priority/README.md",
+        "section": "Source scope and reuse"
+      }
+    ]
+  },
+  {
+    "id": "research-fc32fb1cf046f7ac",
+    "url": "https://www.mgmotors.no/owners/modell%C3%A5r",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "americas-uk.md",
+        "section": "Important implementation consequences"
+      }
+    ]
+  },
+  {
+    "id": "research-81cbb49139c6b6e8",
+    "url": "https://www.nhtsa.gov/about-nhtsa/terms-use",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "README.md",
+        "section": "Source and reuse boundaries"
+      },
+      {
+        "document": "nhtsa-bulk.md",
+        "section": "Coverage and reuse"
+      },
+      {
+        "document": "asia.md",
+        "section": "Shared discovery and reuse findings"
+      },
+      {
+        "document": "americas-uk.md",
+        "section": "Reuse boundary"
+      }
+    ]
+  },
+  {
+    "id": "research-f4072c42ad4f674b",
+    "url": "https://www.nhtsa.gov/privacy-policy/linking-policy",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "americas-uk.md",
+        "section": "Reuse boundary"
+      }
+    ]
+  },
+  {
+    "id": "research-a729b132a4fe4d46",
+    "url": "https://www.seat.com/datamanual-manual/leon/my15_w22/en-uk/Gama%20Leon_EN.pdf",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "europe.md",
+        "section": "SEAT"
+      }
+    ]
+  },
+  {
+    "id": "research-cc405d8ac5c060e2",
+    "url": "https://www.seat.com/faqs/seat-connect",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "europe.md",
+        "section": "SEAT"
+      }
+    ]
+  },
+  {
+    "id": "research-b1f7af8fe12515dd",
+    "url": "https://www.skoda-storyboard.com/en/copyright/",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "europe.md",
+        "section": "Škoda"
+      }
+    ]
+  },
+  {
+    "id": "research-fb6116cc2fb4f0e9",
+    "url": "https://www.skoda-storyboard.com/en/skoda-world/what-can-vin-codes-tell-you/",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "europe.md",
+        "section": "Škoda"
+      }
+    ]
+  },
+  {
+    "id": "research-82b5a6d3426fa8f0",
+    "url": "https://www.statistik.at/fileadmin/pages/77/Pressemappe_2025.pdf",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "../europe-priority/README.md",
+        "section": "Source scope and reuse"
+      }
+    ]
+  },
+  {
+    "id": "research-47122c3552cd82da",
+    "url": "https://www.statistik.at/ueber-uns/aufgaben-und-grundsaetze/rechtsgrundlagen/impressum",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "../europe-priority/README.md",
+        "section": "Source scope and reuse"
+      }
+    ]
+  },
+  {
+    "id": "research-69867b5ff0f4d9bf",
+    "url": "https://www.technicalinformation.fiat.com/tech-info-web/web/pageLarge.do?id=12",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "europe.md",
+        "section": "Fiat"
+      }
+    ]
+  },
+  {
+    "id": "research-de7060daa7e614e3",
+    "url": "https://www.technicalinformation.fiat.com/tech-info-web/web/pageLarge.do?id=467",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "europe.md",
+        "section": "Fiat"
+      }
+    ]
+  },
+  {
+    "id": "research-bd6fc63cd31f031b",
+    "url": "https://www.toyota.com/owners/vehicle-specification/",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "asia.md",
+        "section": "Toyota — verified table, narrow US model scope"
+      }
+    ]
+  },
+  {
+    "id": "research-6ae1eccc0ab81d77",
+    "url": "https://www.vauxhall.co.uk/content/dam/vauxhall/Home/PDFs/owners/owners-manuals/viva/om_Viva_kta2779_1-vx-en_eu_ed0515_en_vx_online.pdf",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "europe.md",
+        "section": "Vauxhall"
+      }
+    ]
+  },
+  {
+    "id": "research-58f7f14b2977f9a0",
+    "url": "https://www.vauxhall.co.uk/owners/maintenance-and-repair/vehicle-recall-check.html",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "europe.md",
+        "section": "Vauxhall"
+      }
+    ]
+  },
+  {
+    "id": "research-a18aa51939d8b654",
+    "url": "https://www.volkswagen-newsroom.com/en/vehicle-data-golf-5-profile-19481",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "europe.md",
+        "section": "Volkswagen"
+      }
+    ]
+  },
+  {
+    "id": "research-573e29b217143e70",
+    "url": "https://www.volkswagen.co.uk/en/owners-and-services/my-car/xtl-diesel-fuel.html/__layer/layers/owners/my-car/xtl_diesel_fuel/modelyear/master.layer",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "europe.md",
+        "section": "Volkswagen"
+      }
+    ]
+  }
+]

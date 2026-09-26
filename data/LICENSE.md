@@ -2,6 +2,27 @@
 
 The Apache code license does not license the embedded data.
 
+## Swiss ASTRA type-approval factual data
+
+`astra/` contains **Swiss Federal Roads Office (ASTRA), Basisdaten TG ab 1995,
+TG-Automobil**, snapshot last modified 2026-07-30, retrieved 2026-09-26.
+[Original data](https://opendata.astra.admin.ch/ivzod/2000-Typengenehmigungen_TG_TARGA/2200-Basisdaten_TG_ab_1995/TG-Automobil.txt).
+ASTRA [explicitly publishes these factual data as Open Government Data](https://www.astra.admin.ch/de/news-homologation).
+[Swiss EMBAG, Article 10(4)](https://www.fedlex.admin.ch/eli/cc/2023/682/de)
+permits unrestricted OGD reuse subject to statutory attribution requirements.
+This is a statutory OGD reuse basis, not a Creative Commons license or a claim
+that all documents on the ASTRA website have the same terms. Preserve ASTRA
+attribution, source URI and this notice. No endorsement is implied.
+
+The retained gzip archive decompresses to the exact original bytes. Modifications
+in the separate projection: M1/M1G selection, conservative template filtering,
+selected original columns, base64/UTF-8 encoding and WMI partitioning. Remarks
+remain associated with each approval. ASTRA requires careful, professional use
+and provides data without warranty. These are possible approved types, not proof
+of a vehicle's make/model, configuration, market, model year or build date.
+See `astra/metadata.json` and the repository's `docs/research/astra-review.md` for
+the source locators, original-byte hashes and reviewed scope.
+
 ## Orvin's original work
 
 Orvin contributors dedicate their original dataset selection, arrangement, annotations and
@@ -54,3 +75,32 @@ Modifications: selected one reference date, renamed columns, sorted rows, repres
 `\N`, and packaged the data for lookup. Source labels, counts and statistical markers are unchanged.
 The JSON gzip snapshot retains the source attributes and complete object-ID set, with normalized
 JSON serialization; it is not a byte-for-byte archive of HTTP response envelopes.
+
+## Scoped OEM factual associations
+
+`europe/tesla-model-y.json` records selected factual associations from Tesla's
+2025+ Model Y service manual. `europe/vw-golf-1k-2005.json` records a bounded synthesis
+of Volkswagen's maintenance manual, 2005 year/plant chart and historical Golf V
+profile. Each records exact URLs, editions, locators, review dates, hosting status
+and inspected-byte hashes where available. No OEM manual/PDF or illustrations
+are redistributed, and no open license for those documents is asserted.
+Upstream rights are retained. These selected facts are independently structured
+for interoperability; the files record that reuse assessment and its scope.
+
+The native NHTSA projection in `decoding/` also preserves source pattern/schema
+IDs and derivation kinds. Its matching semantics were implemented from the pinned
+standalone source; NHTSA's published-information reuse statement and the limitations
+above apply. `decoding/sources.json` and the runtime source catalog retain attribution.
+The complete archive, projected files and historical/reference API snapshots are
+checked by the offline provenance and source-reconstruction validators.
+
+## Normalization and contributed regression fixture
+
+The identity catalogue is a derived exact-label projection of the NHTSA, ASTRA and
+selected OEM/KBA facts above. Each binding records its source and locator; display
+names are ORvin policy. These transformations do not replace upstream reuse terms.
+
+`identity/fixtures.json` contains a **User-contributed Golf 5 from Austria**, whose
+owner explicitly permitted the VIN in repository tests on 2026-09-26. The fixture
+records that permission and distinguishes owner-reported facts from rule-derived
+expectations. No separate standardized license from the owner is asserted.

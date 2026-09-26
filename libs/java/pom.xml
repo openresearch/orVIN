@@ -4,8 +4,8 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.openresearch</groupId>
   <artifactId>orvin</artifactId>
-  <version>0.1.0-SNAPSHOT</version>
-  <name>Orvin</name>
+  <version>0.2.0-SNAPSHOT</version>
+  <name>ORvin</name>
   <description>Offline VIN manufacturer identification and German HSN/TSN lookup with sourced reference datasets.</description>
   <url>https://github.com/openresearch/orvin</url>
   <licenses>

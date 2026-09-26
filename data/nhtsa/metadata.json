@@ -848,7 +848,8 @@
     "Retain noncompliant flags as assignment notes; never silently correct malformed WMIs."
   ],
   "implementedDecoding": [
-    "WMI manufacturer, brand candidates and vehicle category"
+    "WMI manufacturer, brand candidates and vehicle category",
+    "Public VIN patterns, model-year alternatives, model/make, engine-model associations and displacement conversion"
   ],
-  "archivedOnly": "Detailed pattern, model-year, enrichment and validation tables/functions are bundled but not executed by either library."
+  "archivedOnly": "Vehicle-spec enrichment, defaults, VIN repair and vPIC error scoring remain unimplemented. SQL is retained as source data, never executed by either library."
 }

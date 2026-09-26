@@ -37,7 +37,8 @@ class VinTest(unittest.TestCase):
             self.assertEqual("RECOGNIZED", self.decoder.decode(vin)["status"])
         self.assertEqual("UNSUPPORTED_FORMAT", self.decoder.decode("\t1HGAAAAAAAAAAAAAA")["status"])
         self.assertEqual("UNKNOWN", self.decoder.decode("ZZZAAAAAAAAAAAAAA")["status"])
-        self.assertEqual("UNKNOWN", result["assemblyCountry"]["status"])
+        self.assertEqual("NEEDS_CONTEXT", result["assemblyCountry"]["status"])
+        self.assertIsNone(result["assemblyCountry"]["value"])
         self.assertIsNone(result["manufacturerCountry"]["value"])
 
     def test_extended_wmi_does_not_fall_back_or_use_wrong_positions(self):
@@ -163,8 +164,8 @@ class ScriptTest(unittest.TestCase):
         return subprocess.run([str(ROOT / name), *args], cwd="/", capture_output=True, text=True, **kwargs)
 
     def test_scripts_print_library_json_from_an_unrelated_working_directory(self):
-        for script, args, expected in [("vin.sh", ["1HGAAAAAAAAAAAAAA"], VinDecoder.bundled().decode("1HGAAAAAAAAAAAAAA")),
-                                       ("hsntsn.sh", ["0005", "amq"], HsnTsnLookup.bundled().lookup("0005", "amq"))]:
+        for script, args, expected in [("vin.sh", ["1HGAAAAAAAAAAAAAA"], VinDecoder.bundled().decode_vehicle("1HGAAAAAAAAAAAAAA").short()),
+                                       ("hsntsn.sh", ["0005", "amq"], HsnTsnLookup.bundled().lookup_vehicle("0005", "amq").short())]:
             result = self.run_script(script, *args, "--json")
             self.assertEqual(0, result.returncode, result.stderr)
             self.assertEqual("", result.stderr)
@@ -173,12 +174,12 @@ class ScriptTest(unittest.TestCase):
     def test_exit_codes_help_missing_python_and_json_escaping(self):
         invalid = self.run_script("hsntsn.sh", "5", "AMQ", "--json")
         self.assertEqual(2, invalid.returncode)
-        self.assertEqual("INVALID_INPUT", json.loads(invalid.stdout)["status"])
+        self.assertEqual("INVALID_HSN", json.loads(invalid.stdout)["inputStatus"])
         self.assertEqual(0, self.run_script("hsntsn.sh", "9999", "ZZZ").returncode)
         self.assertEqual(2, self.run_script("vin.sh").returncode)
         self.assertEqual(0, self.run_script("vin.sh", "--help").returncode)
         strange = 'quote"\t\\\n'
-        self.assertEqual(strange, json.loads(self.run_script("vin.sh", strange, "--json").stdout)["supplied"])
+        self.assertEqual(strange, json.loads(self.run_script("vin.sh", strange, "--json", "--long").stdout)["details"]["input"]["supplied"])
         missing = self.run_script("vin.sh", "anything", env={**os.environ, "ORVIN_PYTHON": "/nonexistent/python"})
         self.assertEqual(1, missing.returncode)
         self.assertIn("Python 3.10+", missing.stderr)
@@ -196,40 +197,27 @@ class ScriptTest(unittest.TestCase):
                                     env={**os.environ, "PATH": directory, "ORVIN_PYTHON": "python3"},
                                     capture_output=True, text=True)
             self.assertEqual(0, result.returncode, result.stderr)
-            self.assertIn("Status: Recognized (1 match)", result.stdout)
-            self.assertIn("Trade / model name: 1ER REIHE", result.stdout)
+            answer = json.loads(result.stdout)
+            self.assertEqual("0005", answer["hsn"])
+            self.assertEqual("BMW", answer["vehicle"]["make"])
 
-    def test_default_summaries_show_one_match_and_deduplicate_sources(self):
-        # Synthetic VIN; do not add a customer's real VIN to fixtures.
-        vin = self.run_script("vin.sh", "WVWAAAAAAAAAAAAAA")
-        self.assertEqual(0, vin.returncode, vin.stderr)
-        self.assertIn("Manufacturer: VOLKSWAGEN AG", vin.stdout)
-        self.assertIn("Status: Recognized (1 match)", vin.stdout)
-        self.assertIn("Category: Passenger car", vin.stdout)
-        self.assertIn("checksum not checked", vin.stdout)
-        self.assertIn("model, year, engine and trim are not decoded", vin.stdout)
-        self.assertEqual(1, vin.stdout.count("Source:"))
-        self.assertNotIn('"candidates"', vin.stdout)
-        kba = self.run_script("hsntsn.sh", "0005", "AMQ")
-        self.assertEqual(0, kba.returncode, kba.stderr)
-        self.assertIn("Trade / model name: 1ER REIHE", kba.stdout)
-        self.assertIn("Registered vehicles: 1,993", kba.stdout)
-        self.assertIn("Reference date: 2026-01-01", kba.stdout)
-        self.assertIn("License: dl-de/by-2-0", kba.stdout)
-        self.assertEqual(1, kba.stdout.count("Source:"))
-
-    def test_summary_distinguishes_absent_evidence_from_invalid_input_and_escapes_controls(self):
+    def test_default_json_deduplicates_credits_and_distinguishes_invalid_input(self):
+        answer = json.loads(self.run_script("vin.sh", "WVWAAAAAAAAAAAAAA").stdout)
+        self.assertEqual("VW", answer["vehicle"]["make"])
+        self.assertEqual("SUPPORTED_FORMAT", answer["inputStatus"])
+        ids = [source["id"] for source in answer["sources"]]
+        self.assertEqual(len(ids), len(set(ids)))
+        self.assertNotIn("candidates", answer)
         unknown = self.run_script("hsntsn.sh", "9999", "ZZZ")
         self.assertEqual(0, unknown.returncode)
-        self.assertIn("Status: Unknown (0 matches)", unknown.stdout)
-        self.assertIn("does not establish that the codes are invalid", unknown.stdout)
+        self.assertEqual("SUPPORTED_FORMAT", json.loads(unknown.stdout)["inputStatus"])
+        self.assertTrue(all(v is None for v in json.loads(unknown.stdout)["vehicle"].values()))
         invalid = self.run_script("hsntsn.sh", "5", "AMQ")
         self.assertEqual(2, invalid.returncode)
-        self.assertIn("Input: Invalid hsn", invalid.stdout)
-        self.assertIn("keep leading zeroes", invalid.stdout)
+        self.assertEqual("INVALID_HSN", json.loads(invalid.stdout)["inputStatus"])
         controls = self.run_script("vin.sh", "WVW\n\x1b[31m")
         self.assertEqual(2, controls.returncode)
-        self.assertIn(r"WVW\n\u001b[31M", controls.stdout)
+        self.assertEqual("WVW\n\x1b[31M", json.loads(controls.stdout)["vin"])
         self.assertNotIn("\x1b", controls.stdout)
 
     def test_summaries_preserve_ambiguity_and_statistical_unknowns(self):

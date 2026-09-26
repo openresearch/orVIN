@@ -8,7 +8,7 @@ listed on the [official download page](https://vpic.nhtsa.dot.gov/downloads/).
 | Item | Pinned value |
 | --- | --- |
 | Publication / retrieval | 2026-09-19 / 2026-09-25 |
-| Orvin WMI dataset version | `2026.09.25.2` |
+| ORvin WMI dataset version | `2026.09.25.2` |
 | Source ZIP | 76,201,016 bytes |
 | SHA-256 | `1ee4a1e22526a606b492ce4ab301894465afbf43dc00946df6d503c3102d5911` |
 | Complete source | 97 tables, including 13,001 WMIs and 1,678,690 VIN patterns; 15 SQL functions |
@@ -52,13 +52,15 @@ These records are excluded only from the normal runtime projection, not deleted 
 archived source. No letter is silently replaced with a similar digit. Future snapshots also
 exclude WMIs whose public-availability date is later than the recorded retrieval date.
 
-## What is archived but not decoded yet
+## Rich decoding and remaining archived stages
 
 The ZIP preserves every original table and function, including detailed model, engine, fuel,
-body, restraint, plant, year, validation and enrichment data. Neither library currently executes
-that procedural decoder or returns those detailed fields. Pattern matching, applicability,
-precedence, year-cycle handling and enrichment still need native implementations and reviewed
-behavioral tests. See the [bulk feasibility assessment](research/vin-rules/nhtsa-bulk.md).
+body, restraint, plant, year, validation and enrichment data. Both libraries now execute native
+pattern matching over 1,343,387 public rules, including schema/year selection, precedence,
+dictionary values, numeric captures, engine-model facts, model-to-make resolution and displacement
+conversions. They preserve year alternatives instead of copying upstream error-scoring heuristics.
+Vehicle-spec enrichment, defaults, VIN repair and full vPIC error output remain unimplemented.
+See [implemented behavior](rich-decoding.md) and the [source assessment](research/vin-rules/nhtsa-bulk.md).
 
 NHTSA's [coverage explanation](https://vpic.nhtsa.dot.gov/api/Home/Index/FAQ) focuses on vehicles
 reported for US sale, import or use. A complete download cannot fill missing European rules.
@@ -70,6 +72,7 @@ KBA HSN/TSN lookup remains separate; no VIN-to-HSN/TSN mapping is inferred.
 ```sh
 # Offline regeneration from the bundled source:
 python3 tools/nhtsa.py import
+python3 tools/decoding.py import
 .venv/bin/python tools/dataset.py --update-runtime
 
 # Offline integrity and full projection check:
@@ -90,12 +93,12 @@ drift. New source families require an explicit importer/schema change with prove
 
 The Java main JAR embeds `data/` under `META-INF/orvin/`; the Python wheel embeds it under
 `orvin/_data/`. The complete compressed archive stays on disk unless explicitly read; ordinary
-lookup does not expand it. The verified main JAR is 74,414,998 bytes and the wheel is
-73,865,730 bytes; outer archive compression also compresses the embedded source ZIP. Check artifacts:
+lookup does not expand it. Rich decoding reads the additional generated compressed shards as needed.
+Outer archive compression also compresses the embedded source ZIP. Check artifacts:
 
 ```sh
-python3 tools/check_packages.py --jar libs/java/target/orvin-0.1.0-SNAPSHOT.jar
-python3 tools/check_packages.py --wheel libs/python/dist/orvin-0.1.0.dev0-py3-none-any.whl
+python3 tools/check_packages.py --jar libs/java/target/orvin-0.2.0-SNAPSHOT.jar
+python3 tools/check_packages.py --wheel libs/python/dist/orvin-0.2.0.dev0-py3-none-any.whl
 python3 tools/check_parity.py
 ```
 
@@ -104,4 +107,4 @@ Java classes/resources from the main JAR and tests samples across the WMI and KB
 The wheel is also installed and exercised outside the checkout in CI.
 
 Preserve [upstream notices](../data/LICENSE.md). NHTSA data, source SQL and manufacturer documents
-are not covered by Orvin's CC0 dedication or Apache code license.
+are not covered by ORvin's CC0 dedication or Apache code license.

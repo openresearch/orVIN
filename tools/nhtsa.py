@@ -63,8 +63,9 @@ def copy_value(value):
     return result.decode("utf-8")
 
 
-def read_tables(stream):
+def read_tables(stream, selected=None):
     """Keep only lookup tables in memory, while counting every source table."""
+    selected = TABLES if selected is None else selected
     tables, inventory = {}, {}
     for line in stream:
         header = COPY.fullmatch(line)
@@ -78,7 +79,7 @@ def read_tables(stream):
             if line.rstrip("\r\n") == r"\.":
                 break
             count += 1
-            if name in TABLES:
+            if name in selected:
                 values = line.rstrip("\r\n").split("\t")
                 if len(values) != len(columns):
                     raise ValueError(f"Invalid COPY row in {name}")
@@ -86,10 +87,10 @@ def read_tables(stream):
         else:
             raise ValueError(f"Unterminated COPY table: {name}")
         inventory[name] = {"columns": columns, "rowCount": count}
-        if name in TABLES:
+        if name in selected:
             tables[name] = rows
-    if TABLES - tables.keys():
-        raise ValueError(f"Missing COPY tables: {sorted(TABLES - tables.keys())}")
+    if selected - tables.keys():
+        raise ValueError(f"Missing COPY tables: {sorted(selected - tables.keys())}")
     return tables, dict(sorted(inventory.items()))
 
 
@@ -194,8 +195,9 @@ def derive(archive):
                                     "Keep manufacturer and assembly countries unknown; WMI country is not either fact.",
                                     "Do not interpret administrative dates as model-year constraints.",
                                     "Retain noncompliant flags as assignment notes; never silently correct malformed WMIs."],
-                "implementedDecoding": ["WMI manufacturer, brand candidates and vehicle category"],
-                "archivedOnly": "Detailed pattern, model-year, enrichment and validation tables/functions are bundled but not executed by either library."}
+                "implementedDecoding": ["WMI manufacturer, brand candidates and vehicle category",
+                                        "Public VIN patterns, model-year alternatives, model/make, engine-model associations and displacement conversion"],
+                "archivedOnly": "Vehicle-spec enrichment, defaults, VIN repair and vPIC error scoring remain unimplemented. SQL is retained as source data, never executed by either library."}
     return data, metadata
 
 

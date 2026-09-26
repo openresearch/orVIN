@@ -1,0 +1,62 @@
+{
+  "reviewedOn": "2026-09-26",
+  "sources": [
+    {
+      "id": "astra-targa-field-description",
+      "publisher": "Swiss Federal Roads Office (ASTRA)",
+      "title": "Basisdaten TG ab 1995 — field description",
+      "url": "https://opendata.astra.admin.ch/ivzod/2000-Typengenehmigungen_TG_TARGA/2200-Basisdaten_TG_ab_1995/2220-Datenbeschreibung/Basisdaten_TG_ab_1995.pdf",
+      "edition": "Version served 2026-09-26; no edition date asserted",
+      "section": "Page 2, column N / field 14 maps 06 Vorziffer to tgdtxt.VINCODE; column V describes marking location. Pages 2 and 8 show placeholder refinements in remarks.",
+      "retrievedOn": "2026-09-26",
+      "reuseBasis": "Research citation and selected schema facts; original PDF is not redistributed.",
+      "inspectedSha256": "a6a62e9f48fdf11749d279edcefbed67cfeb7c77fbc071488a7f996397d18c84",
+      "archiveStatus": "Not redistributed; inspected-byte hash only"
+    },
+    {
+      "id": "astra-tas-prefix-schema-2026-09-26",
+      "publisher": "Swiss Federal Roads Office (ASTRA)",
+      "title": "Type Approval JSON Schema",
+      "url": "https://opendata.astra.admin.ch/ivzod/4000-Typengenehmigungen_TAS/4250-json-Schema/govServices_TypeApproval_Schema.json",
+      "edition": "Directory timestamp 2026-08-03; inspected 2026-09-26",
+      "section": "$defs.arrayVinPrefix.items.description (dot placeholder, O/Q/I excluded, maximum length 17); TypeApproval.properties.chVinPrefix. Corroborates older TARGA syntax, not a promise that every legacy string is well formed.",
+      "retrievedOn": "2026-09-26",
+      "reuseBasis": "Research citation and selected factual format semantics; complete schema is not redistributed.",
+      "inspectedSha256": "5fb35f59455aca0983a36328bfb11e418e05f7af98b82579874ca216b2523d9d",
+      "archiveStatus": "Not redistributed; inspected-byte hash only"
+    },
+    {
+      "id": "swiss-embag-2025-05-01",
+      "publisher": "Swiss Confederation / Fedlex",
+      "title": "Bundesgesetz über den Einsatz elektronischer Mittel zur Erfüllung von Behördenaufgaben (EMBAG), SR 172.019",
+      "url": "https://www.fedlex.admin.ch/filestore/fedlex.data.admin.ch/eli/cc/2023/682/20250501/de/pdf-a/fedlex-data-admin-ch-eli-cc-2023-682-20250501-de-pdf-a.pdf",
+      "edition": "Consolidated 2025-05-01",
+      "section": "Page 5, Article 10(4): OGD reuse and statutory attribution; Article 10(2) excludes restricted material from publication",
+      "retrievedOn": "2026-09-26",
+      "reuseBasis": "Citation of official legislation supporting dataset reuse; original PDF is not redistributed.",
+      "inspectedSha256": "996b8d697fdfd9278e453b7fff832601a7739bcd914ba9a7c16e0d0d903b0149",
+      "archiveStatus": "Not redistributed; inspected-byte hash only"
+    },
+    {
+      "id": "byd-seal-cem-taximeter-2025-09",
+      "publisher": "BYD Europe, published by Centro Español de Metrología (CEM)",
+      "title": "BYD SEAL EKE — taximeter installation memorandum",
+      "url": "https://www.cem.es/sites/default/files/2025-10/05_protocolo_taximetro_byd_seal_eke_cam_00_signed_0.pdf",
+      "edition": "September 2025, revision 00, Madrid/Spain",
+      "section": "Page 1: SEAL, type EKE, approval e13*2018/858*00639, prefix LGXC; only partial prefix/model/approval concordance, not a full decoder",
+      "retrievedOn": "2026-09-26",
+      "reuseBasis": "Selected factual cross-check with exact citation; original OEM memorandum is not redistributed and no open document license is asserted.",
+      "inspectedSha256": "acf011e8ace21a9f7ca0c4808ca17369c37a2d4694a82a5549396ee399610c46",
+      "archiveStatus": "Not redistributed; inspected-byte hash only"
+    }
+  ],
+  "parserSourceRefs": ["astra-targa-field-description", "astra-tas-prefix-schema-2026-09-26"],
+  "fixtures": [
+    {"vin": "LGXCH6AD0S0000001", "sourceRefs": ["astra-targa-automobil-2026-07-30", "byd-seal-cem-taximeter-2025-09"], "locator": "ASTRA ABJ202/ABJ204; CEM p.1 independently corroborates only LGXC, SEAL/EKE and approval family. Synthetic continuation; multiple models/configurations remain possible."},
+    {"vin": "LGXCH6AB0S0000001", "sourceRefs": ["astra-targa-automobil-2026-07-30"], "locator": "ASTRA ABJ203 and negative ABJ202/ABJ204 position-8 assertions; synthetic matching specimen, not observed vehicle"},
+    {"vin": "LGXCF6AD000000001", "sourceRefs": ["astra-targa-automobil-2026-07-30", "byd-seal-cem-taximeter-2025-09"], "locator": "ASTRA ABJ201; CEM p.1 corroborates partial prefix/model/approval only; synthetic matching specimen"},
+    {"vin": "VF3LBYHYP00000001", "sourceRefs": ["astra-targa-automobil-2026-07-30"], "locator": "Synthetic continuation of a short VF3LBYHYP prefix, deliberately excluded by first projection's full-length grammar; not evidence of no such vehicle"},
+    {"vin": "WAPB333L00ME44001", "sourceRefs": ["astra-targa-automobil-2026-07-30"], "locator": "TG 1AF712, first slash-separated template; synthetic matching specimen"},
+    {"vin": "WAPB333L00UE46001", "sourceRefs": ["astra-targa-automobil-2026-07-30"], "locator": "TG 1AF712, second slash-separated template; synthetic matching specimen"}
+  ]
+}

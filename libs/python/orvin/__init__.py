@@ -4,5 +4,6 @@ Results are fresh JSON-compatible dictionaries. Unknown optional values are None
 status fields distinguish missing evidence, unsupported input and ambiguity.
 """
 from .lookup import Context, HsnTsnLookup, VinDecoder
+from .answer import VehicleAnswer
 
-__all__ = ["Context", "HsnTsnLookup", "VinDecoder"]
+__all__ = ["Context", "HsnTsnLookup", "VinDecoder", "VehicleAnswer"]

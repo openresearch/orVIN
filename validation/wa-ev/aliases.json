@@ -1,0 +1,4 @@
+{
+  "policy": "Only individually documented make-scoped observed/decoded model pairs are accepted. Case and repeated whitespace are normalized separately. No aliases are assumed in the initial benchmark; exact and alias precision therefore coincide.",
+  "modelAliases": []
+}

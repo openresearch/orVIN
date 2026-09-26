@@ -1,0 +1,117 @@
+{
+  "version": "2026.09.25.1",
+  "source": {
+    "id": "tesla-model-y-2025-service-manual",
+    "url": "https://service.tesla.com/docs/ModelY/ServiceManual/2025/en-au/air/GUID-BB4CE449-3F8E-4905-AF4A-96DFA87535B5.html",
+    "title": "Tesla Model Y 2025+ service manual: Vehicle Identification Number",
+    "retrievedOn": "2026-09-25",
+    "scope": "Berlin and Shanghai Model Y; only the explicitly listed 2025–2027 production-year codes. No inference of exact build date or model year.",
+    "reuseBasis": "Selected factual code associations independently structured for interoperability; no manual text, illustrations or complete restraint tables reproduced. Tesla retains rights in its documentation.",
+    "publisher": "Tesla",
+    "edition": "Model Y 2025+ service manual, reviewed 2026-09-25",
+    "section": "Vehicle Identification Number: VIN decoding table, Berlin/Shanghai layouts and positions 4–11",
+    "inspectedSha256": "a25eefacf38bd7d7f9b1e9f3ec5654fee9561784771a2427e4abe039aceea719",
+    "archiveStatus": "Not redistributed; selected factual associations only"
+  },
+  "requirements": {
+    "4": "Y",
+    "5": "GH",
+    "6": "ABCD",
+    "7": "EF",
+    "8": "DEFJKLRS",
+    "10": "STV"
+  },
+  "years": {
+    "S": 2025,
+    "T": 2026,
+    "V": 2027
+  },
+  "layouts": [
+    {
+      "wmi": "XP7",
+      "plant": "B",
+      "fields": {
+        "Make": "TESLA",
+        "Model": "Model Y",
+        "PlantCity": "BERLIN",
+        "PlantCountry": "GERMANY"
+      }
+    },
+    {
+      "wmi": "LRW",
+      "plant": "C",
+      "fields": {
+        "Make": "TESLA",
+        "Model": "Model Y",
+        "PlantCity": "SHANGHAI",
+        "PlantCountry": "CHINA"
+      }
+    }
+  ],
+  "attributes": [
+    {
+      "position": 5,
+      "characters": "GH",
+      "fields": {
+        "Doors": "5",
+        "BodyClass": "Multipurpose passenger vehicle"
+      }
+    },
+    {
+      "position": 5,
+      "characters": "G",
+      "fields": {
+        "SteeringLocation": "Left-Hand Drive (LHD)"
+      }
+    },
+    {
+      "position": 5,
+      "characters": "H",
+      "fields": {
+        "SteeringLocation": "Right-Hand Drive (RHD)"
+      }
+    },
+    {
+      "position": 7,
+      "characters": "EF",
+      "fields": {
+        "FuelTypePrimary": "Electric"
+      }
+    },
+    {
+      "position": 7,
+      "characters": "E",
+      "fields": {
+        "BatteryChemistry": "Ternary lithium-ion"
+      }
+    },
+    {
+      "position": 7,
+      "characters": "F",
+      "fields": {
+        "BatteryChemistry": "Lithium iron phosphate"
+      }
+    },
+    {
+      "position": 8,
+      "characters": "DJRS",
+      "fields": {
+        "MotorConfiguration": "Single motor; standard"
+      }
+    },
+    {
+      "position": 8,
+      "characters": "EK",
+      "fields": {
+        "MotorConfiguration": "Dual motor; standard"
+      }
+    },
+    {
+      "position": 8,
+      "characters": "FL",
+      "fields": {
+        "MotorConfiguration": "Dual motor; performance"
+      }
+    }
+  ]
+}

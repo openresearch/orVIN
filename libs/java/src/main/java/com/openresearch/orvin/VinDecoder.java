@@ -12,13 +12,25 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-/** Immutable, thread-safe offline manufacturer lookup. A lookup never establishes VIN validity. */
+/** Thread-safe offline manufacturer lookup and sourced vehicle decoding; never VIN authentication. */
 public final class VinDecoder {
     private final DatasetInfo dataset;
     private final Map<String, List<Assignment>> byWmi;
     private final Set<String> extendedPrefixes;
+    private final RichDecoder rich;
+    private final ApprovalDecoder approvals;
 
     VinDecoder(DatasetInfo dataset, List<Assignment> assignments) {
+        this(dataset, assignments, null);
+    }
+
+    VinDecoder(DatasetInfo dataset, List<Assignment> assignments, RichDecoder rich) {
+        this(dataset, assignments, rich, null);
+    }
+
+    VinDecoder(DatasetInfo dataset, List<Assignment> assignments, RichDecoder rich, ApprovalDecoder approvals) {
+        this.rich = rich;
+        this.approvals = approvals;
         this.dataset = Objects.requireNonNull(dataset);
         this.byWmi = assignments.stream().collect(Collectors.groupingBy(Assignment::wmi,
                 Collectors.collectingAndThen(Collectors.toList(), List::copyOf)));
@@ -48,7 +60,8 @@ public final class VinDecoder {
     /**
      * Decodes only supported 17-character layouts. Preserves the original string verbatim.
      * Matching trims ASCII space at the ends and uppercases ASCII a-z only. It does not remove
-     * internal whitespace, replace lookalikes, perform Unicode folding, or infer a model year.
+     * internal whitespace, replace lookalikes or perform Unicode folding. Rich decoding separately
+     * infers model-year candidates within documented source scope.
      * A recognized prefix may coexist with invalid characters elsewhere in the identifier.
      */
     public Result decode(String supplied, Context context) {
@@ -58,7 +71,7 @@ public final class VinDecoder {
         Structure structure = assess(normalized);
         if (structure == Structure.UNSUPPORTED_LENGTH) {
             return new Result(supplied, normalized, structure, MatchStatus.UNSUPPORTED_FORMAT,
-                    List.of(), dataset, context);
+                    List.of(), dataset, context, details(normalized, structure, context), typeApprovals(normalized, structure));
         }
         String prefix = normalized.substring(0, 3);
         String key = extendedPrefixes.contains(prefix) ? prefix + normalized.substring(11, 14) : prefix;
@@ -74,7 +87,23 @@ public final class VinDecoder {
         } else {
             status = MatchStatus.RECOGNIZED;
         }
-        return new Result(supplied, normalized, structure, status, matches, dataset, context);
+        return new Result(supplied, normalized, structure, status, matches, dataset, context,
+                details(normalized, structure, context), typeApprovals(normalized, structure));
+    }
+
+    /** Normalized identity with short and long projections of the same decision. */
+    public VehicleAnswer decodeVehicle(String supplied) { return decodeVehicle(supplied, Context.unknown()); }
+
+    public VehicleAnswer decodeVehicle(String supplied, Context context) {
+        return VehicleAnswer.from(decode(supplied, context));
+    }
+
+    private VehicleDetails details(String vin, Structure structure, Context context) {
+        return rich == null ? VehicleDetails.unavailable() : rich.decode(vin, structure, context);
+    }
+
+    private TypeApprovals typeApprovals(String vin, Structure structure) {
+        return approvals == null ? TypeApprovals.unavailable() : approvals.decode(vin, structure);
     }
 
     private static Structure assess(String value) {
@@ -92,7 +121,7 @@ public final class VinDecoder {
         LOW_SPEED_VEHICLE, MULTIPURPOSE_PASSENGER_VEHICLE, OFF_ROAD_VEHICLE
     }
 
-    /** Caller-supplied context. Model year is never read from VIN position 10. */
+    /** Caller-supplied context, distinct from separately decoded year candidates. */
     public record Context(Optional<Integer> modelYear, Optional<String> market) {
         public Context {
             Objects.requireNonNull(modelYear);
@@ -151,18 +180,36 @@ public final class VinDecoder {
     }
 
     public record Result(String supplied, String normalized, Structure structure, MatchStatus status,
-                         List<Assignment> candidates, DatasetInfo dataset, Context context) {
+                         List<Assignment> candidates, DatasetInfo dataset, Context context, VehicleDetails details,
+                         TypeApprovals typeApprovals) {
         public Result { candidates = List.copyOf(candidates); }
+
+        /** Compatibility constructor for results without Swiss approval candidates. */
+        public Result(String supplied, String normalized, Structure structure, MatchStatus status,
+                      List<Assignment> candidates, DatasetInfo dataset, Context context, VehicleDetails details) {
+            this(supplied, normalized, structure, status, candidates, dataset, context, details, TypeApprovals.unavailable());
+        }
+
+        /** Compatibility constructor for manufacturer-only results. */
+        public Result(String supplied, String normalized, Structure structure, MatchStatus status,
+                      List<Assignment> candidates, DatasetInfo dataset, Context context) {
+            this(supplied, normalized, structure, status, candidates, dataset, context, VehicleDetails.unavailable());
+        }
 
         public Resolution<Manufacturer> manufacturer() {
             return resolve(a -> Optional.of(a.manufacturer()));
         }
-        public Resolution<String> brand() { return resolve(Assignment::brand); }
+        public Resolution<String> brand() {
+            Resolution<String> decoded = details.field("Make");
+            return decoded.status() == Knowledge.KNOWN ? decoded : resolve(Assignment::brand);
+        }
         public Resolution<Category> category() { return resolve(Assignment::category); }
         public Resolution<String> manufacturerCountry() { return resolve(a -> a.manufacturer().country()); }
 
-        /** Assembly country is intentionally unsupported by this WMI-only release. */
-        public Resolution<String> assemblyCountry() { return new Resolution<>(Knowledge.UNKNOWN, List.of()); }
+        public Resolution<String> model() { return details.field("Model"); }
+        public Resolution<String> modelYear() { return details.field("ModelYear"); }
+        /** Comes from plant patterns, never the WMI country. */
+        public Resolution<String> assemblyCountry() { return details.field("PlantCountry"); }
 
         private <T> Resolution<T> resolve(Function<Assignment, Optional<T>> field) {
             if (candidates.isEmpty()) return new Resolution<>(Knowledge.UNKNOWN, List.of());

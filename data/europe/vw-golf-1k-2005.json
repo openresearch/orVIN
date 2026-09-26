@@ -1,0 +1,92 @@
+{
+  "version": "2026.09.25.1",
+  "scope": "European WVW ZZZ 1K Z layout, model year 2005 only, Mosel or Wolfsburg plant. Golf family, including variants; no engine, trim, fuel, equipment or exact build date inference. Do not reuse for North American 1K Jetta layouts or later Golf generations.",
+  "assessment": "Combine the European Golf maintenance manual's positional layout and type example with Volkswagen's historical Golf V factory-type profile and the same-year Volkswagen year/plant code chart. Only year and plant facts are taken from the North American chart; its 1K=new Jetta model rule, engine and restraint rules do not apply to ZZZ filler layouts. This is a bounded synthesis of those sources, not a single universal OEM decoder table.",
+  "reuseBasis": "Selected factual associations independently structured for interoperability, with exact source attribution. No manual, PDF, illustrations or complete table is redistributed; upstream rights are retained.",
+  "sources": [
+    {
+      "id": "vw-golf-maintenance-2009",
+      "publisher": "Volkswagen AG",
+      "title": "Golf 2004 / Golf Plus 2005, Maintenance, edition 11.2009",
+      "section": "3.5.4, printed page 35 (PDF page 39): European VIN layout and Golf type; page 36: separate vehicle-data sticker",
+      "url": "https://manuals.plus/m/2aaea4e3144187875b261a01a103ee47e41a5d9dc30a36162ad57b78b5849a1b.pdf#page=39",
+      "hosting": "Third-party mirror of the Volkswagen-authored document",
+      "retrievedOn": "2026-09-25",
+      "edition": "Maintenance edition 11.2009",
+      "inspectedSha256": null,
+      "archiveStatus": "Not redistributed; selected factual associations only",
+      "hashUnavailableReason": "Reviewed through indexed PDF text; direct download returned HTTP 403, so no exact-byte digest is available."
+    },
+    {
+      "id": "vw-vin-chart-2005",
+      "publisher": "Volkswagen",
+      "title": "2005 Volkswagen V.I.N. Decoder, June 2005",
+      "section": "Position 10: 5=2005; position 11: P=Mosel, W=Wolfsburg. North American model/engine rules are excluded.",
+      "url": "https://meinwirt.com/webserver/vwvortex/VIN_Decoder__2005.pdf",
+      "hosting": "Third-party mirror of the Volkswagen-authored chart",
+      "retrievedOn": "2026-09-25",
+      "edition": "Model year 2005, June 2005",
+      "inspectedSha256": "c3423d9e038da407952c8dfe94db9c806d9ef13fcb65eedd81f0ed80ada6cfa4",
+      "archiveStatus": "Not redistributed; selected factual associations only"
+    },
+    {
+      "id": "vw-golf-v-profile",
+      "publisher": "Volkswagen AG",
+      "title": "Golf V vehicle profile",
+      "section": "Factory type 1K and production periods; does not identify an individual engine/trim",
+      "url": "https://www.volkswagen-newsroom.com/en/vehicle-data-golf-5-profile-19481",
+      "retrievedOn": "2026-09-25",
+      "edition": "Historical Golf V profile, reviewed 2026-09-25",
+      "inspectedSha256": "100361e487587b7e73ad812eff128e06a40f8481835225595258680dbc1f0fdc",
+      "archiveStatus": "Not redistributed; selected factual associations only"
+    }
+  ],
+  "rules": [
+    {
+      "id": "vw-europe-golf-1k-2005-mosel",
+      "pattern": "WVWZZZ1KZ5P[0-9]{6}",
+      "modelYear": 2005,
+      "fields": {
+        "Make": "VOLKSWAGEN",
+        "Model": "Golf",
+        "Series": "V (Typ 1K)",
+        "ModelYear": "2005",
+        "PlantCity": "MOSEL"
+      }
+    },
+    {
+      "id": "vw-europe-golf-1k-2005-wolfsburg",
+      "pattern": "WVWZZZ1KZ5W[0-9]{6}",
+      "modelYear": 2005,
+      "fields": {
+        "Make": "VOLKSWAGEN",
+        "Model": "Golf",
+        "Series": "V (Typ 1K)",
+        "ModelYear": "2005",
+        "PlantCity": "WOLFSBURG"
+      }
+    }
+  ],
+  "fieldSources": {
+    "Make": [
+      "vw-golf-maintenance-2009",
+      "vw-golf-v-profile"
+    ],
+    "Model": [
+      "vw-golf-maintenance-2009",
+      "vw-golf-v-profile"
+    ],
+    "Series": [
+      "vw-golf-maintenance-2009",
+      "vw-golf-v-profile"
+    ],
+    "ModelYear": [
+      "vw-golf-maintenance-2009",
+      "vw-vin-chart-2005"
+    ],
+    "PlantCity": [
+      "vw-golf-maintenance-2009",
+      "vw-vin-chart-2005"
+    ]
+  }
+}

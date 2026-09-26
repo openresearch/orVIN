@@ -60,7 +60,7 @@
   878 complete Java/Python results, and run both libraries outside the checkout. The published
   wheel installs offline as version 0.1.0; both VIN and HSN/TSN lookups pass.
 
-Decisions: Apache-2.0 code; CC0 only for Orvin-owned data contributions; NHTSA-derived facts retain
+Decisions: Apache-2.0 code; CC0 only for ORvin-owned data contributions; NHTSA-derived facts retain
 their source notice; KBA data retains dl-de/by-2-0. WMI JSON and KBA TSV with JSON metadata are
 canonical and language-neutral. Java uses validated derived resources; Python reads canonical
 data directly. Both implementations work offline without runtime dependencies. Country, year,

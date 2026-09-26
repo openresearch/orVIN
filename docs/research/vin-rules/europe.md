@@ -58,14 +58,22 @@ explicitly identifies position 10 as model year, with a 2010–2025 table, in an
 XTL diesel compatibility explanation. It does not supply a full VDS/plant decoder
 or justify extending that table to every historical year.
 
-**Historical European Golf 1K around MY2005 remains unresolved.** Volkswagen's
-[archival Golf V profile](https://www.volkswagen-newsroom.com/en/vehicle-data-golf-5-profile-19481)
-explicitly identifies the Golf V factory type as `1K` and lists variants produced
-during 2005. This verifies a model-family fact, not a VIN position rule: the page
-does not establish that positions 7–8 uniquely identify that family, how a 2005
-European VIN encodes its model year, or the applicable position-11 plant mapping.
-The targeted official-source search did not establish that historical decoder.
-Neither the 2026 US filing nor the UK 2010–2025 year table closes this gap.
+**Historical European Golf 1K, follow-up review:** the
+[Golf V profile](https://www.volkswagen-newsroom.com/en/vehicle-data-golf-5-profile-19481)
+establishes factory type 1K and production during 2005. Volkswagen's
+[Golf 2004 / Golf Plus 2005 maintenance manual, edition 11.2009](https://manuals.plus/m/2aaea4e3144187875b261a01a103ee47e41a5d9dc30a36162ad57b78b5849a1b.pdf#page=39),
+section 3.5.4, printed page 35 (PDF page 39), supplies the European filler/type/year/
+plant layout. The [June 2005 Volkswagen VIN chart](https://meinwirt.com/webserver/vwvortex/VIN_Decoder__2005.pdf)
+supplies only 5=2005 and P=Mosel/W=Wolfsburg. Both documents are Volkswagen-authored
+but hosted by third-party mirrors. The North American chart's 1K=new Jetta model
+mapping must not be applied to European ZZZ layouts.
+
+ORvin combines these sources only for `WVWZZZ1KZ5[PW]` and a numeric serial.
+Model/family and year/plant fields have separate source references. This is a
+bounded synthesis, not a claim that one document provides a universal decoder.
+The maintenance PDF was inspected through indexed text; its direct download
+returned HTTP 403, so its exact-byte hash is explicitly unavailable. Other
+historical years, plants, engine and trim remain outside the rule.
 
 **Reuse:** redistribution permission not established for the OEM filing or UK
 page or archival profile. Public NHTSA hosting is not itself an OEM open license.

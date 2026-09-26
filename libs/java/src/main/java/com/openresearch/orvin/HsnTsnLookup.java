@@ -49,6 +49,11 @@ public final class HsnTsnLookup {
         return new Result(hsn, tsn, normalizedHsn, normalizedTsn, inputStatus, status, entries, dataset);
     }
 
+    /** Normalized answer for independently supplied type codes. */
+    public VehicleAnswer lookupVehicle(String hsn, String tsn) {
+        return VehicleAnswer.from(lookup(hsn, tsn));
+    }
+
     public enum InputStatus { VALID, INVALID_HSN, INVALID_TSN, INVALID_HSN_AND_TSN }
     public enum MatchStatus { RECOGNIZED, UNKNOWN, AMBIGUOUS, INVALID_INPUT }
 

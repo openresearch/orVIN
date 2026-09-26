@@ -11,6 +11,7 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "libs/python"))
 from orvin import Context, HsnTsnLookup, VinDecoder
+from orvin.answer import vin_answer, hsntsn_answer
 
 
 def encoded(value):
@@ -19,11 +20,15 @@ def encoded(value):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--jar", type=Path, default=ROOT / "libs/java/target/orvin-0.1.0-SNAPSHOT.jar")
+    parser.add_argument("--jar", type=Path, default=ROOT / "libs/java/target/orvin-0.2.0-SNAPSHOT.jar")
     args = parser.parse_args()
     requests, expected = [], []
     decoder = VinDecoder.bundled()
     vins = [f["vin"] for f in json.loads((ROOT / "data/fixtures.json").read_text())]
+    vins += [f["vin"] for f in json.loads((ROOT / "data/vehicle-fixtures.json").read_text())]
+    vins += [f["vin"] for f in json.loads((ROOT / "data/astra/review.json").read_text())["fixtures"]]
+    vins += [f["vin"] for f in json.loads((ROOT / "data/identity/fixtures.json").read_text())]
+    vins += ["5VLAA24208A000001", "5UPAA2420AA000001", "XP7YGAEK0RB000001", "XP7YGAEK0TC000001"]
     data = json.loads((ROOT / "data/dataset.json").read_text())
     wmis = sorted({a["wmi"] for a in data["assignments"]})
     # Exercise both ordinary and extended layouts across the full bulk catalog,
@@ -38,7 +43,7 @@ def main():
     vins += ["", "CHASSIS-1962", "ZZZAAAAAAAAAAAAAA", " 1hgaaaaaaaaaaaaaa ", "1HGIAAAAAAAAAAAAA",
              "1HGAAAAAAAAAAAAAſ", "1HGAAAAAAAAAAAA😀", "1H9AAAAAAAA334AAA", "1H9333AAAAAAAAAAA", 'quote"\t\\\n']
     for vin in vins:
-        for context in (Context(), Context(2005, "US")):
+        for context in (Context(), Context(2005, "US"), Context(market="US"), Context(market="DE")):
             requests.append("\t".join(["vin", encoded(vin), str(context.model_year or ""), context.market or ""]))
             expected.append(decoder.decode(vin, context))
     lookup = HsnTsnLookup.bundled()
@@ -52,6 +57,16 @@ def main():
     for hsn, tsn in pairs:
         requests.append("\t".join(["hsntsn", encoded(hsn), encoded(tsn)]))
         expected.append(lookup.lookup(hsn, tsn))
+    # The new consumer contract is compared in full, not only its primary values.
+    normalized_requests, normalized_expected = [], []
+    for request, raw in zip(requests, expected):
+        answer = vin_answer(raw) if request.startswith("vin\t") else hsntsn_answer(raw)
+        kind, rest = request.split("\t", 1)
+        for view, result in (("short", answer.short()), ("long", answer.long())):
+            normalized_requests.append(kind + ":" + view + "\t" + rest)
+            normalized_expected.append(result)
+    requests.extend(normalized_requests)
+    expected.extend(normalized_expected)
     # Load production classes AND resources only from the distributable JAR.
     classpath = os.pathsep.join((str(args.jar.resolve()), str(ROOT / "libs/java/target/test-classes")))
     completed = subprocess.run(["java", "-cp", classpath, "com.openresearch.orvin.ParityProbe"],

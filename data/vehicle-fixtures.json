@@ -1,0 +1,140 @@
+[
+  {
+    "id": "bmw-x3-public-descriptor",
+    "vin": "5UXWX7C50BA000000",
+    "market": "US",
+    "source": "https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVinValues/5UXWX7C5*BA?format=json&modelyear=2011",
+    "note": "Synthetic suffix/check digit; independently reviewed public partial-VIN response, 2026-09-25. Source labels (including plant) are retained, not independently certified manufacturing records.",
+    "expected": {
+      "Make": "BMW",
+      "Model": "X3",
+      "ModelYear": "2011",
+      "PlantCity": "MUNICH",
+      "PlantCountry": "GERMANY",
+      "FuelTypePrimary": "Gasoline",
+      "Trim": "xDrive35i",
+      "DisplacementL": "3.0"
+    },
+    "sourceRefs": [
+      "nhtsa-reference-bmw-x3-public-descriptor"
+    ]
+  },
+  {
+    "id": "honda-accord-public-descriptor",
+    "vin": "1HGCM82603A000000",
+    "market": "US",
+    "source": "https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVinValues/1HGCM826*3A?format=json&modelyear=2003",
+    "note": "Synthetic suffix/check digit; public partial-VIN response reviewed 2026-09-25. Converted units follow Orvin's documented six-decimal rounding.",
+    "expected": {
+      "Make": "HONDA",
+      "Model": "Accord",
+      "ModelYear": "2003",
+      "BodyClass": "Coupe",
+      "PlantCity": "MARYSVILLE",
+      "PlantCountry": "UNITED STATES (USA)",
+      "EngineModel": "J30A4",
+      "Trim": "EX-V6",
+      "DisplacementL": "2.998833",
+      "TransmissionStyle": "Automatic"
+    },
+    "sourceRefs": [
+      "nhtsa-reference-honda-accord-public-descriptor"
+    ]
+  },
+  {
+    "id": "tesla-model-3-public-descriptor",
+    "vin": "5YJ3E1EA0LF000000",
+    "market": "US",
+    "source": "https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVinValues/5YJ3E1EA*LF?format=json&modelyear=2020",
+    "note": "Synthetic suffix/check digit; independently reviewed public partial-VIN response, 2026-09-25.",
+    "expected": {
+      "Make": "TESLA",
+      "Model": "Model 3",
+      "ModelYear": "2020",
+      "PlantCity": "FREMONT",
+      "PlantCountry": "UNITED STATES (USA)",
+      "FuelTypePrimary": "Electric",
+      "BodyClass": "Sedan/Saloon"
+    },
+    "sourceRefs": [
+      "nhtsa-reference-tesla-model-3-public-descriptor"
+    ]
+  },
+  {
+    "id": "shared-wmi-resolved-jeep",
+    "vin": "1C4RJFBG0FC000000",
+    "market": "US",
+    "source": "https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVinValues/1C4RJFBG*FC?format=json&modelyear=2015",
+    "note": "Synthetic suffix/check digit; independently reviewed public partial-VIN response, 2026-09-25.",
+    "expected": {
+      "Make": "JEEP",
+      "Model": "Grand Cherokee",
+      "ModelYear": "2015",
+      "PlantCity": "DETROIT",
+      "PlantCompanyName": "Jefferson North Assembly",
+      "Trim": "Limited",
+      "DisplacementL": "3.6",
+      "DriveType": "4WD/4-Wheel Drive/4x4"
+    },
+    "sourceRefs": [
+      "nhtsa-reference-shared-wmi-resolved-jeep"
+    ]
+  },
+  {
+    "id": "tesla-berlin-production-year",
+    "vin": "XP7YGAEK0TB000001",
+    "market": "DE",
+    "source": "https://service.tesla.com/docs/ModelY/ServiceManual/2025/en-au/air/GUID-BB4CE449-3F8E-4905-AF4A-96DFA87535B5.html",
+    "note": "Synthetic configuration from the 2025+ Model Y manual; no individual vehicle queried. T is production year here, not model year.",
+    "expected": {
+      "Make": "TESLA",
+      "Model": "Model Y",
+      "ProductionYear": "2026",
+      "PlantCity": "BERLIN",
+      "PlantCountry": "GERMANY",
+      "BatteryChemistry": "Ternary lithium-ion",
+      "MotorConfiguration": "Dual motor; standard",
+      "Doors": "5"
+    },
+    "sourceRefs": [
+      "tesla-model-y-2025-service-manual"
+    ]
+  },
+  {
+    "id": "tesla-shanghai-production-year",
+    "vin": "LRWYHAFD0SC000001",
+    "market": "DE",
+    "source": "https://service.tesla.com/docs/ModelY/ServiceManual/2025/en-au/air/GUID-BB4CE449-3F8E-4905-AF4A-96DFA87535B5.html",
+    "note": "Synthetic configuration from the 2025+ Model Y manual; no individual vehicle queried.",
+    "expected": {
+      "Model": "Model Y",
+      "ProductionYear": "2025",
+      "PlantCity": "SHANGHAI",
+      "PlantCountry": "CHINA",
+      "BatteryChemistry": "Lithium iron phosphate",
+      "SteeringLocation": "Right-Hand Drive (RHD)"
+    },
+    "sourceRefs": [
+      "tesla-model-y-2025-service-manual"
+    ]
+  },
+  {
+    "id": "vw-european-golf-2005",
+    "vin": "WVWZZZ1KZ5P000001",
+    "market": "DE",
+    "source": "https://manuals.plus/m/2aaea4e3144187875b261a01a103ee47e41a5d9dc30a36162ad57b78b5849a1b.pdf#page=39",
+    "sourceRefs": [
+      "vw-golf-maintenance-2009",
+      "vw-vin-chart-2005",
+      "vw-golf-v-profile"
+    ],
+    "note": "Synthetic serial; bounded combination of European layout, Golf V type profile and 2005 year/plant chart. No customer vehicle record.",
+    "expected": {
+      "Make": "VOLKSWAGEN",
+      "Model": "Golf",
+      "Series": "V (Typ 1K)",
+      "ModelYear": "2005",
+      "PlantCity": "MOSEL"
+    }
+  }
+]
