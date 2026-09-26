@@ -5,6 +5,10 @@ are `0.2.0-SNAPSHOT` and `0.2.0.dev0`; the workflow stamps build copies from the
 [Version 0.1.0](https://github.com/openresearch/orvin/releases/tag/v0.1.0) was published on
 2026-09-25 from commit `4641b5c61af219ff18c937685d5ba2e3ddc5198e`; its
 [release workflow passed](https://github.com/openresearch/orvin/actions/runs/36189579018).
+[Version 0.2.0](https://github.com/openresearch/orvin/releases/tag/v0.2.0) was published on
+2026-09-26 from commit `48bddd2f815b9cd6eed73f49f0dd5a3122012c79`; its
+[release workflow passed](https://github.com/openresearch/orvin/actions/runs/36227453802),
+including Java package publication and all eight GitHub release assets.
 Pushing a code/CI branch does not publish packages.
 
 ## GitHub Actions
@@ -51,14 +55,14 @@ version. A failure after Maven publication can leave the package available befor
 exist; inspect the run and complete only the missing step using its verified artifacts. Blindly
 rerunning deployment can fail on existing coordinates. Use a new version for changed content.
 
-The current development JAR includes the entire shared dataset and is about 100 MB
+The published 0.2.0 JAR includes the entire shared dataset and is about 128 MB
 (the published 0.1.0 JAR is about 74 MB). Source JARs and Python
 distributions also include data. Dataset versions/hashes remain independent of library versions.
 
 ## Use Java from Gradle or Maven
 
-These examples consume the published **0.1.0** release. Nothing in Tourfold is changed by this
-setup. Both build systems consume the same `com.openresearch:orvin:0.1.0` artifact.
+These examples consume the published **0.2.0** release. Nothing in Tourfold is changed by this
+setup. Both build systems consume the same `com.openresearch:orvin:0.2.0` artifact.
 
 GitHub requires authentication for Maven/Gradle packages, including public ones. Set
 `ORVIN_GITHUB_USER` to your username and `ORVIN_GITHUB_TOKEN` to a classic PAT with
@@ -81,7 +85,7 @@ repositories {
     }
 }
 dependencies {
-    implementation("com.openresearch:orvin:0.1.0")
+    implementation("com.openresearch:orvin:0.2.0")
 }
 ```
 
@@ -99,7 +103,7 @@ Maven `pom.xml`:
   <dependency>
     <groupId>com.openresearch</groupId>
     <artifactId>orvin</artifactId>
-    <version>0.1.0</version>
+    <version>0.2.0</version>
   </dependency>
 </dependencies>
 ```
@@ -126,7 +130,7 @@ Consuming the JAR needs Java 17+, without Python, a database or runtime network 
 The wheel/sdist are GitHub Release assets, **not PyPI publications**. After publication:
 
 ```sh
-python -m pip install https://github.com/openresearch/orvin/releases/download/v0.1.0/orvin-0.1.0-py3-none-any.whl
+python -m pip install https://github.com/openresearch/orvin/releases/download/v0.2.0/orvin-0.2.0-py3-none-any.whl
 ```
 
 Alternatively download the wheel, verify `SHA256SUMS`, and install it locally. Python 3.10+

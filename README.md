@@ -70,7 +70,7 @@ long_json_values = answer.long()
 vin = VinDecoder.bundled().decode("1HGAAAAAAAAAAAAAA")
 print(vin["manufacturer"]["value"]["name"])
 
-# These richer APIs require the current development version, after v0.1.0.
+# These APIs are available in ORvin 0.2.0 and later.
 vehicle = VinDecoder.bundled().decode("1HGCM82603A000000", Context(market="US"))
 print(vehicle["model"]["value"])                       # Accord
 print(vehicle["modelYear"]["value"])                   # "2003"
@@ -106,7 +106,7 @@ virtual-environment path. Java CI covers 17, 21 and 25.
 <dependency>
   <groupId>com.openresearch</groupId>
   <artifactId>orvin</artifactId>
-  <version>0.1.0</version>
+  <version>0.2.0</version>
 </dependency>
 ```
 
@@ -120,7 +120,7 @@ var result = HsnTsnLookup.bundled().lookup("0005", "AMQ");
 System.out.println(result.value().flatMap(HsnTsnLookup.TypeEntry::tradeName));
 System.out.println(result.dataset().referenceDate());
 
-// Normalized API in the current development version, after v0.1.0:
+// Normalized API, available in ORvin 0.2.0 and later:
 var answer = VinDecoder.bundled().decodeVehicle("WVWZZZ1KZ5P000001");
 System.out.println(answer.vehicle().make()); // Optional[VW]
 System.out.println(answer.toShortJson());
@@ -133,8 +133,8 @@ System.out.println(vehicle.model().value());
 System.out.println(vehicle.details().field("PlantCity").value());
 ```
 
-Kotlin uses the same artifact: `implementation("com.openresearch:orvin:0.1.0")`.
-**[Version 0.1.0 is released](https://github.com/openresearch/orvin/releases/tag/v0.1.0).**
+Kotlin uses the same artifact: `implementation("com.openresearch:orvin:0.2.0")`.
+**[Version 0.2.0 is released](https://github.com/openresearch/orvin/releases/tag/v0.2.0).**
 Java is published to GitHub Packages; configure its repository and authentication using the
 [Maven/Gradle instructions](docs/releasing.md). Python wheel/sdist downloads are release assets.
 Local source builds still use the development versions `0.2.0-SNAPSHOT` / `0.2.0.dev0`.
