@@ -23,7 +23,24 @@ if (args.Contains("--parity"))
 
 // Independently reviewed facts are checked separately from implementation parity.
 var decoder = VinDecoder.Bundled();
+// KBA SV 3.1, PDF page 6 rows 1/12: independently reviewed manufacturer facts.
+var directory = decoder.DecodeVehicle("W09AAAAAAAAA53001", new Context(market: "JP")).Long();
+Check(directory["details"]!["specifications"]!["ManufacturerDirectoryName"]!["value"]!.GetValue<string>() == "A+A HAHN GMBH", "extended KBA WMI positions");
+var abt = decoder.DecodeVehicle("WAKAAAAAAAAAAAAAA", new Context(market: "AT"));
+Check(abt.Vehicle["make"] is null, "manufacturer directory label is not retail make");
+Check(abt.Long()["details"]!["specifications"]!["ManufacturerDirectoryLocation"]!["value"]!.GetValue<string>() == "Kempten", "KBA manufacturer location");
+var directoryCredit = abt.Long()["details"]!["provenance"]!["additionalSources"]!.AsArray().Single(s => s!["id"]!.GetValue<string>() == "kba-sv31-2026-01-15");
+Check(directoryCredit!["license"]!.GetValue<string>() == "LicenseRef-KBA-SV31-Attribution" && directoryCredit["modifications"]!.GetValue<string>().Contains("eigene Darstellung"), "KBA WMI attribution and modification notice");
 var golf = decoder.DecodeVehicle("WVWZZZ1KZ5P000001", new Context(market: "AT"));
+// Row-specific preference: KBA PDF 34/78 versus NHTSA WMI 4873 / make 4657.
+var cobra = decoder.DecodeVehicle("1CAAAAAAAAAAAAAAA", new Context(market: "AT")).Long();
+Check(cobra["vehicle"]!["make"]!.GetValue<string>() == "Cobra Industries", "preferred 1CA make");
+var cobraDetails = cobra["details"]!;
+var preferenceFacts = cobraDetails["decisions"]!["make"]!["evidenceIds"]!.AsArray()
+    .Select(id => cobraDetails["evidence"]![id!.GetValue<string>()]!["record"]!);
+Check(preferenceFacts.Any(f => f["kind"]?.GetValue<string>() == "SOURCE_PREFERENCE" && f["keys"]!.GetValue<string>().Contains("sv31-p034-r078")), "1CA preference is linked to the make decision");
+Check(cobraDetails["specifications"]!["ManufacturerDirectoryName"]!["value"]!.GetValue<string>() == "DAIMLERCHRYSLER CORP (DODGE/BUS)", "original conflicting KBA name retained");
+Check(decoder.DecodeVehicle("1C3AAAAAAAAAAAAAA").Vehicle["make"]?.GetValue<string>() != "Cobra Industries", "preference is not a global Chrysler alias");
 Check(golf.Vehicle["model"]!.GetValue<string>() == "Golf", "reviewed European Golf family");
 Check(golf.Vehicle["make"]!.GetValue<string>() == "VW", "normalized make");
 Check(golf.Vehicle["modelYear"]!.GetValue<int>() == 2005, "documented Golf model year");

@@ -11,6 +11,15 @@ Only NHTSA's PostgreSQL bulk archive, KBA's Kfz table, and ASTRA's TG-Automobil 
 are refreshed. Downloads are explicit; normal builds remain deterministic and offline.
 PDFs, forums, OEM documents, parser grammar, custom rules, contributed fixtures and
 normalization policy are never rewritten automatically.
+The KBA SV 3.1 WMI PDF extract is also fixed for manual review. When NHTSA changes,
+only its diagnostic comparison against that unchanged extract is regenerated
+(`data/kba-wmi/comparison.json`). The KBA WMI snapshot, terms, parser and fixtures
+are outside the publication allowlist.
+The row-specific `1CA` source preference is also fixed in the KBA WMI metadata.
+An unchanged preferred NHTSA assignment can advance to a new structured source
+edition. If its manufacturer/make, WMI, category, applicability constraints or
+locator changes, or another assignment competes for `1CA`, validation stops for
+manual review. It never rewrites the preference to make a refresh pass.
 
 `tools/source-pins.json` records the currently selected NHTSA edition/hash and derived
 dataset versions. Other source snapshots retain their existing metadata files. The

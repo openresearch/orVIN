@@ -1,0 +1,2 @@
+# Optional: only for manually re-extracting the pinned KBA PDF.
+pypdf==6.10.0

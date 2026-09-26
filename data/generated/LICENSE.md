@@ -82,6 +82,32 @@ Modifications: selected one reference date, renamed columns, sorted rows, repres
 The JSON gzip snapshot retains the source attributes and complete object-ID set, with normalized
 JSON serialization; it is not a byte-for-byte archive of HTTP response envelopes.
 
+## KBA SV 3.1 manufacturer/WMI directory
+
+`kba-wmi/` retains factual rows extracted from **Kraftfahrt-Bundesamt, Flensburg,
+Hersteller von Kraftfahrzeugen und -anhängern, alphabetisch (SV 3.1),
+15 January 2026**, retrieved 26 September 2026.
+[Original directory](https://www.kba.de/SharedDocs/Downloads/DE/SV/sv31_pdf.pdf?__blob=publicationFile&v=3).
+The PDF itself is not redistributed. Installed packages contain compiled
+manufacturer-directory rules and the source assessment, not the authoring extract.
+
+Reuse basis: the PDF's [page 151, Impressum/Copyright](https://www.kba.de/SharedDocs/Downloads/DE/SV/sv31_pdf.pdf?__blob=publicationFile&v=3#page=151)
+permits reproduction and dissemination with source acknowledgement, including
+partial, digital and indirectly obtained content. The descriptive identifier
+`LicenseRef-KBA-SV31-Attribution` refers to that publication notice; it is not
+an SPDX-listed license. The assessment is in `kba-wmi/metadata.json`.
+No publisher endorsement is implied.
+
+Required credit: Datenquelle: Kraftfahrt-Bundesamt, SV 3.1, Stand 15. Januar 2026,
+Abruf 26. September 2026; eigene Darstellung. Preserve the dataset URI,
+copyright-page link, provider/product/edition and modification notice.
+Imported rows keep these terms and are not relicensed under orVIN's CC0 dedication.
+Modifications: extract factual columns, attach PDF page/row locators, encode valid
+ordinary/extended WMIs as shared lookup rules and retain repeated rows as alternatives.
+Invalid identifiers and missing WMIs are recorded without correction/inference.
+Manufacturer location is not vehicle assembly location; directory HSN associations
+are not a determination of a vehicle's HSN/TSN, model, year or retail make.
+
 ## Scoped OEM factual associations
 
 `europe/tesla-model-y.json` records selected factual associations from Tesla's

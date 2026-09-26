@@ -158,6 +158,17 @@
     ]
   },
   {
+    "id": "research-d2f0e6c3b242b5ac",
+    "url": "https://openjurist.org/618/sw2d/799/chrysler-corp-v-schuenemann",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "../kba-wmi/comparison.md",
+        "section": "Reviewed examples"
+      }
+    ]
+  },
+  {
     "id": "research-741854e2e1d36399",
     "url": "https://polestartechhub.com/resources/vin-decoder",
     "role": "research-citation",
@@ -401,6 +412,10 @@
       {
         "document": "nhtsa-bulk.md",
         "section": "Exact inspected download"
+      },
+      {
+        "document": "../kba-wmi/comparison.md",
+        "section": "Reproducible scope"
       }
     ]
   },
@@ -1119,6 +1134,10 @@
       {
         "document": "../kba-wmi/README.md",
         "section": "Inspected sources"
+      },
+      {
+        "document": "../kba-wmi/comparison.md",
+        "section": "Reproducible scope"
       }
     ]
   },

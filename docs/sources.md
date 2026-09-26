@@ -4,8 +4,9 @@
 
 The current dataset is generated from the complete official September 2026
 [standalone database](https://vpic.nhtsa.dot.gov/downloads/vPICList_lite_2026_09.plain.zip),
-published 2026-09-19. Both library distributions retain that ZIP unchanged, including all
-97 tables and the stored functions. The importer extracts all public usable WMI/manufacturer/
+published 2026-09-19. The repository retains that ZIP unchanged, including all
+97 tables and the stored functions; all three library distributions embed only the
+compiled runtime. The importer extracts all public usable WMI/manufacturer/
 make/type associations: 12,998 WMIs, 11,604 manufacturer entities and 14,169 associations.
 See [import, exclusions and field coverage](nhtsa-data.md).
 
@@ -41,22 +42,25 @@ During research, the API documentation's `1T9131` example returned no records. I
 The real extended seed `1H9333` was found through `GetWMIsForManufacturer/trailer` and then
 verified through its exact DecodeWMI endpoint. Documentation examples are not accepted as facts.
 
-## KBA: HSN/TSN data available; manufacturer directories still deferred
+## KBA: HSN/TSN data and manufacturer directory
 
 Follow-up research established reusable official **FZ 6** and **FZ Hersteller Handelsnamen Kfz**
 datasets for HSN/TSN, manufacturer labels, trade names and stock counts under dl-de/by-2-0.
 The 2026 workbook and KBA's published machine-readable table were inspected. See
 [the KBA assessment](kba-data.md) for exact sources, fields, licensing and VIN integration limits.
-The Kfz table's 63,260 entries for 2026-01-01 are bundled in both the Python and Java libraries,
+The Kfz table's 63,260 entries for 2026-01-01 are bundled in Python, Java and .NET,
 with exact source attributes, object-ID completeness checks and dl-de/by-2-0 attribution.
 
 The [KBA WMI portal](https://www.kba-online.de/wmi_prod/webapp-nezo/) identifies KBA as the German
 assignment authority, describes extended identifiers and refers to the annual manufacturer
-directory. An authoritative current copy of that directory and its edition-specific reuse notice
-were not established in this pass. Third-party mirrors were not imported or treated as permission.
-
-Before adding KBA WMI-directory data, obtain the official edition, publication date, relevant rows/pages, exact
-reuse conditions and a review of how the entries distinguish manufacturer identities, HSNs and WMIs.
+directory. Follow-up review on 2026-09-26 established the official SV 3.1 edition
+of 15 January 2026 and the attribution-based reuse assessment. The current source
+checkout compiles 5,261 rows for 3,827 identifiers into global manufacturer-directory
+evidence, preserving HSN associations and manufacturer locations separately from
+vehicle identities and assembly plants. One invalid identifier and rows without
+WMIs are explicitly excluded from matching. The original PDF is not distributed.
+See [import and coverage](kba-wmi-data.md) and the
+[attribution and reuse basis](research/kba-wmi/README.md).
 
 ## Deferred: manufacturer VIN guides
 

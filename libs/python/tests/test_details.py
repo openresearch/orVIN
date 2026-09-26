@@ -88,7 +88,8 @@ class DetailsTest(unittest.TestCase):
         for vin in ("XP7YGAEK0RB000001", "XP7YGAEK0TC000001", "XP7YGAEZ0TB000001", "XP7YGAEK0TB000000"):
             with self.subTest(vin=vin):
                 result = self.decoder.decode(vin, Context(market="DE"))
-                self.assertEqual({}, result["details"]["fields"])
+                self.assertTrue(all(code.startswith("ManufacturerDirectory")
+                                    for code in result["details"]["fields"]))
         berlin = self.decoder.decode("XP7YGAEK0TB000001")
         self.assertEqual("Model Y", berlin["model"]["value"])
         self.assertIsNone(berlin["modelYear"]["value"])
@@ -100,7 +101,8 @@ class DetailsTest(unittest.TestCase):
             self.assertEqual("INVALID_INPUT", result["details"]["status"])
             self.assertEqual({}, result["details"]["fields"])
         result = self.decoder.decode("1HGCM82603A000000", Context(market="US"))
-        result["details"]["alternatives"][0]["fields"]["Model"][0]["value"] = "changed"
+        alternative = next(a for a in result["details"]["alternatives"] if "Model" in a["fields"])
+        alternative["fields"]["Model"][0]["value"] = "changed"
         result["details"]["sources"][0]["title"] = "changed"
         self.assertEqual("Accord", self.decoder.decode("1HGCM82603A000000", Context(market="US"))["model"]["value"])
         self.assertNotEqual("changed", self.decoder.decode("1HGCM82603A000000", Context(market="US"))["details"]["sources"][0]["title"])

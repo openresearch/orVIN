@@ -50,6 +50,10 @@ The logical bundle has several indexed tables; there is no row per possible VIN.
 - `policy.tsv`: flattened JSON policy. Dotted paths and `.length` describe arrays;
   each row is path, scalar type (`S`, `I`, `B`), value. String values are base64 UTF-8.
 - `rules.tsv`: generic whole-VIN conditional literal groups, described below.
+  KBA SV 3.1 rows compile here as distinct manufacturer-directory fields; their
+  page/row lineage and correlated alternatives survive. `kba-wmi/metadata.json`
+  carries the original PDF digest and full reuse assessment. Neither the PDF nor
+  its authoring row snapshot is packaged. See [KBA WMI data](kba-wmi-data.md).
 
 Pattern matching uses the same limited character-class/repetition language across
 engines. Input normalization trims ASCII spaces and uppercases ASCII letters only.

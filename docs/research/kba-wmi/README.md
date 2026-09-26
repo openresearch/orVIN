@@ -1,7 +1,9 @@
 # KBA WMI directory and market applicability
 
-Reviewed **2026-09-26**. Research only: no KBA WMI rows have been imported into
-the runtime dataset, and no existing source scope has been changed.
+Reviewed **2026-09-26**. Implemented in the source checkout: 5,261 directory rows
+for 3,827 valid identifiers, including 3,054 identifiers absent from the NHTSA
+September 2026 WMI projection. See [the import guide](../../kba-wmi-data.md)
+and [KBA/NHTSA conflict analysis](comparison.md).
 
 ## Inspected sources
 
@@ -31,8 +33,8 @@ the runtime dataset, and no existing source scope has been changed.
   does not establish the vehicle's assembly country. This is an agency interpretation,
   not a statement that every country's VIN rules are identical.
 
-Web pages were inspected as rendered/extracted content; original response-byte
-hashes were not captured. Only the directly retrieved SV 3.1 PDF has a byte digest.
+Web pages were inspected as rendered/extracted content without original response-byte
+hashes. The directly retrieved SV 3.1 PDF has the byte digest recorded above.
 
 ## What the directory adds
 
@@ -40,14 +42,14 @@ SV 3.1 pages 4–5 describe manufacturers with national HSNs and special collect
 codes, with WMIs included where known. Page 6 contains foreign as well as German
 manufacturers. Its columns include HSN, WMI parts 1 and 2, manufacturer label, full
 manufacturer name and manufacturer location. This is not a complete global WMI
-register. No row-count comparison with NHTSA has been performed, so the number of
-additional identifiers is unknown.
+register. The reproducible comparison with NHTSA is retained in
+`data/kba-wmi/comparison.json`; repeated entries remain correlated alternatives.
 
 The KBA and NHTSA records refer to the same international identifier system;
 they are separate datasets with different coverage. A verified WMI assignment
 can identify a manufacturer regardless of the caller's registration/sales market.
 The publisher's country is provenance, not automatically an applicability restriction.
-That is the proposed interpretation of the cited international system, not a
+That is the implemented interpretation of the cited international system, not a
 claim that all fields attached to a WMI are globally valid.
 
 Keep legal manufacturer separate from retail make: multiple makes, historical
@@ -56,6 +58,10 @@ WMIs and conflicting assignments. An HSN association is not an exact VIN-to-TSN
 mapping. WMI alone does not resolve model, year, engine or factory.
 
 ## Current implementation
+
+`tools/kba_wmi.py` extracts the pinned PDF and the common compiler emits generic
+rules for its directory facts in every market. These facts remain distinct from
+retail make and vehicle HSN/TSN; repeated rows are preserved in long output.
 
 `tools/nhtsa.py` imports WMI assignments without sales-market constraints, while
 retaining the source's limits about historical validity. `libs/python/orvin/lookup.py`
@@ -67,16 +73,24 @@ A local smoke check on the compiled-runtime branch with synthetic VIN
 `WVWZZZ1KZ5P000001` retained make `VW` for AT, DE, US and JP. This is a behavior
 check, not independent ground truth or proof of global completeness.
 
-## Reuse basis
+## Reuse basis and attribution
 
-The recorded reuse basis is the notice on PDF page 151: reproduction and
-dissemination, including digital, partial and indirectly obtained content, with
-KBA source acknowledgement. Retain the edition, source URL, inspected-byte digest,
-attribution and a statement of modifications with any factual extraction.
-The original PDF is not committed or packaged.
+The reuse basis is **SV 3.1, 15 January 2026, PDF page 151 (Impressum,
+Copyright)**. It permits reproduction and dissemination with KBA source
+acknowledgement, including partial, digital and indirectly obtained content.
+The runtime uses `LicenseRef-KBA-SV31-Attribution`, an orVIN descriptive identifier
+for that notice, not an SPDX-listed license or a CC0 dedication.
 
-Before importing, compare full identifiers against NHTSA, review differing legal
-identities and make mappings, and normalize reviewed rows into the common dataset
-with source edition, page/row locators, attribution and documented scope.
-This is a PDF source: under the existing maintenance policy it requires manual
-review and is not automatically included in the structured-data refresh workflow.
+Required credit identifies Kraftfahrt-Bundesamt, Flensburg, SV 3.1, edition
+15 January 2026, retrieval 26 September 2026, the exact dataset URL and copyright
+page. The modification statement identifies extraction/normalization by orVIN.
+The source record, original PDF digest and full assessment are in
+`data/kba-wmi/metadata.json` and travel with every installed package. Long output
+credits the directory evidence; short output credits the primary facts it exposes.
+No publisher endorsement is implied. The original PDF is not redistributed.
+
+The import preserves page/row locators, missing cells and repeated identifiers.
+WMI/HSN associations are many-to-many; no vehicle HSN/TSN, retail marque,
+assembly location, model or model year is inferred from these directory entries.
+Invalid printed identifiers are recorded as exclusions, not silently corrected.
+This PDF source remains manually reviewed and is outside automatic source refreshes.

@@ -70,9 +70,12 @@ class StructuredRefreshTest(unittest.TestCase):
             self.assertFalse(refresh_data.preserve_referenced_source({"id": "uncited"}, archive))
 
     def test_publication_cannot_edit_curated_rules_or_test_expectations(self):
-        publish_refresh.check_paths(["data/kba/types.tsv", "data/identity/index.tsv", "tools/source-pins.json"])
+        publish_refresh.check_paths(["data/kba/types.tsv", "data/identity/index.tsv", "tools/source-pins.json",
+                                     "data/kba-wmi/comparison.json"])
         for path in ("data/europe/tesla-model-y.json", "data/astra/review.json", "data/identity/fixtures.json",
-                     "tools/astra.py", ".github/workflows/release.yml", "libs/python/orvin/answer.py"):
+                     "tools/astra.py", ".github/workflows/release.yml", "libs/python/orvin/answer.py",
+                     "data/kba-wmi/rows.json.gz", "data/kba-wmi/metadata.json", "data/kba-wmi/fixtures.json",
+                     "tools/kba_wmi.py"):
             with self.subTest(path=path), self.assertRaises(ValueError):
                 publish_refresh.check_paths(["data/kba/types.tsv", path])
         self.assertEqual("v0.10.1", publish_refresh.next_tag(["v0.9.9", "v0.10.0", "v0.11.0-rc1"]))

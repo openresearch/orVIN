@@ -10,6 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 ALLOWED = (
     "data/generated/*", "tools/source-pins.json", "data/dataset.json", "data/nhtsa/metadata.json", "data/nhtsa/*.plain.zip",
     "data/kba/metadata.json", "data/kba/source.json.gz", "data/kba/types.tsv",
+    "data/kba-wmi/comparison.json",
     "data/astra/metadata.json", "data/astra/index.tsv", "data/astra/TG-Automobil-*.txt.gz",
     "data/astra/patterns/*.tsv.gz", "data/decoding/metadata.json", "data/decoding/sources.json",
     "data/decoding/index.tsv", "data/decoding/patterns-*.tsv.gz", "data/identity/metadata.json",

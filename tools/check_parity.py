@@ -30,6 +30,15 @@ def main():
     vins += [f["vin"] for f in json.loads((ROOT / "data/vehicle-fixtures.json").read_text())]
     vins += [f["vin"] for f in json.loads((ROOT / "data/astra/review.json").read_text())["fixtures"]]
     vins += [f["vin"] for f in json.loads((ROOT / "data/identity/fixtures.json").read_text())]
+    vins += [f["vin"] for f in json.loads((ROOT / "data/kba-wmi/fixtures.json").read_text())]
+    # Spread across the complete PDF catalogue, in addition to independent
+    # fixtures for extended suffixes, empty cells and repeated entries.
+    import kba_wmi
+    directory_rows, _ = kba_wmi.load()
+    identifiers = sorted({w for row in directory_rows if (w := kba_wmi.identifier(row)[0])})
+    vins += [w[:3] + "A" * 8 + w[3:] + "001" if len(w) == 6 else w + "A" * 14
+             for w in identifiers[::31] + identifiers[-1:]]
+    vins += ["W09A53AAAAAAAAAAA", "W09AAAAAAAAA54001", "WBIAAAAAAAAAAAAAA"]
     vins += ["5VLAA24208A000001", "5UPAA2420AA000001", "XP7YGAEK0RB000001", "XP7YGAEK0TC000001"]
     data = json.loads((ROOT / "data/dataset.json").read_text())
     wmis = sorted({a["wmi"] for a in data["assignments"]})

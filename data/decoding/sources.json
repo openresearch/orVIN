@@ -1,5 +1,23 @@
 [
   {
+    "id": "kba-sv31-2026-01-15",
+    "publisher": "Kraftfahrt-Bundesamt, Flensburg",
+    "title": "Hersteller von Kraftfahrzeugen und -anhängern, alphabetisch (SV 3.1)",
+    "url": "https://www.kba.de/SharedDocs/Downloads/DE/SV/sv31_pdf.pdf?__blob=publicationFile&v=3",
+    "edition": "15 January 2026",
+    "section": "PDF pages 6–150; row ordinal top to bottom within each page; columns Herstellerklartext, KBA, WMI Teil 1/2, vollständige Herstellerbezeichnung, Herstellerstandort",
+    "retrievedOn": "2026-09-26",
+    "reuseBasis": "KBA SV 3.1, 15 January 2026, PDF page 151 (Impressum): reproduction and dissemination, including partial, digital and indirectly obtained content, are permitted with acknowledgement of the source. Factual rows are extracted and normalized with KBA attribution; original documents are not redistributed.",
+    "license": "LicenseRef-KBA-SV31-Attribution",
+    "termsUrl": "https://www.kba.de/SharedDocs/Downloads/DE/SV/sv31_pdf.pdf?__blob=publicationFile&v=3#page=151",
+    "modifications": "Datenquelle: Kraftfahrt-Bundesamt, SV 3.1, Stand 15. Januar 2026, Abruf 26. September 2026; eigene Darstellung. Factual columns extracted and normalized into VIN-matching rules by orVIN; page/row lineage and repeated entries retained. No retail-make, assembly-location, model/year or VIN-to-HSN inference.",
+    "archivePath": null,
+    "archiveSha256": null,
+    "inspectedSha256": "d4a7daa14f46571fbcbe1e242567f0c1b79dd49793ea916e57b740c0495440f8",
+    "archiveStatus": "Original PDF not redistributed; hash-pinned transformed factual row extract retained in Git only.",
+    "evidencePath": "kba-wmi/metadata.json"
+  },
+  {
     "id": "nhtsa-vpic-2026-09",
     "title": "NHTSA vPIC standalone database, September 2026",
     "publisher": "NHTSA",

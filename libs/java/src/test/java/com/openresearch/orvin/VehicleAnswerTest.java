@@ -7,6 +7,47 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class VehicleAnswerTest {
+    @Test void kbaWmiDirectoryPreservesExtendedIdentifiersAndAttributionWithoutInventingAMake() {
+        var decoder = VinDecoder.bundled();
+        // Independently read from SV 3.1 PDF page 6, rows 1 and 12; synthetic VINs.
+        var hahn = decoder.decode("W09AAAAAAAAA53001");
+        assertEquals("A+A HAHN GMBH", hahn.details().field("ManufacturerDirectoryName").value().orElseThrow());
+        assertEquals("1031", hahn.details().field("ManufacturerDirectoryHSN").value().orElseThrow());
+        var nearMiss = decoder.decode("W09A53AAAAAAAAAAA");
+        assertFalse(nearMiss.details().field("ManufacturerDirectoryName").possibilities().contains("A+A HAHN GMBH"));
+        var answer = decoder.decodeVehicle("WAKAAAAAAAAAAAAAA");
+        assertTrue(answer.vehicle().make().isEmpty());
+        var details = JsonValues.object(answer.longResult().get("details"));
+        var specifications = JsonValues.object(details.get("specifications"));
+        assertEquals("Kempten", JsonValues.object(specifications.get("ManufacturerDirectoryLocation")).get("value"));
+        assertFalse(specifications.containsKey("PlantCity"));
+        var provenance = JsonValues.object(details.get("provenance"));
+        var credit = JsonValues.list(provenance.get("additionalSources")).stream().map(JsonValues::object)
+                .filter(s -> "kba-sv31-2026-01-15".equals(s.get("id"))).findFirst().orElseThrow();
+        assertEquals("LicenseRef-KBA-SV31-Attribution", credit.get("license"));
+        assertEquals("https://www.kba.de/SharedDocs/Downloads/DE/SV/sv31_pdf.pdf?__blob=publicationFile&v=3#page=151", credit.get("termsUrl"));
+        assertTrue(credit.get("modifications").toString().contains("eigene Darstellung"));
+    }
+
+    @Test void cobraPreferenceExplainsItsDecisionAndPreservesTheConflictingDirectoryRow() {
+        // Reviewed KBA PDF 34/78 versus NHTSA WMI 4873 / make 4657.
+        var decoder = VinDecoder.bundled();
+        var answer = decoder.decodeVehicle("1CAAAAAAAAAAAAAAA");
+        assertEquals("Cobra Industries", answer.vehicle().make().orElseThrow());
+        var details = JsonValues.object(answer.longResult().get("details"));
+        var evidence = JsonValues.object(details.get("evidence"));
+        var decision = JsonValues.object(JsonValues.object(details.get("decisions")).get("make"));
+        var preference = JsonValues.list(decision.get("evidenceIds")).stream()
+                .map(id -> JsonValues.object(JsonValues.object(evidence.get(id)).get("record")))
+                .filter(record -> "SOURCE_PREFERENCE".equals(record.get("kind"))).findFirst().orElseThrow();
+        assertEquals("kba-sv31-1ca-prefer-nhtsa", preference.get("ruleId"));
+        assertTrue(preference.get("keys").toString().contains("sv31-p034-r078"));
+        var specifications = JsonValues.object(details.get("specifications"));
+        assertEquals("DAIMLERCHRYSLER CORP (DODGE/BUS)",
+                JsonValues.object(specifications.get("ManufacturerDirectoryName")).get("value"));
+        assertNotEquals("Cobra Industries", decoder.decodeVehicle("1C3AAAAAAAAAAAAAA").vehicle().make().orElse(""));
+    }
+
     @Test void ownerAuthorizedGolfUsesTheNormalizedContract() {
         // User-contributed Golf 5 from Austria. Explicit permission and expectation provenance:
         // data/identity/fixtures.json. Model year is rule-derived, not owner-confirmed.

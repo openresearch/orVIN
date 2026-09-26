@@ -8,7 +8,7 @@
     "title": "NHTSA vPIC standalone database, September 2026",
     "sourceId": "nhtsa-vpic-2026-09"
   },
-  "decodingVersion": "2026.09.25.1",
-  "identityVersion": "2026.09.26.1",
+  "decodingVersion": "2026.09.26.3",
+  "identityVersion": "2026.09.26.3",
   "referenceYear": 2026
 }

@@ -17,7 +17,7 @@ import identity
 ROOT = nhtsa.ROOT
 RESEARCH_FILES = ("README.md", "framework.md", "nhtsa-bulk.md", "europe.md", "asia.md", "americas-uk.md",
                   "../astra-review.md", "../europe-priority/README.md", "bmw-subaru-followup.md",
-                  "../data-redistribution/README.md", "../kba-wmi/README.md")
+                  "../data-redistribution/README.md", "../kba-wmi/README.md", "../kba-wmi/comparison.md")
 
 
 def read(path):
@@ -130,11 +130,21 @@ def validation_corpus(root):
 def validate(root=ROOT):
     data_dir = root / "data"
     data = read(data_dir / "dataset.json")
+    import kba_wmi
+    wmi_metadata, wmi_comparison = kba_wmi.validate(root)
     sources = {}
     expected = {"dataset.json", "schema.json", "fixtures.json", "vehicle-fixtures.json", "LICENSE.md", "CC0-1.0.txt",
                 "nhtsa/metadata.json", "kba/metadata.json", "kba/fixtures.json", "snapshots/metadata.json",
                 "europe/tesla-model-y.json", "europe/vw-golf-1k-2005.json",
                 "decoding/metadata.json", "decoding/index.tsv", "decoding/sources.json"}
+    wmi_source = wmi_metadata["source"]
+    source_record(wmi_source)
+    sources[wmi_source["id"]] = wmi_source
+    expected.update({"kba-wmi/metadata.json", "kba-wmi/rows.json.gz", "kba-wmi/comparison.json", "kba-wmi/fixtures.json"})
+    snapshot(data_dir, "kba-wmi/" + wmi_metadata["snapshot"], wmi_metadata["snapshotSha256"])
+    for fixture in read(data_dir / "kba-wmi/fixtures.json"):
+        references(fixture["sourceRefs"], sources, fixture["id"])
+        require(fixture["locator"] and fixture["expectationBasis"], "Missing KBA WMI fixture provenance")
     for s in data["sources"]:
         source = {**s, "edition": s["publicationVersion"], "reuseBasis": s["reuse"]["basis"]}
         source_record(source)
@@ -229,6 +239,7 @@ def validate(root=ROOT):
     return {"dataFiles": len(expected), "sourceRecords": len(sources) + 1,
             "researchCitations": len(research), "assignments": len(data["assignments"]),
             "manufacturers": len(data["manufacturers"]), "kbaRows": kba["recordCount"],
+            "kbaWmiIdentifiers": wmi_comparison["counts"]["uniqueWmis"],
             "identityVersion": identity_metadata["version"],
             "nativePatterns": metadata["counts"]["exportedPatterns"], "volkswagenRules": len(volkswagen["rules"]),
             "astraApprovals": astra["counts"]["approvalRows"],

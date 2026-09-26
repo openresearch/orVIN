@@ -49,7 +49,7 @@ def build():
         elif sid == astra["source"]["id"]:
             source.update(termsUrl="https://www.fedlex.admin.ch/eli/cc/2023/682/de",
                           modifications="Passenger approvals filtered; VIN masks interpreted conservatively; labels normalized by orVIN.")
-        elif sid != kba_id:
+        elif sid != kba_id and not source.get("modifications"):
             source["modifications"] = "Selected factual associations structured and combined as scoped orVIN rules; labels normalized. Original documents not redistributed."
     makes, models, make_ids = {}, {}, {}
     for row in sorted(tables["make"], key=lambda r: int(r["id"])):

@@ -110,7 +110,8 @@ class VehicleDetailsTest {
         assertEquals("2026", berlin.details().field("ProductionYear").value().orElseThrow());
         assertTrue(berlin.modelYear().value().isEmpty());
         for (String vin : List.of("XP7YGAEK0RB000001", "XP7YGAEK0TC000001", "XP7YGAEZ0TB000001", "XP7YGAEK0TB000000"))
-            assertTrue(decoder.decode(vin, market("DE")).details().fields().isEmpty(), vin);
+            assertTrue(decoder.decode(vin, market("DE")).details().fields().keySet().stream()
+                    .allMatch(code -> code.startsWith("ManufacturerDirectory")), vin);
     }
 
     @Test
@@ -126,7 +127,8 @@ class VehicleDetailsTest {
         assertThrows(UnsupportedOperationException.class, () -> details.alternatives().clear());
         assertThrows(UnsupportedOperationException.class, () -> details.alternatives().get(0).fields().put("Model", List.of()));
         assertThrows(UnsupportedOperationException.class, () -> details.fields().get("Model").evidence().clear());
-        assertThrows(UnsupportedOperationException.class, () -> details.alternatives().get(0).fields().get("Model").clear());
+        var modelAlternative = details.alternatives().stream().filter(a -> a.fields().containsKey("Model")).findFirst().orElseThrow();
+        assertThrows(UnsupportedOperationException.class, () -> modelAlternative.fields().get("Model").clear());
     }
 
     @Test

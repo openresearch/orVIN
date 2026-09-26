@@ -1,0 +1,72 @@
+[
+  {
+    "id": "abt-manufacturer-directory",
+    "vin": "WAKAAAAAAAAAAAAAA",
+    "sourceRefs": ["kba-sv31-2026-01-15"],
+    "locator": "PDF page 6, table row 12",
+    "expectationBasis": "Manufacturer facts read from the rendered KBA table; synthetic VIN tail, no independently known vehicle make/model/year.",
+    "expected": {
+      "ManufacturerDirectoryName": ["ABT e-Line GmbH"],
+      "ManufacturerDirectoryLabel": ["ABT e-Line"],
+      "ManufacturerDirectoryLocation": ["Kempten"],
+      "ManufacturerDirectoryHSN": ["1925"]
+    }
+  },
+  {
+    "id": "hahn-extended-identifier",
+    "vin": "W09AAAAAAAAA53001",
+    "sourceRefs": ["kba-sv31-2026-01-15"],
+    "locator": "PDF page 6, table row 1; WMI W09 / A53",
+    "expectationBasis": "Printed six-character identifier and manufacturer facts independently read from the rendered table; suffix at VIN positions 12–14, synthetic remaining characters.",
+    "expected": {
+      "ManufacturerDirectoryName": ["A+A HAHN GMBH"],
+      "ManufacturerDirectoryLabel": ["A+A HAHN"],
+      "ManufacturerDirectoryLocation": ["NEUMÜNSTER"],
+      "ManufacturerDirectoryHSN": ["1031"]
+    }
+  },
+  {
+    "id": "bmw-directory-is-not-plant",
+    "vin": "WBAAAAAAAAAAAAAAA",
+    "sourceRefs": ["kba-sv31-2026-01-15"],
+    "locator": "PDF page 17, table row 25",
+    "expectationBasis": "Printed BMW manufacturer row; MUENCHEN is the directory's manufacturer location, not an assertion about the synthetic vehicle's factory.",
+    "expected": {
+      "ManufacturerDirectoryName": ["BAYERISCHE MOTORENWERKE AG (PERSONENWAGEN)"],
+      "ManufacturerDirectoryHSN": ["0005"],
+      "ManufacturerDirectoryLocation": ["MUENCHEN"]
+    }
+  },
+  {
+    "id": "volkswagen-directory-retains-correlated-alternatives",
+    "vin": "WVWZZZ1KZ5P000001",
+    "sourceRefs": ["kba-sv31-2026-01-15"],
+    "locator": "PDF page 140, table rows 4, 21, 34 and 62",
+    "expectationBasis": "All four printed WVW rows independently reviewed; no selection of HSN, historical company or manufacturer location from WMI alone. Synthetic Golf-layout VIN.",
+    "expected": {
+      "ManufacturerDirectoryName": ["VOLKSWAGEN AG (PERSONENWAGEN)", "VOLKSWAGEN DO BRASIL S/A", "VOLKSWAGEN OF AMERICA"],
+      "ManufacturerDirectoryHSN": ["0600", "0603", "1166", "1913"]
+    }
+  },
+  {
+    "id": "different-directory-assignment-is-retained",
+    "vin": "1CAAAAAAAAAAAAAAA",
+    "sourceRefs": ["kba-sv31-2026-01-15"],
+    "locator": "PDF page 34, table row 78",
+    "expectationBasis": "DaimlerChrysler/Dodge bus association independently read from the rendered KBA page. Retain the printed directory claim with its source; do not promote it to a retail make. Synthetic VIN tail.",
+    "expected": {
+      "ManufacturerDirectoryName": ["DAIMLERCHRYSLER CORP (DODGE/BUS)"],
+      "ManufacturerDirectoryHSN": ["1004"]
+    }
+  },
+  {
+    "id": "missing-source-name-not-filled",
+    "vin": "8AXAAAAAAAAAAAAAA",
+    "sourceRefs": ["kba-sv31-2026-01-15"],
+    "locator": "PDF page 140, table rows 46, 55 and 74",
+    "expectationBasis": "Rendered table includes a row with an empty full manufacturer name. Its absent cells must not be filled from adjacent rows; other matching rows retain their own names.",
+    "expected": {
+      "ManufacturerDirectoryHSN": ["0600", "1166", "1913"]
+    }
+  }
+]

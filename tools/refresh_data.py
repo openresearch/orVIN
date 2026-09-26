@@ -239,6 +239,9 @@ def refresh(apply=False):
             exclusion_guard("NHTSA decoding", old_decoding["counts"]["sourcePatterns"] - old_decoding["counts"]["exportedPatterns"],
                             old_decoding["counts"]["sourcePatterns"], counts["sourcePatterns"] - counts["exportedPatterns"], counts["sourcePatterns"])
             report["sources"]["nhtsa"]["counts"] = counts
+            # Recompare the unchanged, manually reviewed KBA extract with the new
+            # NHTSA snapshot. This does not refresh a PDF, source pin or rule.
+            command(sys.executable, "tools/kba_wmi.py", "compare")
         if astra_changed:
             source = dict(old_astra["source"])
             previous = ROOT / "data" / source["archivePath"]

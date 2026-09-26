@@ -1,11 +1,11 @@
 {
   "formatVersion": 1,
-  "version": "2026.09.25.1",
+  "version": "2026.09.26.3",
   "sourceId": "nhtsa-vpic-2026-09",
   "sourceSha256": "1ee4a1e22526a606b492ce4ab301894465afbf43dc00946df6d503c3102d5911",
   "referenceYear": 2026,
-  "indexSha256": "5ee77503aa480e6e20882007b57f46a5d285e1e29d06421372d11440be082478",
-  "sourcesSha256": "0cc327461a6fce658111781e2c585809717dfa1634f5fae0c0f3e2011284f483",
+  "indexSha256": "c684e34f94ba63e1f289bfcbf23dcffa97b38ece4835097dd9f8ae7a47eab9b5",
+  "sourcesSha256": "82e21b8e92034027e216dc539eeec04ce9f6f3866563f7bc01a71d21e0498edb",
   "counts": {
     "excludedPrivateUndecodedOrQc": 335302,
     "exportedPatterns": 1343387,

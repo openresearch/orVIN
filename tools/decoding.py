@@ -152,7 +152,9 @@ def compile_archive(destination):
                     index.append(["F", rule["id"], code, b64(val), source["id"], source["url"]])
         documents = source_documents(europe, volkswagen)
         for source in documents:
-            index.append(["D", *(b64(value or "") for value in source.values())])
+            keys = ("id", "title", "publisher", "url", "edition", "section", "retrievedOn", "reuseBasis",
+                    "archivePath", "archiveSha256", "inspectedSha256", "evidencePath")
+            index.append(["D", *(b64(source.get(key) or "") for key in keys)])
         (destination / "sources.json").write_text(nhtsa.json_text(documents), encoding="utf-8", newline="\n")
         for r in sorted(elements.values(), key=lambda r: int(r["id"])):
             index.append(["E", r["id"], r["code"], b64(r["name"]), r["datatype"]])
@@ -234,6 +236,9 @@ def source_documents(tesla, volkswagen):
                           "url": source["url"], "edition": source["edition"], "section": source["section"],
                           "retrievedOn": source["retrievedOn"], "reuseBasis": reuse, "archivePath": None,
                           "archiveSha256": None, "inspectedSha256": source.get("inspectedSha256"), "evidencePath": path})
+    import kba_wmi
+    _, metadata = kba_wmi.load()
+    documents.append(metadata["source"])
     return sorted(documents, key=lambda s: s["id"])
 
 

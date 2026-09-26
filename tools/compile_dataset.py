@@ -102,6 +102,7 @@ def rule_rows(rules, source_ids, codes):
 def compile_bundle(root=ROOT):
     import dataset
     import kba
+    import kba_wmi
     from jsonschema import Draft202012Validator
     data = root / "data"
     inputs, files = {}, {}
@@ -125,6 +126,17 @@ def compile_bundle(root=ROOT):
         for path in sorted((data / area).rglob("*.tsv.gz")):
             copy(path.relative_to(data).as_posix())
     raw_index = read("decoding/index.tsv").decode().splitlines()
+    # Manufacturer-directory rows are compiled into the same generic program as
+    # other reviewed facts. Their distinct fields prevent brand/plant inference.
+    read("kba-wmi/metadata.json")
+    read("kba-wmi/rows.json.gz")
+    directory_rows, directory_metadata = kba_wmi.load(data / "kba-wmi")
+    existing_elements = {int(line.split("\t")[1]) for line in raw_index if line.startswith("E\t")}
+    existing_codes = {line.split("\t")[2] for line in raw_index if line.startswith("E\t")}
+    for element, code, label, _ in kba_wmi.FIELDS:
+        if element in existing_elements or code in existing_codes:
+            raise ValueError("Manufacturer-directory field collision")
+        raw_index.append("\t".join(("E", str(element), code, b64(label), "string")))
     index = "\n".join(line for line in raw_index if line.split("\t")[0] not in {"T", "R", "Y", "L", "A", "O", "F"}) + "\n"
     files["decoding/index.tsv"] = index.encode()
     meta = json.loads(files["decoding/metadata.json"])
@@ -138,7 +150,8 @@ def compile_bundle(root=ROOT):
     codes = {line.split("\t")[2] for line in raw_index if line.startswith("E\t")}
     for name in ("europe/tesla-model-y.json", "europe/vw-golf-1k-2005.json"):
         read(name)
-    rules = list(literal_rules(data))
+    rules = [*literal_rules(data), *kba_wmi.rules(directory_rows),
+             *kba_wmi.preference_rules(directory_rows, directory_metadata, json.loads(wmi))]
     schema = json.loads(read("rules.schema.json"))
     validator = Draft202012Validator(schema)
     for path in sorted((data / "rules").glob("*.json")):
@@ -154,6 +167,9 @@ def compile_bundle(root=ROOT):
     files["kba-metadata.tsv"] = (kba.render_metadata(meta).rstrip("\n") + "\t" + digest(files["kba/metadata.json"]) + "\n").encode()
     for name in ("LICENSE.md", "CC0-1.0.txt"):
         copy(name)
+    # Include the full rights assessment and original PDF digest, never the PDF
+    # or the authoring snapshot, in installed packages.
+    copy("kba-wmi/metadata.json")
     # Notices are part of the common bundle, including when building a wheel from an sdist.
     for name in ("LICENSE", "NOTICE"):
         files["CODE-" + name] = (root / name).read_bytes()

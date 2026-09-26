@@ -24,6 +24,8 @@ language-neutral dataset, with Python, Java and .NET libraries that return consi
 orVIN combines [NHTSA VIN data](docs/nhtsa-data.md),
 [German KBA type records](docs/kba-data.md),
 [Swiss ASTRA type approvals](docs/research/astra-review.md) and reviewed manufacturer-specific rules.
+The source checkout also includes [KBA WMI manufacturer-directory evidence](docs/kba-wmi-data.md)
+for 3,827 identifiers across markets (not yet in the 0.3.0 release).
 The language-neutral files in [`data/`](data/) can also be used independently of the libraries.
 
 Coverage varies by manufacturer, market and year. Where supported, rules can identify
