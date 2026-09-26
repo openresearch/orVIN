@@ -21,7 +21,7 @@ Contributor requirements are in [AGENTS.md](../AGENTS.md).
 | Behavioral comparison sources | 4 public partial-VIN API responses | Original response bytes retained and hashed; fixtures link to the source records |
 | Tesla Model Y | 2 factory layouts, 9 attribute rules and 3 production-year codes | One reviewed manual source, scope, edition, table locator and inspection hash |
 | Volkswagen Golf | 2 bounded model-year-2005 factory rules | Three source documents; field-specific references and explicit explanation of the combined evidence |
-| Research reports | 113 distinct cited URLs | Citation inventory records report/section locations; research leads are not automatically runtime evidence |
+| Research reports | 119 distinct cited URLs | Citation inventory records report/section locations; research leads are not automatically runtime evidence |
 | Shared identity catalog | 12,447 make-label bindings, 32,010 model-label bindings | Exact reconstruction from pinned source labels, stable identities, source IDs and row locators; these are label bindings, not VIN coverage counts |
 | Owner-contributed Golf 5 fixture | 1 expressly authorized VIN from Austria | Owner permission and attribution recorded; owner-reported model/country separated from the rule-derived model year |
 | Contributed BMW X1 and Subaru Legacy fixtures | 2 expressly authorized test VINs | User reports and permission retained; ownership/year not assumed; current decoding gaps recorded |
@@ -68,7 +68,7 @@ seen during review; without retaining those bytes they do not guarantee that a
 future download will reproduce them. The package retains the selected factual
 associations, exact citations, scope and reuse assessments.
 
-The 113 research citations are an inventory of leads and supporting references.
+The 119 research citations are an inventory of leads and supporting references.
 Their regional report sections preserve the document assessments, applicability
 and remaining gaps. Inventory validation checks citation continuity, not the
 current availability or accuracy of every linked document. Each newly implemented

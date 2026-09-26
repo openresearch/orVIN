@@ -32,6 +32,7 @@ proof that a source does not exist.
 | [American makes and other global brands](americas-uk.md) | Ford, Lincoln, Chevrolet, GMC, Cadillac, Buick, Chrysler, Dodge, Jeep, Ram, Tesla, Volvo, Polestar, Land Rover, Jaguar, MG | 16 makes: 15 with scoped tables; MG has identification guidance but no verified character map. |
 | [NHTSA bulk assessment](nhtsa-bulk.md) | The complete standalone database, independently of the 50-make selection | Inspected September 2026 snapshot, exact hashes, table inventory, WMI associations and decoding procedure semantics. |
 | [Common rule framework](framework.md) | Cross-cutting requirements | Scope, provenance, ambiguity, encoded facts versus enrichment, and shared Python/Java fixtures. |
+| [KBA WMI directory](../kba-wmi/README.md) | International manufacturer identifiers and the January 2026 directory | Same WMI system as NHTSA; potentially complementary coverage, with conflicting reuse notices still unresolved. No KBA WMI rows imported. |
 
 The regional reports record exact URLs, document editions, relevant pages,
 markets, verified fields, gaps and reuse findings. Their implementation-status

@@ -19,6 +19,20 @@ language-neutral dataset, with Python, Java and .NET libraries that return consi
   dependencies, database server or calls to upstream providers.
 - **German registration codes:** HSN/TSN lookup alongside VIN decoding.
 
+## Data and coverage
+
+orVIN combines [NHTSA VIN data](docs/nhtsa-data.md),
+[German KBA type records](docs/kba-data.md),
+[Swiss ASTRA type approvals](docs/research/astra-review.md) and reviewed manufacturer-specific rules.
+The language-neutral files in [`data/`](data/) can also be used independently of the libraries.
+
+Coverage varies by manufacturer, market and year. Where supported, rules can identify
+factory, engine, fuel, body and other specifications. Type-approval matches remain
+candidate configurations; exact build dates, complete options and vehicle history
+are outside current coverage. HSN/TSN codes must be supplied separately.
+See the [European coverage report](docs/european-coverage.md) and
+[decoding limits](docs/rich-decoding.md).
+
 ## Python
 
 Requires **Python 3.10+**. Install the released package from GitHub:
@@ -95,20 +109,6 @@ Console.WriteLine(answer.Short().ToJsonString());
 [.NET guide](libs/dotnet/README.md). The package embeds the same compiled data,
 with no Python, Java or network dependency. Release automation builds the NuGet
 package alongside the JAR and wheel.
-
-## Data and coverage
-
-orVIN combines [NHTSA VIN data](docs/nhtsa-data.md),
-[German KBA type records](docs/kba-data.md),
-[Swiss ASTRA type approvals](docs/research/astra-review.md) and reviewed manufacturer-specific rules.
-The language-neutral files in [`data/`](data/) can also be used independently of the libraries.
-
-Coverage varies by manufacturer, market and year. Where supported, rules can identify
-factory, engine, fuel, body and other specifications. Type-approval matches remain
-candidate configurations; exact build dates, complete options and vehicle history
-are outside current coverage. HSN/TSN codes must be supplied separately.
-See the [European coverage report](docs/european-coverage.md) and
-[decoding limits](docs/rich-decoding.md).
 
 ## Help build the database
 
