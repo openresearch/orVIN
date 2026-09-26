@@ -131,6 +131,16 @@ name difference was silently normalized into a retail make, and no directory HSN
 was selected as a vehicle's actual code.
 The original PDF is not bundled; its factual extraction remains an authoring input.
 
+## Published 0.3.1 verification
+
+The [0.3.1 release workflow](https://github.com/openresearch/orVIN/actions/runs/36250362061)
+passed for source commit `82d85fb7b8ddc0150484ecc661d93ebae40c3d1f`, including
+fresh versioned packages, embedded-data checks, installed consumers and three-language
+parity. All nine assets are published. The downloaded wheel matches `SHA256SUMS`;
+its digest is recorded in [release documentation](releasing.md). Production now
+uses that wheel, with the explicit source preference and original KBA evidence
+verified through synthetic queries; see the [deployment record](plans/kba-wmi/plan.md#release-and-production-verification).
+
 ## Re-run
 
 From an environment with `tools/requirements.txt` installed:

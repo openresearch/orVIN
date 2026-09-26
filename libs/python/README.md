@@ -55,11 +55,11 @@ or digits. Normalization only trims ASCII spaces and uppercases ASCII letters. L
 2.2 codes are not silently truncated. An absent type remains unknown: the KBA snapshot records
 the stock at one reference date, not every type ever assigned. VIN cannot determine HSN/TSN.
 
-Install the [0.3.0 release](https://github.com/openresearch/orvin/releases/tag/v0.3.0) wheel,
+Install the [0.3.1 release](https://github.com/openresearch/orvin/releases/tag/v0.3.1) wheel,
 including normalized answers, rich decoding and the bundled dataset:
 
 ```sh
-python3 -m pip install https://github.com/openresearch/orvin/releases/download/v0.3.0/orvin-0.3.0-py3-none-any.whl
+python3 -m pip install https://github.com/openresearch/orvin/releases/download/v0.3.1/orvin-0.3.1-py3-none-any.whl
 ```
 
 The wheel/sdist are GitHub Release assets; the package is not published on PyPI.

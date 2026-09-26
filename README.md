@@ -24,8 +24,8 @@ language-neutral dataset, with Python, Java and .NET libraries that return consi
 orVIN combines [NHTSA VIN data](docs/nhtsa-data.md),
 [German KBA type records](docs/kba-data.md),
 [Swiss ASTRA type approvals](docs/research/astra-review.md) and reviewed manufacturer-specific rules.
-The source checkout also includes [KBA WMI manufacturer-directory evidence](docs/kba-wmi-data.md)
-for 3,827 identifiers across markets (not yet in the 0.3.0 release).
+It also includes [KBA WMI manufacturer-directory evidence](docs/kba-wmi-data.md)
+for 3,827 identifiers across markets.
 The language-neutral files in [`data/`](data/) can also be used independently of the libraries.
 
 Coverage varies by manufacturer, market and year. Where supported, rules can identify
@@ -40,7 +40,7 @@ See the [European coverage report](docs/european-coverage.md) and
 Requires **Python 3.10+**. Install the released package from GitHub:
 
 ```sh
-python3 -m pip install https://github.com/openresearch/orvin/releases/download/v0.3.0/orvin-0.3.0-py3-none-any.whl
+python3 -m pip install https://github.com/openresearch/orvin/releases/download/v0.3.1/orvin-0.3.1-py3-none-any.whl
 ```
 
 ```python
@@ -76,11 +76,11 @@ Requires **Java 17+**. Configure the GitHub Packages repository using the
 <dependency>
   <groupId>com.openresearch</groupId>
   <artifactId>orvin</artifactId>
-  <version>0.3.0</version>
+  <version>0.3.1</version>
 </dependency>
 ```
 
-For Gradle: `implementation("com.openresearch:orvin:0.3.0")`.
+For Gradle: `implementation("com.openresearch:orvin:0.3.1")`.
 GitHub Packages requires authentication, including for public packages.
 
 ```java
@@ -99,7 +99,7 @@ The JAR includes the same dataset as Python. It needs no Python installation at 
 Requires **.NET 8+**. Configure the [GitHub Packages NuGet feed](docs/releasing.md#net-packages), then install:
 
 ```sh
-dotnet add package OpenResearch.orVIN --version 0.3.0
+dotnet add package OpenResearch.orVIN --version 0.3.1
 ```
 
 ```csharp

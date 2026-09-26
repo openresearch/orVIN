@@ -1,7 +1,6 @@
 # KBA WMI directory import
 
-Status: implementation and local package verification complete, 2026-09-26.
-Prepared for release 0.3.1; publication and API deployment are pending.
+Status: implemented, released as 0.3.1 and deployed, 2026-09-26.
 The recorded reuse basis is the attribution notice on SV 3.1 PDF page 151;
 see `docs/research/kba-wmi/README.md`.
 
@@ -73,5 +72,24 @@ with 52 Java tests and complete source reconstruction, fresh installed .NET chec
 6,474 Java/Python and 4,316 .NET/Python results, and all 524 common package files.
 The installed wheel confirms explicit preference evidence in AT/DE/US/JP, preserved
 KBA wording, no preference on the neighbouring `1C3` prefix, and unchanged Golf
-identity. Derived decoding/identity versions are now `2026.09.26.3`; no library
-release or deployment was performed for this follow-up.
+identity. Derived decoding/identity versions are now `2026.09.26.3`.
+The follow-up is included in release 0.3.1.
+
+## Release and production verification
+
+[Release 0.3.1](https://github.com/openresearch/orVIN/releases/tag/v0.3.1) was
+published from `82d85fb7b8ddc0150484ecc661d93ebae40c3d1f` after the complete
+[release workflow](https://github.com/openresearch/orVIN/actions/runs/36250362061)
+passed. All nine assets are available; the downloaded wheel matches its published
+SHA-256. The API's [scheduled updater](https://gitlab.openresearch.com/dispoxyz/code/orvin-api/-/pipelines/143176)
+verified and tested the release, committed the pin as `52e8bee`, and triggered the
+[image pipeline](https://gitlab.openresearch.com/dispoxyz/code/orvin-api/-/pipelines/143177).
+Ruff and 17 API tests passed; both image architectures were published.
+
+Flux commit `b7fb0db7` selected `main-2026-09-26-15-10-10-23` through the Harbor
+proxy. The rollout completed and production `/healthz` reports orVIN 0.3.1.
+Synthetic AT/US `1CA` checks verified Cobra Industries, explicit preference evidence,
+original KBA wording and exact short/long extension. Global `WAK` and extended
+`W09` directory evidence, a synthetic Golf, HSN/TSN and missing-market HTTP 400
+also passed. The public browser result showed Cobra Industries and the expanded
+KBA attribution/source section. No customer VIN was sent to production.

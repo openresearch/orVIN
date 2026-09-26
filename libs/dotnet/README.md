@@ -21,7 +21,7 @@ var germanType = HsnTsnLookup.Bundled().LookupVehicle("0603", "BMT");
 Model year and production year are distinct.
 
 Configure the [GitHub Packages feed](../../docs/releasing.md#net-packages), then
-install with `dotnet add package OpenResearch.orVIN --version 0.3.0`. You can also
+install with `dotnet add package OpenResearch.orVIN --version 0.3.1`. You can also
 download the `.nupkg` from the GitHub Release and use a local NuGet source.
 Build from a checkout with `dotnet pack libs/dotnet/orVIN -c Release`.
 

@@ -1,8 +1,7 @@
 # KBA manufacturer/WMI directory
 
-The source checkout imports **SV 3.1, 15 January 2026**, retrieved 26 September
-2026, as manufacturer-directory evidence for every market. This addition is not
-part of the already published 0.3.0 artifacts.
+Available in **orVIN 0.3.1**. The library imports **SV 3.1, 15 January 2026**,
+retrieved 26 September 2026, as manufacturer-directory evidence for every market.
 
 | Coverage | Count |
 | --- | ---: |
