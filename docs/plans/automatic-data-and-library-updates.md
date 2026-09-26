@@ -1,6 +1,6 @@
 # Automatic data updates, API releases and additional VIN coverage
 
-Status: implementation authorized, 2026-09-26. Step 4 runs in a research-only subagent; consider its implementation only after step 5 passes.
+Status: steps 1, 2, 3 and 5 delivered and verified, 2026-09-26. Step 4 research is complete; decoding implementation remains deferred for review after this checkpoint.
 
 ## Requested outcome
 
@@ -183,8 +183,24 @@ library release solely for testing.
   No simulated source bytes are committed or published.
 - Step 4: [all-BMW and Subaru research](../research/vin-rules/bmw-subaru-followup.md)
   is complete and its citations are registered. Implementation remains deferred.
-- Step 5: GitHub workflow validation, v0.2.1 publication and the real GitLab
-  library-upgrade-to-Flux rollout remain in progress.
+- Step 5: [v0.2.1](https://github.com/openresearch/orvin/releases/tag/v0.2.1)
+  is published and deployed. [Release run](https://github.com/openresearch/orvin/actions/runs/36231490657)
+  passed all Java/Python, tooling, provenance, package equality, parity and installed-wheel checks.
+  [Hosted source check](https://github.com/openresearch/orvin/actions/runs/36231473233)
+  passed with all three sources unchanged and correctly skipped publishing.
+  [GitLab scheduled upgrade](https://gitlab.openresearch.com/dispoxyz/code/orvin-api/-/pipelines/143154)
+  verified and tested the wheel, committed the exact pin in `1baa60d`, and explicitly
+  triggered [image pipeline 143155](https://gitlab.openresearch.com/dispoxyz/code/orvin-api/-/pipelines/143155).
+  Flux selected `main-2026-09-26-09-09-43-14`, committed manifest update `46966da2`,
+  and rolled out the healthy deployment. Reconciliation was requested to accelerate
+  the configured timers; image selection and the manifest change used the existing automation.
+  Public `/healthz` reports 0.2.1. Synthetic Golf VIN and HSN/TSN checks passed,
+  including source credits, short/long equality and no-store responses.
+
+No new upstream edition was available, so changed-source regeneration was verified
+with simulated inputs locally; automatic publication of a future real upstream
+change has not yet been observed. The release-to-API-to-Flux chain was exercised
+with the real v0.2.1 release. No BMW/Subaru runtime decoding rule was added.
 
 ## Sources inspected for feasibility
 

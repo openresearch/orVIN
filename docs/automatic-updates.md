@@ -63,6 +63,19 @@ KBA population counts and catalogue row IDs are snapshot facts, not permanent ve
 identity fixtures. Their exact mapping is checked by full source reconstruction and
 cross-language comparison; the independent HSN/TSN identity expectations remain fixed.
 
+## First delivery verification
+
+On 2026-09-26, [the hosted source check](https://github.com/openresearch/orvin/actions/runs/36231473233)
+found no changes and skipped publication. A separate disposable-checkout simulation
+exercised all three changed-source paths, historical archive retention and the
+publication file allowlist. Simulated bytes were never published.
+
+[ORvin v0.2.1](https://github.com/openresearch/orvin/releases/tag/v0.2.1) exercised the
+real downstream chain: GitLab schedule 31 verified and tested the new wheel, pushed
+the pin update, triggered image pipeline 143155, and Flux deployed it. Public health
+and synthetic VIN/HSN/TSN checks confirmed 0.2.1 with source credits intact. Future
+changed-source publication remains guarded by the workflow checks above.
+
 ## Operations
 
 Read-only online discovery/comparison:
