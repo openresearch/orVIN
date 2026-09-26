@@ -44,6 +44,28 @@
     ]
   },
   {
+    "id": "research-4f719dd8088a533e",
+    "url": "https://data.gov.de/suche/daten/fz-hersteller-handelsnamen-kfz?ids=c1e3a0b6-0d34-4e99-8181-91bdfb639208",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "../data-redistribution/README.md",
+        "section": "Structured production inputs"
+      }
+    ]
+  },
+  {
+    "id": "research-1da9e087a238c301",
+    "url": "https://data.wa.gov/api/views/f6w7-q2d2.json",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "../data-redistribution/README.md",
+        "section": "Separately licensed validation data"
+      }
+    ]
+  },
+  {
     "id": "research-da5982e45cbf6713",
     "url": "https://eur-lex.europa.eu/legal-content/EN/ALL/?uri=CELEX%3A32021R0535",
     "role": "research-citation",
@@ -121,6 +143,17 @@
       {
         "document": "../astra-review.md",
         "section": "What the VIN field means"
+      }
+    ]
+  },
+  {
+    "id": "research-359d176d4c56e072",
+    "url": "https://opendatacommons.org/licenses/odbl/1-0/",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "../data-redistribution/README.md",
+        "section": "Separately licensed validation data"
       }
     ]
   },
@@ -268,6 +301,17 @@
       {
         "document": "americas-uk.md",
         "section": "Important implementation consequences"
+      }
+    ]
+  },
+  {
+    "id": "research-6fb6da9058741296",
+    "url": "https://vpic.nhtsa.dot.gov/About",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "../data-redistribution/README.md",
+        "section": "Structured production inputs"
       }
     ]
   },
@@ -670,6 +714,10 @@
       {
         "document": "../astra-review.md",
         "section": "Reuse basis"
+      },
+      {
+        "document": "../data-redistribution/README.md",
+        "section": "Structured production inputs"
       }
     ]
   },
@@ -714,6 +762,10 @@
       {
         "document": "../astra-review.md",
         "section": "Reuse basis"
+      },
+      {
+        "document": "../data-redistribution/README.md",
+        "section": "Structured production inputs"
       }
     ]
   },
@@ -934,6 +986,10 @@
       {
         "document": "../astra-review.md",
         "section": "Reuse basis"
+      },
+      {
+        "document": "../data-redistribution/README.md",
+        "section": "Structured production inputs"
       }
     ]
   },
@@ -945,6 +1001,10 @@
       {
         "document": "../astra-review.md",
         "section": "Reuse basis"
+      },
+      {
+        "document": "../data-redistribution/README.md",
+        "section": "Structured production inputs"
       }
     ]
   },
@@ -967,6 +1027,10 @@
       {
         "document": "../europe-priority/README.md",
         "section": "Source scope and reuse"
+      },
+      {
+        "document": "../data-redistribution/README.md",
+        "section": "Structured production inputs"
       }
     ]
   },
@@ -1045,6 +1109,10 @@
       {
         "document": "americas-uk.md",
         "section": "Reuse boundary"
+      },
+      {
+        "document": "../data-redistribution/README.md",
+        "section": "Structured production inputs"
       }
     ]
   },

@@ -8,7 +8,7 @@ import subprocess
 
 ROOT = Path(__file__).resolve().parents[1]
 ALLOWED = (
-    "tools/source-pins.json", "data/dataset.json", "data/nhtsa/metadata.json", "data/nhtsa/*.plain.zip",
+    "data/generated/*", "tools/source-pins.json", "data/dataset.json", "data/nhtsa/metadata.json", "data/nhtsa/*.plain.zip",
     "data/kba/metadata.json", "data/kba/source.json.gz", "data/kba/types.tsv",
     "data/astra/metadata.json", "data/astra/index.tsv", "data/astra/TG-Automobil-*.txt.gz",
     "data/astra/patterns/*.tsv.gz", "data/decoding/metadata.json", "data/decoding/sources.json",

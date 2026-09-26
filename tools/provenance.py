@@ -16,7 +16,8 @@ import identity
 
 ROOT = nhtsa.ROOT
 RESEARCH_FILES = ("README.md", "framework.md", "nhtsa-bulk.md", "europe.md", "asia.md", "americas-uk.md",
-                  "../astra-review.md", "../europe-priority/README.md", "bmw-subaru-followup.md")
+                  "../astra-review.md", "../europe-priority/README.md", "bmw-subaru-followup.md",
+                  "../data-redistribution/README.md")
 
 
 def read(path):
@@ -214,6 +215,11 @@ def validate(root=ROOT):
     expected.update({"identity/metadata.json", "identity/index.tsv", "identity/fixtures.json"})
     for fixture in read(data_dir / "identity/fixtures.json"):
         references(fixture["ruleSourceRefs"], sources, fixture["id"])
+    import compile_dataset
+    generated = compile_dataset.validate(root)
+    expected.update("generated/" + name for name in generated)
+    expected.update({"policy/identity.json", "policy/decoder.json", "rules.schema.json"})
+    expected.update(p.relative_to(data_dir).as_posix() for p in (data_dir / "rules").glob("*.json"))
     inventory(data_dir, expected)
     research = research_inventory(root)
     require(read(root / "docs/research/vin-rules/sources.json") == research,

@@ -6,7 +6,9 @@ import hashlib
 import json
 
 SOURCE_KEYS = ("id", "publisher", "title", "url", "edition", "section", "retrievedOn", "reuseBasis", "license", "termsUrl", "modifications", "archiveSha256", "inspectedSha256", "evidencePath")
-PRIMARY = {"make": "Make", "model": "Model", "modelYear": "ModelYear", "productionYear": "ProductionYear"}
+from .program import policy, read
+PRIMARY = {policy().get(f"primaryFields.{i}.name"): policy().get(f"primaryFields.{i}.code")
+           for i in range(policy().get("primaryFields.length"))}
 
 
 def _key(value):
@@ -23,7 +25,7 @@ def _id(value):
 
 class _Catalogue:
     def __init__(self, directory):
-        self.metadata = json.loads((directory / "metadata.json").read_bytes())
+        self.metadata = json.loads(read(directory.parent, "identity/metadata.json"))
         content = (directory / "index.tsv").read_bytes()
         if hashlib.sha256(content).hexdigest() != self.metadata["sha256"]:
             raise RuntimeError("Bundled identity catalogue does not match its SHA-256")
@@ -156,7 +158,7 @@ class _Builder:
                     missing = True
         unique = sorted(set(mapped), key=lambda v: str(v))
         status = ("AMBIGUOUS" if len(unique) > 1 else "UNKNOWN" if missing or knowledge == "UNKNOWN" else
-                  "SUGGESTED" if knowledge == "NEEDS_CONTEXT" else "RESOLVED")
+                  policy().get("statuses." + knowledge))
         self.status[name] = status
         self.vehicle[name] = unique[0][1] if status in ("RESOLVED", "SUGGESTED") else None
         if name in ("make", "model"):
@@ -182,7 +184,7 @@ class _Builder:
                 if field:
                     self._select(name, field["possibilities"], field["status"], self.rich_ids[code], "SCOPED_VIN_RULE", self.vehicle["makeId"])
             # A unique WMI assignment can establish the marque when no direct make is established.
-            if self.status["make"] != "RESOLVED" and self.wmi_ids and not rich["fields"].get("Make"):
+            if self.status["make"] != "RESOLVED" and self.wmi_ids and (not rich["fields"].get("Make") or (self.status["make"] == "UNKNOWN" and self.raw["brand"]["status"] == "KNOWN")):
                 self._select("make", [r.get("brand") for r in self.raw["candidates"]], self.raw["brand"]["status"],
                              self.wmi_ids, "WMI_ASSIGNMENT")
             if self.status["make"] == "SUGGESTED" and self.raw["brand"]["status"] == "KNOWN":
@@ -190,11 +192,11 @@ class _Builder:
                 if mapped and all(m and m["id"] == self.vehicle["makeId"] for m in mapped):
                     self._select("make", [r["brand"] for r in self.raw["candidates"]], "KNOWN", self.wmi_ids, "WMI_ASSIGNMENT")
             conditional = [name for name in PRIMARY if self.status[name] == "SUGGESTED" and PRIMARY[name] in rich["fields"]]
-            self._assume("US_MARKET_ASSUMED", conditional if rich["marketScope"] == "US" else [])
+
             if self.status["make"] == "SUGGESTED" and not conditional:
                 self._assume("MATCH_CONSTRAINTS_UNCONFIRMED", ["make"])
             # A conflict is never replaced by a weaker catalogue guess.
-            conflict = rich["status"] == "CONTEXT_CONFLICT" and (rich["marketScope"] != "US" or self.raw["context"]["market"] == "US")
+            conflict = rich["status"] == "CONTEXT_CONFLICT" and (rich["marketScope"] != policy().get("patternProfile.market") or self.raw["context"]["market"] == policy().get("patternProfile.market"))
             supplied_year = self.raw["context"]["modelYear"]
             if supplied_year is not None:
                 self.evidence["context:modelYear"] = {"kind": "CALLER_CONTEXT", "sourceIds": [], "record": self.raw["context"]}
@@ -229,13 +231,13 @@ class _Builder:
                     self._select(name, [r.get(key) for r in rows], "NEEDS_CONTEXT", self.approval_ids,
                                  "CATALOGUE_CONSENSUS", self.vehicle["makeId"])
                     if self.status[name] == "SUGGESTED":
-                        self._assume("CATALOGUE_MEMBERSHIP_UNCONFIRMED", [name])
+                        self._assume(policy().get("catalogue.assumptionCode"), [name])
             if self.vehicle["makeId"] is None and self.vehicle["modelId"] is not None:
                 self.vehicle["model"] = self.vehicle["modelId"] = None
                 self.status["model"] = "AMBIGUOUS"
                 self.decisions["model"]["reason"] = "PRIMARY_MAKE_UNRESOLVED"
                 self.decisions["model"]["evidenceIds"] = sorted(set(self.decisions["model"]["evidenceIds"] + self.decisions["make"]["evidenceIds"]))
-            if self.decisions["model"]["reason"] in ("COMPETING_CONDITIONAL_SOURCES", "PRIMARY_MAKE_UNRESOLVED") and self.status["modelYear"] == "SUGGESTED":
+            if self.status["model"] in ("AMBIGUOUS", "CONFLICT") and self.status["modelYear"] == "SUGGESTED":
                 self.vehicle["modelYear"] = None
                 self.status["modelYear"] = "UNKNOWN"
                 self.decisions["modelYear"]["reason"] = "IDENTITY_APPLICABILITY_UNRESOLVED"
@@ -249,8 +251,19 @@ class _Builder:
                     self.decisions["modelYear"]["reason"] = "CALLER_CONTEXT"
                 self.decisions["modelYear"]["evidenceIds"] = sorted(set(self.decisions["modelYear"]["evidenceIds"] + ["context:modelYear"]))
             for assumption in self.assumptions:
-                assumption["fields"] = [name for name in assumption["fields"] if self.status[name] != "PROVIDED"]
+                assumption["fields"] = [name for name in assumption["fields"] if self.status[name] == "SUGGESTED"]
             self.assumptions = [a for a in self.assumptions if a["fields"]]
+            conditional = [name for name in PRIMARY if self.status[name] == "SUGGESTED" and self.decisions[name]["reason"] == "SCOPED_VIN_RULE"]
+            if conditional:
+                evidence = {eid for name in conditional for eid in self.decisions[name]["evidenceIds"]}
+                markets = sorted({a["market"] for a in self.alternatives if any(evidence.intersection(ids) for ids in a["fields"].values())})
+                requested = self.raw["context"]["market"]
+                if requested is None and markets == [policy().get("patternProfile.market")]:
+                    self._assume(policy().get("patternProfile.assumptionCode"), conditional)
+                else:
+                    self.assumptions.append({"code": policy().get("patternProfile.fallbackCode"), "fields": conditional,
+                        "requestedMarket": requested, "sourceMarkets": markets,
+                        "message": policy().get("patternProfile.fallbackMessage").replace("{sourceMarket}", ", ".join(markets)).replace("{requestedMarket}", requested or "an unspecified market")})
         elif self.raw["inputStatus"] == "VALID" and self.approval_ids:
             rows = self.raw["candidates"]
             self._select("make", [r["manufacturer"] for r in rows], "KNOWN", self.approval_ids, "TYPE_CODE_LOOKUP")
@@ -320,7 +333,7 @@ class _Builder:
                 record = item["record"]
                 rule = {key: record[key] for key in ("sourceId", "ruleId", "schemaId", "keys", "kind")}
                 rules["rule:" + _id(rule)] = rule
-        details = {"meta": {"library": "ORvin", "policyVersion": "vehicle-identity-v1", "datasets": datasets}, "input": input_data,
+        details = {"meta": {"library": "ORvin", "policyVersion": policy().get("version"), "datasets": datasets}, "input": input_data,
             "decisions": self.decisions, "specifications": specifications, "alternatives": self.alternatives,
             "evidence": dict(sorted(self.evidence.items())), "provenance": {"rules": dict(sorted(rules.items())), "variables": variables, "normalizationRules": dict(sorted(self.normalizations.items())),
                 "sourceDetails": source_details,

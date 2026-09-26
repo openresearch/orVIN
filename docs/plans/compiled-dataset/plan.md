@@ -1,20 +1,41 @@
 # Compiled dataset and generic runtimes
 
-Status: proposed; implementation has not started. Based on `main` at `b2b8ac8`,
-reviewed on 2026-09-26.
+Status: implemented and locally verified on `codex/compiled-runtime`, authorized on
+2026-09-26. Not yet released. Initial audit based on `main` at `b2b8ac8`.
 
 ## Objective
 
-Make ORvin's vehicle knowledge live in reviewed data and build tooling. Python and
-Java should execute the same generated dataset through small, generic evaluators.
+Make ORvin's vehicle knowledge live in reviewed data and build tooling. Python, Java and
+.NET execute the same generated dataset through small, generic evaluators.
 Adding a make, model, alias or rule expressible by the supported operations should
 require no library source changes. New operations still require an explicit format
-and engine change in both languages.
+and engine change in all three languages.
 
-Keep the existing offline packages, complete bundled dataset, public APIs, source
-attribution, and short/long answer contract. This work does not itself add coverage.
+Keep offline packages, public entry points, source attribution, and the short/long
+answer relationship. The user subsequently approved keeping permitted originals in
+the repository while shipping only compiled runtime data, provenance and notices.
+This work does not itself add manufacturer coverage.
 
-## What exists today
+## Accepted follow-up decisions
+
+- Retain the reviewed structured snapshots in Git. The redistribution assessment
+  is recorded in [the source-terms review](../../research/data-redistribution/README.md).
+  Downloading at build time would not by itself change downstream reuse obligations.
+- Ship the generated runtime bundle in JAR/wheel/sdist/NuGet; omit raw archives and
+  validation fixtures. Keep original source hashes, locations and required notices
+  available in short and long outputs and all three packages.
+- Market remains optional in the libraries because current registration country does not establish
+  original sales-market specification. Unknown remains explicit. Do not infer it
+  from WMI geography or the caller's location.
+- Add a labeled cross-market suggestion when the requested market has no usable
+  answer. It must stay SUGGESTED, retain its source market and requested market,
+  and never replace a supported answer, hide conflicts, mix incompatible identities
+  or promote unverified technical specifications. Do not claim a statistical
+  probability; use “possible match from US data; applicability to AT unverified”.
+- Keep the existing local baseline outside the repo at
+  `/tmp/orvin-before-migration.json.gz`; it is a comparison aid, not new truth fixtures.
+
+## Initial audit (before migration)
 
 | Area | Current implementation | Gap |
 | --- | --- | --- |
@@ -42,8 +63,8 @@ Concrete examples:
   build time, but reviewed display preferences and explicit aliases are Python
   constants rather than separately reviewable policy and mapping records.
 
-The current design is partly compiled and data-driven, but the libraries are not
-yet generic consumers of one normalized rule contract.
+The pre-migration design was partly compiled but still duplicated vehicle knowledge
+and policy. The completed work below replaces those runtime paths.
 
 ## Target flow
 
@@ -54,13 +75,15 @@ flowchart TD
     C --> D[Versioned normalized runtime bundle]
     D --> P[Generic Python evaluator]
     D --> J[Generic Java evaluator]
+    D --> N[Generic .NET evaluator]
     P --> O[Normalized answer with evidence]
     J --> O
+    N --> O
 ```
 
 Fetching is explicit and separate from compilation. Compilation and ordinary builds
 work offline from pinned inputs. The runtime reads only the compiled bundle for
-decisions; retained originals remain bundled for inspection and traceability.
+decisions; retained originals remain in the repository for inspection and traceability.
 
 One normalized dataset means one logical contract, not one enormous JSON file or
 one table that conflates VIN facts, WMI assignments, HSN/TSN types and approvals.
@@ -116,7 +139,7 @@ and rounding once in the format specification. Source wildcard syntax must be
 translated by the compiler into the common representation.
 
 This is a constrained evaluator, not a general programming language. No embedded
-Python, Java, SQL or arbitrary expressions. Generic evaluation code exists twice;
+Python, Java, SQL or arbitrary expressions. Generic evaluation code exists in each language;
 vehicle facts, provider interpretation and reviewed policy are authored once.
 
 It is neither practical nor correct to precompute one row per possible VIN. Matching
@@ -134,7 +157,7 @@ the runtime must still evaluate query-dependent conditions and captures.
 2. **Compile an OEM vertical slice.** Add the manifest/schema and compiler entry
    point, move reviewed aliases/display preferences to declarative inputs, and
    express the existing Golf and Tesla rules in the common format. Implement the
-   necessary generic evaluator in both languages. Verify the same existing answers
+   necessary generic evaluator in all three languages. Verify the same existing answers
    and provenance with no Golf/Tesla-specific runtime branches. Keep other paths
    on their existing implementation temporarily.
 3. **Migrate exact lookups and approval candidates.** Compile WMI and KBA indices,
@@ -165,12 +188,12 @@ come from new evidence or a different evaluator.
 ## Acceptance and release boundaries
 
 - An additional rule using existing operations changes only reviewed input data,
-  fixtures and generated output, with no Python/Java runtime edits. A controlled
+  fixtures and generated output, with no Python/Java/.NET runtime edits. A controlled
   synthetic example demonstrates this rather than relying only on a code search.
 - Runtime decisions do not branch on manufacturer names, provider names, source
   IDs or source-specific numeric field IDs. Original source identifiers remain
   available as evidence and in compatibility projections.
-- Compare old/new results and Python/Java results separately. Exercise positive,
+- Compare old/new results and cross-language results separately. Exercise positive,
   near-miss, missing-context, year-cycle, overlap, conflicting-context and partially
   mapped catalogue cases. Input/rule reordering and duplicate rows must not change
   selected identity merely by changing order or apparent vote counts.
@@ -180,8 +203,9 @@ come from new evidence or a different evaluator.
 - Short/long JSON retain their exact relationship: long is short plus `details`.
   Both preserve required attribution; all evidence references resolve. Model year,
   production year and approval dates remain distinct.
-- JAR and wheel embed the identical complete dataset, including retained raw
-  snapshots and notices. Lookup performs no network access or raw-source parsing.
+- JAR and wheel embed identical generated runtime data and required notices,
+  excluding retained raw snapshots and validation fixtures. Lookup performs no
+  network access or raw-source parsing.
 - Demonstrate deterministic rebuilds, bounded loading, and acceptable size/startup/
   query performance against the recorded baseline before replacing the old paths.
 - Daily structured-data refreshes may update generated output only through the
@@ -189,6 +213,52 @@ come from new evidence or a different evaluator.
   license assessments remain manual changes. Expanding the output allowlist must
   not authorize edits to curated inputs or expected fixtures.
 
-Recommended first implementation: steps 1 and 2. The existing Golf and Tesla rules
-are a small, concrete demonstration of data-only vehicle knowledge before tackling
-the much larger NHTSA compiler.
+## Completed implementation
+
+All six slices are implemented. `tools/compile_dataset.py` emits the versioned
+`data/generated/` contract, specified in [compiled runtime](../../compiled-runtime.md).
+Reviewed identities/profile policy are declarative inputs; generic literal rules
+replace OEM dispatch. All engines use the same WMI, KBA, ASTRA, pattern and identity
+bytes. Source-specific import/adaptation remains in tooling. Generic selection and
+consensus mechanics remain in each runtime; their shared invariants are documented.
+
+.NET uses namespace `OpenResearch.ORvin`, targets .NET 8+, and packages embedded
+resources as `OpenResearch.ORvin`. CI covers all three languages, installed NuGet
+consumption on Windows, byte checks, parity and tagged release publication. No
+NuGet release has been published yet.
+
+Cross-market fallback works for any pair of two-letter country codes. Supported
+claims and conflicts block foreign fallback. Foreign values remain suggestions,
+with the requested/source markets, lineage and notices. This does not expand any
+rule's reviewed scope. Synthetic JP/BR/NZ rules exercise the generic operation.
+
+The separate `orvin-api` branch requires a country for VIN requests, defaults only
+from an explicit browser-locale region, and shows flag plus two-letter code before
+the query. HSN/TSN disables the country field. The release dependency remains pinned
+until the existing daily updater adopts the next stable ORvin release.
+
+## Local validation and rollout
+
+- 43 Python behavioral tests, 50 Java tests and 44 tooling tests passed, along with
+  the .NET behavioral checks. Existing independently sourced fixtures were retained.
+- 4,866 Java/Python complete results and 3,244 .NET/Python normalized results agree,
+  including detailed evidence, unknown fields and attribution.
+- The 120-query baseline comparison has no regressions in previously resolved
+  primary fields. Twenty primary answers change in AT/DE contexts due to the
+  explicitly requested foreign-market suggestions. This is a regression comparison,
+  not an independent truth set.
+- Locally measured cold load was 0.149 s, followed by 120 normalized lookups in
+  0.734 s. Timing is indicative and hardware/cache dependent; the old mixed raw and
+  normalized timing is not a directly comparable benchmark.
+- The JAR and wheel contain exactly 523 identical runtime files (about 34.7 MB and
+  34.6 MB respectively), compared with the previous roughly 128 MB artifacts.
+  Required source notices remain; raw snapshots and validation fixtures are excluded.
+- Source reconstruction and generated manifest/inventory checks pass. Installed
+  artifact and repeat-build checks are recorded in the source audit.
+- API ruff checks, 15 tests including real Valkey, a container startup/contract smoke
+  check and a local browser check passed. This records local work, not deployment.
+
+Remaining rollout: review the migration, run hosted CI, publish a stable release,
+then let the API's daily dependency update build and deploy that release. No source
+refresh, new manufacturer rule, production deployment or release tag is part of
+this architectural change itself.

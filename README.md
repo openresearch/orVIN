@@ -1,10 +1,10 @@
 # ORvin
 
-**An open VIN database. Offline decoding for Python and Java.**
+**An open VIN database. Offline decoding for Python, Java and .NET.**
 
 We’re building an open, traceable database for identifying vehicles from their VINs.
 ORvin brings public vehicle datasets and documented decoding rules together in one
-language-neutral dataset, with Python and Java libraries that return consistent results.
+language-neutral dataset, with Python, Java and .NET libraries that return consistent results.
 
 **[Try it online →](https://orvin.openresearch.com)** ·
 [Releases](https://github.com/openresearch/orvin/releases) ·
@@ -15,7 +15,7 @@ language-neutral dataset, with Python and Java libraries that return consistent 
   status for each field. Known aliases share a name; unknowns and conflicts stay explicit.
 - **Traceable results:** sources and attribution in every answer. Expand the result
   to inspect specifications, alternatives and the evidence behind each decision.
-- **Fully offline:** both packages embed the complete dataset. No runtime
+- **Fully offline:** packages embed their lookup data. No runtime
   dependencies, database server or calls to upstream providers.
 - **German registration codes:** HSN/TSN lookup alongside VIN decoding.
 
@@ -78,12 +78,30 @@ System.out.println(answer.toShortJson()); // normalized answer, status and sourc
 
 The JAR includes the same dataset as Python. It needs no Python installation at runtime.
 
+## .NET / C#
+
+The next release adds **`OpenResearch.ORvin` for .NET 8+**. Build the NuGet package
+from this checkout with `dotnet pack libs/dotnet/ORvin -c Release`.
+
+```csharp
+using OpenResearch.ORvin;
+
+var answer = VinDecoder.Bundled().DecodeVehicle(
+    "WVWZZZ1KZ5P000001", new Context(market: "AT"));
+Console.WriteLine(answer.Short().ToJsonString());
+// answer.Long() adds the complete evidence and source records.
+```
+
+[.NET guide](libs/dotnet/README.md). The package embeds the same compiled data,
+with no Python, Java or network dependency. Release automation builds the NuGet
+package alongside the JAR and wheel.
+
 ## Data and coverage
 
 ORvin combines [NHTSA VIN data](docs/nhtsa-data.md),
 [German KBA type records](docs/kba-data.md),
 [Swiss ASTRA type approvals](docs/research/astra-review.md) and reviewed manufacturer-specific rules.
-The language-neutral files in [`data/`](data/) can also be used independently of either library.
+The language-neutral files in [`data/`](data/) can also be used independently of the libraries.
 
 Coverage varies by manufacturer, market and year. Where supported, rules can identify
 factory, engine, fuel, body and other specifications. Type-approval matches remain
@@ -98,8 +116,9 @@ Contribute documented rules, source datasets, corrections or independently verif
 examples. Every addition needs traceable evidence, a reviewed reuse basis and tests.
 Start with the [contribution guide](CONTRIBUTING.md) and [source policy](AGENTS.md).
 
-Python lives in [`libs/python/`](libs/python/), Java in [`libs/java/`](libs/java/).
-Both consume the shared dataset and are checked for equivalent results.
+Python lives in [`libs/python/`](libs/python/), Java in [`libs/java/`](libs/java/),
+and C# in [`libs/dotnet/`](libs/dotnet/). All consume the shared compiled dataset
+and are checked for equivalent results.
 See [architecture](docs/architecture.md), [builds and releases](docs/releasing.md)
 and [automatic data updates](docs/automatic-updates.md).
 

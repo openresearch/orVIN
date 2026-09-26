@@ -1,0 +1,128 @@
+{
+  "version": "astra-targa-2026-07-30-v1",
+  "indexSha256": "190c14b7a611aed3e2243013ca6522cb852804c319bbb01f5c767358d7bbc5ee",
+  "source": {
+    "id": "astra-targa-automobil-2026-07-30",
+    "title": "Basisdaten TG ab 1995 — TG-Automobil (German type-approval factual data)",
+    "publisher": "Swiss Federal Roads Office (ASTRA)",
+    "url": "https://opendata.astra.admin.ch/ivzod/2000-Typengenehmigungen_TG_TARGA/2200-Basisdaten_TG_ab_1995/TG-Automobil.txt",
+    "edition": "HTTP Last-Modified 2026-07-30; downloaded 2026-09-26",
+    "section": "One source row per Typengenehmigungsnummer; row number includes header. 06 Vorziffer VIN template; original named columns in field definitions; Bemerkungen Z1–Z24 retained per approval. M1/M1G only.",
+    "retrievedOn": "2026-09-26",
+    "reuseBasis": "ASTRA explicitly publishes type-approval factual data as Open Government Data: https://www.astra.admin.ch/de/news-homologation . Swiss EMBAG Art. 10(4) permits unrestricted OGD reuse subject to statutory attribution: https://www.fedlex.admin.ch/eli/cc/2023/682/de . Attribution: ASTRA. Source requires careful, professional use; no warranty. Not a CC license. Projection filters passenger categories and conservatively interprets full-length VIN templates; source remains unchanged in compressed archive.",
+    "archivePath": "astra/TG-Automobil-2026-07-30.txt.gz",
+    "archiveSha256": "81cdeab177baf06d7751567f20bfac8d0325b2dbc9fdf068fffbce7a5bd8c63f",
+    "inspectedSha256": "5851dc2bf2cd06efee42a380e75b661eafa4b577a2edc8ecca2269cb9f950b4b",
+    "evidencePath": "astra/metadata.json"
+  },
+  "counts": {
+    "sourceRows": 210673,
+    "passengerRows": 128215,
+    "approvalRows": 122273,
+    "patterns": 125065,
+    "excludedPatternRows": 5942,
+    "excludedNonPassengerRows": 82458,
+    "wmis": 247,
+    "makes": 154
+  },
+  "scope": "Swiss M1/M1G type-approval candidates; not proof of an individual vehicle's configuration or market",
+  "patternPolicy": "Exactly 17 positions, literal WMI, at least one further fixed position; dots are unknown positions; slash alternatives all must pass. No inferred model year or build date.",
+  "fields": [
+    {
+      "key": "make",
+      "label": "Make",
+      "sourceColumn": "04 Marke",
+      "unit": ""
+    },
+    {
+      "key": "type",
+      "label": "Approval type (original name)",
+      "sourceColumn": "04 Typ",
+      "unit": ""
+    },
+    {
+      "key": "variant",
+      "label": "Type / variant / version",
+      "sourceColumn": "05 Typ; Variante/Version",
+      "unit": ""
+    },
+    {
+      "key": "vehicleCategory",
+      "label": "Vehicle category",
+      "sourceColumn": "03 Fahrzeugklasse",
+      "unit": ""
+    },
+    {
+      "key": "body",
+      "label": "Body style",
+      "sourceColumn": "07 Karosserieform",
+      "unit": ""
+    },
+    {
+      "key": "euApproval",
+      "label": "EU type approval",
+      "sourceColumn": "09 EU-Gesamtgenehmigung",
+      "unit": ""
+    },
+    {
+      "key": "drive",
+      "label": "Drive (source code)",
+      "sourceColumn": "17 Achsantrieb",
+      "unit": ""
+    },
+    {
+      "key": "engineMake",
+      "label": "Engine manufacturer",
+      "sourceColumn": "25 Motor Marke",
+      "unit": ""
+    },
+    {
+      "key": "engineCode",
+      "label": "Engine type",
+      "sourceColumn": "25 Motor Typ",
+      "unit": ""
+    },
+    {
+      "key": "fuelCode",
+      "label": "Fuel (source code)",
+      "sourceColumn": "26 Bauart Treibstoff",
+      "unit": ""
+    },
+    {
+      "key": "displacementCc",
+      "label": "Displacement",
+      "sourceColumn": "27 Hubraum",
+      "unit": "cm3"
+    },
+    {
+      "key": "powerKw",
+      "label": "Engine power",
+      "sourceColumn": "28 Leistung kW",
+      "unit": "kW"
+    },
+    {
+      "key": "seatsMin",
+      "label": "Seats minimum",
+      "sourceColumn": "37 Anzahl Plätze Total von",
+      "unit": ""
+    },
+    {
+      "key": "seatsMax",
+      "label": "Seats maximum",
+      "sourceColumn": "37 Anzahl Plätze Total bis",
+      "unit": ""
+    },
+    {
+      "key": "doors",
+      "label": "Doors (source notation)",
+      "sourceColumn": "38 Anzahl Türen",
+      "unit": ""
+    },
+    {
+      "key": "remarks",
+      "label": "Approval remarks",
+      "sourceColumn": "Bemerkungen Z1–Z24",
+      "unit": ""
+    }
+  ]
+}

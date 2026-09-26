@@ -135,6 +135,12 @@ class AnswerTest(unittest.TestCase):
         self.assertIsNone(conflicting["vehicle"]["model"])
         self.assertIsNone(conflicting["vehicle"]["modelYear"])
 
+    def test_partial_foreign_year_cycle_does_not_erase_established_wmi_make(self):
+        result = VinDecoder.bundled().decode_vehicle("1H9AAAAAAAA333AAA", Context(market="NZ")).short()
+        self.assertEqual("Hombilt Trailers", result["vehicle"]["make"])
+        self.assertEqual("RESOLVED", result["fieldStatus"]["make"])
+        self.assertIsNone(result["vehicle"]["modelYear"])
+
     def test_invalid_input_has_no_manufacturer_guess(self):
         answer = self.decoder.decode_vehicle("WVWZZZ1KZ5P00000I").short()
         self.assertEqual("INVALID_CHARACTERS", answer["inputStatus"])

@@ -50,7 +50,7 @@ class VehicleDetailsTest {
         assertEquals("MOSEL", golf.details().field("PlantCity").value().orElseThrow());
         assertFalse(golf.details().fields().containsKey("EngineModel"));
         for (String vin : List.of("WVWZZZ1KZ6P000001", "WVWZZZ1KZ5A000001", "3VWZZZ1KZ5P000001", "WVWAA71K05P000001"))
-            assertTrue(decoder.decode(vin, market("DE")).details().fields().isEmpty());
+            assertTrue(decoder.decode(vin, market("DE")).details().fields().values().stream().flatMap(f -> f.evidence().stream()).noneMatch(e -> e.kind().startsWith("OEM_RULE")));
         assertEquals("CONTEXT_CONFLICT", decoder.decode("WVWZZZ1KZ5P000001", new Context(Optional.of(2006), Optional.empty())).details().status());
     }
 
@@ -61,8 +61,9 @@ class VehicleDetailsTest {
         assertEquals(List.of("Accord"), conditional.model().possibilities());
         assertTrue(conditional.model().value().isEmpty());
         Result germany = decoder.decode("1HGCM82603A000000", market("DE"));
-        assertEquals("OUT_OF_SCOPE", germany.details().status());
-        assertTrue(germany.details().fields().isEmpty());
+        assertEquals("NEEDS_CONTEXT", germany.details().status());
+        assertEquals(List.of("Accord"), germany.model().possibilities());
+        assertTrue(germany.model().value().isEmpty());
         assertEquals("HONDA", germany.brand().value().orElseThrow());
     }
 

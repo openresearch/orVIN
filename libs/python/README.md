@@ -3,13 +3,13 @@
 `VinDecoder.bundled().decode(vin)["typeApprovals"]` provides sourced Swiss
 type-approval candidates, including original type names, engine/power alternatives
 and per-approval remarks. These are catalogue possibilities; they do not overwrite
-the separately decoded `model`, `modelYear` or plant facts. All source data is
+the separately decoded `model`, `modelYear` or plant facts. All required runtime data and source credits are
 bundled for offline use.
 
 Offline VIN manufacturer and German HSN/TSN lookup. Python 3.10+, no runtime dependencies.
-The wheel includes the same canonical datasets used by Java: 12,998 usable NHTSA WMIs and
-63,260 KBA HSN/TSN records, plus the complete 76.2 MB NHTSA source ZIP and KBA snapshot.
-ORvin 0.2.1 uses 1,343,387 public patterns to decode model, year,
+The next-release wheel includes the same compiled dataset used by Java and .NET:
+12,998 usable NHTSA WMIs, 63,260 KBA HSN/TSN records and 122,273 Swiss approval rows.
+Original source archives and test fixtures stay in the repository. ORvin uses 1,343,387 public patterns to decode model, year,
 factory and other vehicle fields with explicit scope/provenance. Selected European Tesla
 Model Y rules distinguish production year from model year. Runtime loads required compressed
 shards through bounded caches and never executes SQL or uses a database server.
@@ -43,7 +43,8 @@ to `decode` only when that context is independently known. `dataset` is a read-o
 returning a fresh dictionary. `bundled()` caches parsed data per process.
 
 NHTSA rich fields are conditional (`NEEDS_CONTEXT`) unless US market scope is independently
-known. A non-US market excludes these rules. `details.alternatives` keeps uncertain year cycles
+known. From the next release, a foreign-market match may supply a labeled
+`SUGGESTED` identity when no applicable claim exists. It does not establish technical facts. `details.alternatives` keeps uncertain year cycles
 separate. All attribute values, including numbers, are strings; `None` means no established value.
 Field evidence includes source URLs, rule/schema IDs and derivation kind. Exact build dates,
 full option lists and vehicle histories are not decoded. WMI `status` remains independent of
@@ -61,6 +62,8 @@ including normalized answers, rich decoding and the bundled dataset:
 python3 -m pip install https://github.com/openresearch/orvin/releases/download/v0.2.1/orvin-0.2.1-py3-none-any.whl
 ```
 
+The example installs the existing stable release. The compiled-bundle and cross-market
+changes described above are in the development version until the next release.
 The wheel/sdist are GitHub Release assets; the package is not published on PyPI.
 From a checkout, install with `python3 -m pip install ./libs/python` for the development version.
 The repository's `vin.sh` and `hsntsn.sh` need no installation. After installation, use

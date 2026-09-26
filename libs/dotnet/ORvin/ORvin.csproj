@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <PackageId>OpenResearch.ORvin</PackageId>
+    <Version>0.3.0-dev</Version>
+    <Authors>OPENRESEARCH contributors</Authors>
+    <Description>Offline, sourced VIN and HSN/TSN lookup with normalized vehicle answers.</Description>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/openresearch/orvin</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="../../../data/generated/**/*" LogicalName="ORvin.Data.%(RecursiveDir)%(Filename)%(Extension)" />
+    <None Include="../README.md" Pack="true" PackagePath="/" />
+    <None Include="../../../data/generated/LICENSE.md" Pack="true" PackagePath="/DATA-LICENSE.md" />
+    <None Include="../../../NOTICE" Pack="true" PackagePath="/" />
+  </ItemGroup>
+</Project>

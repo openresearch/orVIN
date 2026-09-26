@@ -23,9 +23,6 @@ import java.util.zip.GZIPInputStream;
 /** Matches sourced Swiss approval masks without influencing decoded vehicle facts. */
 final class ApprovalDecoder {
     private static final String ROOT = "/META-INF/orvin/astra/";
-    private static final List<String> WARNINGS = List.of(
-            "Matching Swiss type-approval templates identify possible approved types, not this vehicle's actual configuration or market.",
-            "Keep each approval's specifications together; remarks may further restrict variants. Approval dates are not model years or build dates.");
     private final DatasetInfo dataset;
     private final SourceDocument source;
     private final Map<String, Definition> definitions;
@@ -135,8 +132,8 @@ final class ApprovalDecoder {
                     definition.unit(), new ArrayList<>(values)));
         });
         return new TypeApprovals(structure != Structure.MODERN_FORMAT ? "INVALID_INPUT"
-                : candidates.isEmpty() ? "NO_MATCH" : "CANDIDATES", Optional.of(dataset), "CH",
-                candidates.isEmpty() ? List.of() : WARNINGS, fields, candidates,
+                : candidates.isEmpty() ? "NO_MATCH" : "CANDIDATES", Optional.of(dataset), RuntimePolicy.get().text("catalogue.market"),
+                candidates.isEmpty() ? List.of() : RuntimePolicy.get().strings("catalogue.warnings"), fields, candidates,
                 candidates.isEmpty() ? List.of() : List.of(source));
     }
 

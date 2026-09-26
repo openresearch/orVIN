@@ -1,6 +1,6 @@
 # Normalized answers and JSON output
 
-Available in ORvin 0.2.0 and later. Both libraries resolve one identity and expose
+Available in ORvin 0.2.0 and later. All libraries resolve one identity and expose
 two views:
 
 - Short: `schemaVersion`, normalized `vin` (or string `hsn`/`tsn`), `inputStatus`,
@@ -67,6 +67,21 @@ There are no new runtime dependencies. Numeric identity years are JSON integers;
 unknown properties are null. Original technical values remain source strings in
 long evidence and specifications, with datatype/variable metadata preserved.
 
+C# (.NET 8+, next release):
+
+```csharp
+using OpenResearch.ORvin;
+var answer = VinDecoder.Bundled().DecodeVehicle("WVWZZZ1KZ5P000001", new Context(market: "AT"));
+var shortJson = answer.Short(); // System.Text.Json.Nodes.JsonObject
+var longJson = answer.Long();
+var germanType = HsnTsnLookup.Bundled().LookupVehicle("0603", "BMT");
+```
+
+C# projections are fresh JSON objects; modifying one does not alter cached data.
+The library market remains optional. The web application requires a country choice
+for VINs and may prefill an explicit browser locale region. This is editable context,
+not evidence of original sales specification or geolocation.
+
 ## Interpretation and limits
 
 `RESOLVED` identifies a field supported by applicable evidence. `SUGGESTED` is a
@@ -85,9 +100,14 @@ remain unknown until separately reviewed family mappings are added.
 
 Applicable direct VIN facts take priority over broad catalogue candidates.
 A compatible WMI assignment can resolve the make; US-only model/year evidence
-with unknown market stays suggested. An explicitly non-US market excludes the
-US-only decoder. Conflicting independently supplied context is not hidden by a
-Swiss fallback. Competing conditional model identities stay ambiguous, and their
+with unknown market stays suggested. In the next release, any market may supply a
+fallback when applicable evidence has no answer. For example, US evidence with
+requested market NZ remains `SUGGESTED`, with `CROSS_MARKET_MATCH`,
+`requestedMarket: "NZ"`, `sourceMarkets: ["US"]` and an explicit applicability
+message. This applies to all country pairs, not only AT/DE or US evidence.
+Applicable answers and conflicts block weaker foreign suggestions. Foreign
+technical fields are retained in evidence, never promoted to established specifications.
+Conflicting independently supplied context is not hidden by a catalogue fallback. Competing conditional model identities stay ambiguous, and their
 incompatible year/configuration claims are not mixed into one vehicle.
 
 Swiss exact-label consensus currently supplies suggestions. A later reviewed,
@@ -119,8 +139,8 @@ terms are not replaced by the code license.
 
 `tools/identity.py --generate` rebuilds `data/identity/index.tsv` from the retained
 snapshots. The ordinary offline dataset validator checks its hash and exact
-reconstruction, including per-binding source IDs/locators. Both artifacts include
-the same index and provenance. Do not hand-edit the generated index.
+reconstruction, including per-binding source IDs/locators. All artifacts include
+the same compiled index and provenance. Do not hand-edit the generated index.
 
 [The contributed fixture](../data/identity/fixtures.json) is attributed as
 **User-contributed Golf 5 from Austria.** The owner explicitly authorized its VIN

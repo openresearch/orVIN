@@ -18,7 +18,7 @@ final class KbaDatasetLoader {
 
     static HsnTsnLookup load() {
         try {
-            String[] m = new String(BundledResources.read("/com/openresearch/orvin/kba-metadata.tsv"),
+            String[] m = new String(BundledResources.read("/META-INF/orvin/kba-metadata.tsv"),
                     StandardCharsets.UTF_8).stripTrailing().split("\t", -1);
             if (m.length != 14) throw new IllegalStateException("Invalid KBA metadata");
             BundledResources.verify(BundledResources.read("/META-INF/orvin/kba/metadata.json"), m[13]);

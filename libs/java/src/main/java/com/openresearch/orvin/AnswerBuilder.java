@@ -12,10 +12,11 @@ import static com.openresearch.orvin.JsonValues.*;
 
 /** Deterministic resolution and projections, mirrored by Python answer.py. */
 final class AnswerBuilder {
+    private static final RuntimePolicy POLICY = RuntimePolicy.get();
     private static final Map<String, String> PRIMARY = new LinkedHashMap<>();
     static {
-        PRIMARY.put("make", "Make"); PRIMARY.put("model", "Model");
-        PRIMARY.put("modelYear", "ModelYear"); PRIMARY.put("productionYear", "ProductionYear");
+        for (int i = 0; i < POLICY.number("primaryFields.length"); i++)
+            PRIMARY.put(POLICY.text("primaryFields." + i + ".name"), POLICY.text("primaryFields." + i + ".code"));
     }
     private final Map<String, Object> raw;
     private final boolean vin;
@@ -130,7 +131,7 @@ final class AnswerBuilder {
             }
         }
         String resolved = unique.size() > 1 ? "AMBIGUOUS" : missing || knowledge.equals("UNKNOWN") ? "UNKNOWN"
-                : knowledge.equals("NEEDS_CONTEXT") ? "SUGGESTED" : "RESOLVED";
+                : POLICY.text("statuses." + knowledge);
         status.put(name, resolved);
         boolean selected = resolved.equals("RESOLVED") || resolved.equals("SUGGESTED");
         List<Object> pair = selected ? unique.values().iterator().next() : null;
@@ -161,7 +162,7 @@ final class AnswerBuilder {
                     select(name, list(field.get("possibilities")), string(field.get("status")), richIds.get(code), "SCOPED_VIN_RULE", vehicle.get("makeId"));
                 }
             });
-            if (!status.get("make").equals("RESOLVED") && !wmiIds.isEmpty() && !fields.containsKey("Make")) {
+            if (!status.get("make").equals("RESOLVED") && !wmiIds.isEmpty() && (!fields.containsKey("Make") || status.get("make").equals("UNKNOWN") && "KNOWN".equals(obj(raw, "brand").get("status")))) {
                 List<Object> values = list(raw.get("candidates")).stream().map(a -> object(a).get("brand")).toList();
                 select("make", values, string(obj(raw, "brand").get("status")), wmiIds, "WMI_ASSIGNMENT", null);
             }
@@ -172,10 +173,9 @@ final class AnswerBuilder {
                     select("make", rows.stream().map(r -> object(r).get("brand")).toList(), "KNOWN", wmiIds, "WMI_ASSIGNMENT", null);
             }
             List<String> conditional = PRIMARY.keySet().stream().filter(name -> status.get(name).equals("SUGGESTED") && fields.containsKey(PRIMARY.get(name))).toList();
-            assume("US_MARKET_ASSUMED", "US".equals(rich.get("marketScope")) ? conditional : List.of());
             if (status.get("make").equals("SUGGESTED") && conditional.isEmpty()) assume("MATCH_CONSTRAINTS_UNCONFIRMED", List.of("make"));
             boolean conflict = "CONTEXT_CONFLICT".equals(rich.get("status")) &&
-                    (!"US".equals(rich.get("marketScope")) || "US".equals(obj(raw, "context").get("market")));
+                    (!POLICY.text("patternProfile.market").equals(rich.get("marketScope")) || POLICY.text("patternProfile.market").equals(obj(raw, "context").get("market")));
             if (obj(raw, "context").get("modelYear") != null)
                 evidence.put("context:modelYear", map("kind", "CALLER_CONTEXT", "sourceIds", List.of(), "record", raw.get("context")));
             if (conflict) {
@@ -214,7 +214,7 @@ final class AnswerBuilder {
                     }
                     select(name, rows.stream().map(r -> r.get(name.equals("make") ? "make" : "type")).toList(), "NEEDS_CONTEXT", approvalIds,
                             "CATALOGUE_CONSENSUS", vehicle.get("makeId"));
-                    if (status.get(name).equals("SUGGESTED")) assume("CATALOGUE_MEMBERSHIP_UNCONFIRMED", List.of(name));
+                    if (status.get(name).equals("SUGGESTED")) assume(POLICY.text("catalogue.assumptionCode"), List.of(name));
                 }
             }
             if (vehicle.get("makeId") == null && vehicle.get("modelId") != null) {
@@ -224,7 +224,7 @@ final class AnswerBuilder {
                 for (String name : List.of("model", "make")) for (Object eid : list(decisions.get(name).get("evidenceIds"))) ids.add(string(eid));
                 decisions.get("model").put("evidenceIds", List.copyOf(ids));
             }
-            if (List.of("COMPETING_CONDITIONAL_SOURCES", "PRIMARY_MAKE_UNRESOLVED").contains(decisions.get("model").get("reason")) && status.get("modelYear").equals("SUGGESTED")) {
+            if (List.of("AMBIGUOUS", "CONFLICT").contains(status.get("model")) && status.get("modelYear").equals("SUGGESTED")) {
                 vehicle.put("modelYear", null); status.put("modelYear", "UNKNOWN");
                 decisions.get("modelYear").put("reason", "IDENTITY_APPLICABILITY_UNRESOLVED");
             }
@@ -239,8 +239,18 @@ final class AnswerBuilder {
                 decisions.get("modelYear").put("evidenceIds", List.copyOf(ids));
             }
             for (Map<String, Object> assumption : assumptions)
-                assumption.put("fields", list(assumption.get("fields")).stream().filter(name -> !status.get(string(name)).equals("PROVIDED")).toList());
+                assumption.put("fields", list(assumption.get("fields")).stream().filter(name -> status.get(string(name)).equals("SUGGESTED")).toList());
             assumptions.removeIf(a -> list(a.get("fields")).isEmpty());
+            List<String> suggestions = PRIMARY.keySet().stream().filter(name -> status.get(name).equals("SUGGESTED") && decisions.get(name).get("reason").equals("SCOPED_VIN_RULE")).toList();
+            if (!suggestions.isEmpty()) {
+                Set<Object> ids = new LinkedHashSet<>();
+                suggestions.forEach(name -> ids.addAll(list(decisions.get(name).get("evidenceIds"))));
+                List<String> markets = alternatives.stream().filter(a -> obj(a, "fields").values().stream().anyMatch(v -> list(v).stream().anyMatch(ids::contains))).map(a -> string(a.get("market"))).distinct().sorted().toList();
+                Object requested = obj(raw, "context").get("market");
+                if (requested == null && markets.equals(List.of(POLICY.text("patternProfile.market")))) assume(POLICY.text("patternProfile.assumptionCode"), suggestions);
+                else assumptions.add(map("code", POLICY.text("patternProfile.fallbackCode"), "fields", suggestions, "requestedMarket", requested, "sourceMarkets", markets,
+                        "message", POLICY.text("patternProfile.fallbackMessage").replace("{sourceMarket}", String.join(", ", markets)).replace("{requestedMarket}", requested == null ? "an unspecified market" : string(requested))));
+            }
         } else if ("VALID".equals(raw.get("inputStatus")) && !approvalIds.isEmpty()) {
             List<Object> rows = list(raw.get("candidates"));
             select("make", rows.stream().map(r -> object(r).get("manufacturer")).toList(), "KNOWN", approvalIds, "TYPE_CODE_LOOKUP", null);
@@ -328,7 +338,7 @@ final class AnswerBuilder {
             for (String key : List.of("sourceId", "ruleId", "schemaId", "keys", "kind")) rule.put(key, record.get(key));
             rules.put("rule:" + IdentityCatalogue.id(rule), rule);
         }
-        Map<String, Object> details = map("meta", map("library", "ORvin", "policyVersion", "vehicle-identity-v1", "datasets", datasets), "input", input,
+        Map<String, Object> details = map("meta", map("library", "ORvin", "policyVersion", POLICY.text("version"), "datasets", datasets), "input", input,
                 "decisions", decisions, "specifications", specifications, "alternatives", alternatives, "evidence", evidence,
                 "provenance", map("rules", rules, "variables", variables, "normalizationRules", normalizations, "sourceDetails", sourceDetails,
                         "additionalSources", allSources.stream().filter(sid -> !common.containsKey(sid)).map(sid -> credit(sid, Set.of("/details/evidence"))).toList()),

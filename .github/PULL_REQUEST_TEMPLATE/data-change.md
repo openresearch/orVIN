@@ -32,7 +32,7 @@ short/long results. Refer to an existing approved assessment when its scope is u
 - [ ] Fixtures are synthetic or have recorded publication permission; no private documents/personal details are included.
 - [ ] Expected facts are independent of decoder output; relevant near-miss/conflict cases are covered.
 - [ ] Canonical inputs and regenerated outputs agree; source IDs, locators, hashes and retained editions are traceable.
-- [ ] Required credits survive packaging, normalization and short/long output in both languages.
+- [ ] Required credits survive packaging, normalization and short/long output in Python, Java and .NET.
 - [ ] Dataset versions and provenance/capability documentation are updated where applicable.
 
 ## Validation

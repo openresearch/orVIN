@@ -1,4 +1,4 @@
-"""Verify that release artifacts contain every shared data file, byte-for-byte."""
+"""Verify that release artifacts contain the exact compiled runtime bundle, byte-for-byte."""
 import argparse
 import hashlib
 from pathlib import Path
@@ -8,10 +8,14 @@ from nhtsa import ROOT, sha256
 
 
 def check(path, prefix):
-    files = sorted(p for p in (ROOT / "data").rglob("*") if p.is_file())
+    files = sorted(p for p in (ROOT / "data/generated").rglob("*") if p.is_file())
     with zipfile.ZipFile(path) as archive:
+        actual = {n[len(prefix):] for n in archive.namelist() if n.startswith(prefix) and not n.endswith("/")}
+        expected = {p.relative_to(ROOT / "data/generated").as_posix() for p in files}
+        if actual != expected:
+            raise ValueError(f"Unexpected/missing packaged files: {sorted(actual ^ expected)}")
         for path_in_repo in files:
-            name = prefix + path_in_repo.relative_to(ROOT / "data").as_posix()
+            name = prefix + path_in_repo.relative_to(ROOT / "data/generated").as_posix()
             digest = hashlib.sha256()
             with archive.open(name) as stream:
                 for chunk in iter(lambda: stream.read(1024 * 1024), b""):

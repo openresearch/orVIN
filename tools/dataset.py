@@ -131,7 +131,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path)
     parser.add_argument("--update-runtime", action="store_true",
-                        help="Refresh checked-in Java resources after an intentional data edit")
+                        help="Regenerate the shared runtime bundle after an intentional data edit")
     args = parser.parse_args()
     path = ROOT / "data/dataset.json"
     data = read_json(path)
@@ -145,21 +145,10 @@ def main():
     validate_fixtures(fixtures, data, exhaustive=False)
     digest = hashlib.sha256(path.read_bytes()).hexdigest()
     kba_metadata = kba.validate()
+    if args.update_runtime:
+        import compile_dataset
+        compile_dataset.validate(write=True)
     provenance_counts = provenance.validate()
-    identity_metadata = read_json(ROOT / "data/identity/metadata.json")
-    metadata_hash = hashlib.sha256((ROOT / "data/kba/metadata.json").read_bytes()).hexdigest()
-    resources = {"dataset.tsv": render(data, digest),
-                 "identity-metadata.tsv": identity_metadata["version"] + "\t" + identity_metadata["sha256"] + "\n",
-                 "astra-metadata.tsv": astra_metadata["version"] + "\t" + astra_metadata["indexSha256"] + "\n",
-                 "decoding-metadata.tsv": decoding_metadata["version"] + "\t" + decoding_metadata["indexSha256"] + "\n",
-                 "kba-metadata.tsv": kba.render_metadata(kba_metadata).rstrip("\n") + "\t" + metadata_hash + "\n"}
-    for name, content in resources.items():
-        resource = ROOT / "libs/java/src/main/resources/com/openresearch/orvin" / name
-        if args.update_runtime:
-            resource.parent.mkdir(parents=True, exist_ok=True)
-            resource.write_text(content, encoding="utf-8", newline="\n")
-        if not resource.exists() or resource.read_bytes() != content.encode("utf-8"):
-            raise ValueError(f"Stale {name}; run tools/dataset.py --update-runtime and review the diff")
     if args.output:
         args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_text(render(data, digest), encoding="utf-8", newline="\n")

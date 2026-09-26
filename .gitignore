@@ -7,3 +7,8 @@ dist/
 *.egg-info/
 .idea/
 .DS_Store
+
+# .NET build outputs
+libs/dotnet/**/bin/
+libs/dotnet/**/obj/
+libs/dotnet/dist/

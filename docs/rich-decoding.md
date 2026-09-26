@@ -51,7 +51,7 @@ remain auditable. `details.status` independently describes rich decoding:
 | `DECODED` | At least one vehicle rule matched; inspect each field's status |
 | `NEEDS_CONTEXT` | Matches exist under a market assumption that was not established |
 | `UNKNOWN` | No supported match/year interpretation |
-| `OUT_OF_SCOPE` | Explicit non-US market with no applicable OEM extension |
+| `NEEDS_CONTEXT` (foreign market) | Conditional foreign evidence, never established local facts |
 | `CONTEXT_CONFLICT` | Supplied model year conflicts with the supported year code/scheme |
 | `INVALID_INPUT` | Rich decoding requires 17 permitted VIN characters |
 | `UNAVAILABLE` | A custom WMI-only decoder has no attached rich dataset |
@@ -66,7 +66,7 @@ the Java `field(code)` helper and top-level convenience resolutions return UNKNO
 NHTSA reporting scope is US sale/import/use. An absent market retains conditional
 possibilities with `NEEDS_CONTEXT`; it does not infer market from the WMI, factory
 or check digit. `Context(market="US")` establishes that scope only when the caller
-independently knows it. A German market does not use these US rules.
+independently knows it. An explicit foreign market retains labeled conditional matches in the next release; it never establishes the US rules’ applicability.
 
 Automatic year candidates use the source snapshot year (2026), with the published
 two-year horizon and the scoped light-vehicle position-seven discriminator.
@@ -142,4 +142,12 @@ synthetic full identifiers never query an individual vehicle. Tests cover numeri
 captures, bracket plants, conflicting contexts, unresolved cycles, manufacturer
 ambiguity, source provenance, immutable/fresh results and concurrency. The parity
 runner compares complete Python/Java outputs from the packaged JAR. Package checks
-verify every shared data file and installed-wheel behavior outside the checkout.
+verify the exact compiled runtime bundle and installed-wheel behavior outside the checkout.
+
+## Runtime migration (next release)
+
+The source projections described above remain compiler inputs in Git. Packages now
+contain only `data/generated/`; original archives and fixtures are excluded. Generic
+conditional-literal rules replace brand-specific runtime branches, and year/profile
+parameters and identity policy are compiled once for Python, Java and C#. See the
+[compiled runtime contract](compiled-runtime.md) for bytes, operations and compatibility.

@@ -10,13 +10,10 @@ HERE = Path(__file__).resolve().parent
 
 def copy_data(destination):
     # sdist builds have a local data directory; a checkout uses repository-root data.
-    source = HERE / "data" if (HERE / "data").is_dir() else HERE.parents[1] / "data"
+    source = HERE / "data" if (HERE / "data").is_dir() else HERE.parents[1] / "data/generated"
     if destination.exists():
         shutil.rmtree(destination)
     shutil.copytree(source, destination)
-    notice_root = HERE if (HERE / "NOTICE").is_file() else HERE.parents[1]
-    for name in ("LICENSE", "NOTICE"):
-        shutil.copyfile(notice_root / name, destination / ("CODE-" + name))
 
 
 class BuildWithData(build_py):

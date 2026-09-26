@@ -32,9 +32,10 @@ import java.util.zip.GZIPInputStream;
 /** Native implementation of the documented bounded NHTSA stages; never executes SQL. */
 final class RichDecoder {
     private static final String ROOT = "/META-INF/orvin/decoding/";
-    private static final String YEAR_CODES = "ABCDEFGHJKLMNPRSTVWXY123456789";
-    private static final Set<Integer> MULTIPLE = Set.of(121, 129, 150, 154, 155, 114, 169);
-    private static final List<String> STAGES = List.of("public-patterns", "model-make", "engine-model", "displacement-conversion");
+    private final RuntimePolicy policy = RuntimePolicy.get();
+    private String p(String key) { return policy.text("patternProfile." + key); }
+    private int n(String key) { return policy.number("patternProfile." + key); }
+    private final List<LiteralRule> literalRules = loadLiterals();
     private static final Comparator<Match> ORDER = Comparator.comparingInt(Match::priority).reversed()
             .thenComparing(Match::changed, Comparator.nullsFirst(Comparator.reverseOrder()))
             .thenComparingInt(m -> m.keys().replace("*", "").length())
@@ -55,14 +56,6 @@ final class RichDecoder {
     private int referenceYear;
     private String source;
     private final Map<String, SourceDocument> sources = new HashMap<>();
-    private String europeSource;
-    private String europeUrl;
-    private final Map<Integer, String> europeRequirements = new HashMap<>();
-    private final Map<String, Integer> europeYears = new HashMap<>();
-    private final Map<String, Map<String, String>> europeLayouts = new HashMap<>();
-    private final List<OemAttribute> europeAttributes = new ArrayList<>();
-    private final Map<String, OemRule> oemRules = new LinkedHashMap<>();
-
     static RichDecoder load() {
         try {
             String[] metadata = new String(BundledResources.read("decoding-metadata.tsv"), StandardCharsets.UTF_8).strip().split("\t");
@@ -99,14 +92,6 @@ final class RichDecoder {
                 case "C" -> conversions.add(new Conversion(c[1], Integer.parseInt(c[2]), Integer.parseInt(c[3]),
                         c[4], new BigDecimal(c[5])));
                 case "H" -> hashes.put(c[1], c[2]);
-                case "T" -> { europeSource = c[1]; europeUrl = c[2]; }
-                case "R" -> europeRequirements.put(Integer.parseInt(c[1]) - 1, c[2]);
-                case "Y" -> europeYears.put(c[1], Integer.valueOf(c[2]));
-                case "L" -> europeLayouts.computeIfAbsent(c[1] + c[2], key -> new HashMap<>()).put(c[3], text(c[4]));
-                case "A" -> europeAttributes.add(new OemAttribute(Integer.parseInt(c[1]) - 1, c[2], c[3], text(c[4])));
-                case "O" -> oemRules.put(c[1], new OemRule(Pattern.compile(text(c[2])), Integer.parseInt(c[3]), new TreeMap<>()));
-                case "F" -> oemRules.get(c[1]).fields().computeIfAbsent(c[2], key -> new ArrayList<>())
-                        .add(new String[] {text(c[3]), c[4], c[5]});
                 default -> throw new IllegalStateException("Unknown decoding index row");
             }
         }
@@ -156,78 +141,71 @@ final class RichDecoder {
                 kind, rule, Optional.ofNullable(schema), key);
     }
 
-    private VehicleDetails europe(String vin) {
-        Map<String, String> layout = europeLayouts.get(vin.substring(0, 3) + vin.charAt(10));
-        if (layout == null || europeRequirements.entrySet().stream().anyMatch(
-                e -> e.getValue().indexOf(vin.charAt(e.getKey())) < 0)) return null;
-        if (!vin.substring(11).matches("[0-9]{6}") || vin.substring(11).equals("000000")) return null;
-        Map<String, String[]> values = new TreeMap<>();
-        layout.forEach((code, value) -> values.put(code, new String[] {value, "layout:" + vin.substring(0, 3) + vin.charAt(10)}));
-        for (OemAttribute attribute : europeAttributes) {
-            if (attribute.characters().indexOf(vin.charAt(attribute.position())) >= 0)
-                values.put(attribute.code(), new String[] {attribute.value(), "position:" + (attribute.position() + 1) + ":" + vin.charAt(attribute.position())});
-        }
-        values.put("ProductionYear", new String[] {Integer.toString(europeYears.get(vin.substring(9, 10))), "position:10:" + vin.charAt(9)});
-        Map<String, Field> fields = new LinkedHashMap<>();
-        Map<String, List<Evidence>> facts = new LinkedHashMap<>();
-        values.forEach((code, value) -> {
-            var entry = elements.entrySet().stream().filter(e -> e.getValue().code().equals(code)).findFirst().orElseThrow();
-            Element element = entry.getValue();
-            Evidence evidence = new Evidence(entry.getKey(), value[0], value[0], europeSource, europeUrl,
-                    "OEM_RULE", value[1], Optional.empty(), "");
-            facts.put(code, List.of(evidence));
-            fields.put(code, new Field(element.label(), element.dataType(), Knowledge.KNOWN, List.of(value[0]), List.of(evidence)));
-        });
-        return new VehicleDetails("DECODED", Optional.of(dataset), "GLOBAL", referenceYear,
-                List.of("tesla-model-y-2025-oem-rules"),
-                List.of("Production year is a calendar year, not model year or exact build date."), fields,
-                List.of(new Alternative(Optional.empty(), "GLOBAL", facts)), usedSources(fields));
+    private static List<LiteralRule> loadLiterals() {
+        Map<String, LiteralRule> result = new LinkedHashMap<>();
+        try {
+            for (String line : new String(BundledResources.read("rules.tsv"), StandardCharsets.UTF_8).split("\n")) {
+                String[] cells = line.split("\t", -1);
+                String[] c = java.util.Arrays.stream(cells).skip(1).map(RichDecoder::text).toArray(String[]::new);
+                if (cells[0].equals("R")) result.put(c[0], new LiteralRule(Pattern.compile(c[1]),
+                        c[2].isEmpty() ? null : Pattern.compile(c[2]), c[3], c[4].isEmpty() ? List.of() : List.of(c[4].split(",")),
+                        c[5].isEmpty() ? null : Integer.valueOf(c[5]), c[6], c[7], c[8], new ArrayList<>()));
+                else if (cells[0].equals("F")) result.get(c[0]).claims().add(new LiteralClaim(Integer.parseInt(c[1]), c[2], c[3], c[4], c[5], c[6], c[7], c[8]));
+                else throw new IllegalStateException("Unsupported literal-rule operation");
+            }
+        } catch (IOException e) { throw new IllegalStateException("Cannot load literal rules", e); }
+        return List.copyOf(result.values());
     }
 
-    private VehicleDetails oem(String vin, Context context) {
-        for (var ruleEntry : oemRules.entrySet()) {
-            OemRule rule = ruleEntry.getValue();
-            if (!rule.pattern().matcher(vin).matches()) continue;
-            boolean conflict = context.modelYear().filter(year -> year != rule.year()).isPresent();
-            Map<String, Field> fields = new LinkedHashMap<>();
-            Map<String, List<Evidence>> facts = new LinkedHashMap<>();
-            rule.fields().forEach((code, associations) -> {
-                var entry = elements.entrySet().stream().filter(e -> e.getValue().code().equals(code)).findFirst().orElseThrow();
-                List<Evidence> evidence = associations.stream().map(a -> new Evidence(entry.getKey(), a[0], a[0], a[1], a[2],
-                        "OEM_RULE_COMBINATION", ruleEntry.getKey(), Optional.empty(), rule.pattern().pattern())).toList();
-                facts.put(code, evidence);
-                fields.put(code, new Field(entry.getValue().label(), entry.getValue().dataType(), Knowledge.KNOWN,
-                        List.of(associations.get(0)[0]), evidence));
+    private List<VehicleDetails> literals(String vin, Context context) {
+        List<VehicleDetails> results = new ArrayList<>();
+        for (LiteralRule rule : literalRules) {
+            if (!rule.pattern().matcher(vin).matches() || rule.exclude() != null && rule.exclude().matcher(vin).matches()) continue;
+            boolean foreign = !rule.markets().isEmpty() && !rule.markets().contains(context.market().orElse(""));
+            boolean conflict = rule.year() != null && context.modelYear().filter(y -> !y.equals(rule.year())).isPresent();
+            if (conflict && foreign) continue;
+            Map<String, List<Evidence>> facts = new TreeMap<>();
+            for (LiteralClaim claim : rule.claims()) {
+                if (claim.position() >= 0 && claim.characters().indexOf(vin.charAt(claim.position())) < 0) continue;
+                var entry = elements.entrySet().stream().filter(e -> e.getValue().code().equals(claim.code())).findFirst().orElseThrow();
+                Evidence fact = new Evidence(entry.getKey(), claim.value(), claim.value(), claim.source(), sources.get(claim.source()).url(),
+                        claim.kind(), claim.rule(), Optional.empty(), claim.keys());
+                List<Evidence> group = facts.computeIfAbsent(claim.code(), k -> new ArrayList<>());
+                if (!group.contains(fact)) group.add(fact);
+            }
+            Map<String, Field> fields = new TreeMap<>();
+            facts.forEach((code, evidence) -> {
+                Element element = elements.get(evidence.get(0).elementId());
+                List<String> values = evidence.stream().map(Evidence::value).distinct().sorted().toList();
+                fields.put(code, new Field(element.label(), element.dataType(), values.size() > 1 ? Knowledge.AMBIGUOUS : foreign ? Knowledge.NEEDS_CONTEXT : Knowledge.KNOWN, values, evidence));
             });
-            return new VehicleDetails(conflict ? "CONTEXT_CONFLICT" : "DECODED", Optional.of(dataset), "EUROPEAN_LAYOUT", referenceYear,
-                    List.of("vw-europe-golf-1k-2005"),
-                    conflict ? List.of("Supplied model year conflicts with this documented European VIN layout.")
-                            : List.of("Golf family only; filler characters do not identify engine or trim. Model year is not exact build date."),
-                    conflict ? Map.of() : fields, List.of(new Alternative(Optional.of(rule.year()), "EUROPEAN_LAYOUT", facts)), usedSources(fields));
+            results.add(new VehicleDetails(conflict ? "CONTEXT_CONFLICT" : foreign ? "NEEDS_CONTEXT" : "DECODED", Optional.of(dataset), rule.scope(), referenceYear,
+                    List.of(rule.stage()), List.of(conflict ? rule.conflictWarning() : rule.warning()), conflict ? Map.of() : fields,
+                    List.of(new Alternative(Optional.ofNullable(rule.year()), rule.scope(), facts)), sourcesFor(fields, List.of(new Alternative(Optional.ofNullable(rule.year()), rule.scope(), facts)))));
         }
-        return null;
+        return results;
     }
 
     private List<Integer> years(String vin, Context context, String wmi) {
-        int code = YEAR_CODES.indexOf(vin.charAt(9));
+        int code = p("yearCodes").indexOf(vin.charAt(n("yearPosition")));
         if (code < 0) return List.of();
-        int base = 1980 + code;
+        int base = n("yearBase") + code;
         if (context.modelYear().isPresent()) {
             int supplied = context.modelYear().get();
-            return supplied >= 1980 && (supplied - base) % 30 == 0 ? List.of(supplied) : List.of();
+            return supplied >= n("yearBase") && (supplied - base) % n("yearCycle") == 0 ? List.of(supplied) : List.of();
         }
         Wmi w = wmis.get(wmi);
-        boolean light = w.type() == 2 || w.type() == 7 || w.type() == 3 && w.truck().equals("1");
-        boolean digit = vin.charAt(6) >= '0' && vin.charAt(6) <= '9';
+        boolean light = policy.numbers("patternProfile.cycleDiscriminator.vehicleTypes").contains(w.type()) || w.type() == n("cycleDiscriminator.conditionalType") && w.truck().equals(p("cycleDiscriminator.truckType"));
+        boolean digit = vin.charAt(n("cycleDiscriminator.position")) >= '0' && vin.charAt(n("cycleDiscriminator.position")) <= '9';
         List<Integer> years = new ArrayList<>();
-        for (int year = base; year <= referenceYear + 2; year += 30) {
-            if (!light || (year < 2010) == digit) years.add(year);
+        for (int year = base; year <= referenceYear + n("yearHorizon"); year += n("yearCycle")) {
+            if (!light || (year < n("cycleDiscriminator.beforeYear")) == digit) years.add(year);
         }
         return years;
     }
 
     private Alternative decodeYear(String vin, String wmi, int year, Context context) {
-        String key = vin.substring(3, 8) + "|" + vin.substring(9);
+        String key = java.util.stream.IntStream.range(0, n("keySlices.length")).mapToObj(i -> vin.substring(n("keySlices." + i + ".0"), n("keySlices." + i + ".1"))).collect(java.util.stream.Collectors.joining(p("keySeparator")));
         Map<Integer, List<Match>> matches = new TreeMap<>();
         for (Schema schema : schemas.getOrDefault(wmi, List.of())) {
             if (year < schema.start() || year > schema.end()) continue;
@@ -239,10 +217,10 @@ final class RichDecoder {
                 Evidence fact = fact(rule.element(), value, attribute, formula ? "NUMERIC_PATTERN" : "PATTERN",
                         Integer.toString(rule.id()), schema.id(), rule.keys());
                 matches.computeIfAbsent(rule.element(), e -> new ArrayList<>()).add(new Match(
-                        formula ? 100 : schema.start(), rule.changed(), rule.keys(), rule.id(), fact));
+                        formula ? n("formulaPriority") : schema.start(), rule.changed(), rule.keys(), rule.id(), fact));
             }
         }
-        List<Match> engineMatches = matches.getOrDefault(18, List.of());
+        List<Match> engineMatches = matches.getOrDefault(n("engineElement"), List.of());
         if (!engineMatches.isEmpty()) {
             Evidence parent = engineMatches.stream().min(Comparator.comparingInt(Match::priority).reversed()
                     .thenComparing(Match::changed, Comparator.nullsFirst(Comparator.reverseOrder()))
@@ -251,19 +229,19 @@ final class RichDecoder {
                 Evidence fact = fact(engine.element(), engine.value(), engine.attribute(), "ENGINE_MODEL",
                         parent.ruleId() + "/engine:" + engine.id(), parent.schemaId().orElse(null), parent.keys());
                 matches.computeIfAbsent(engine.element(), e -> new ArrayList<>()).add(
-                        new Match(50, engine.changed(), parent.keys(), engine.id(), fact));
+                        new Match(n("enginePriority"), engine.changed(), parent.keys(), engine.id(), fact));
             }
         }
         Map<Integer, List<Evidence>> facts = new TreeMap<>();
         matches.forEach((element, items) -> {
             items.sort(ORDER);
-            facts.put(element, MULTIPLE.contains(element) ? items.stream().map(Match::fact).distinct().toList()
+            facts.put(element, policy.numbers("patternProfile.multipleElements").contains(element) ? items.stream().map(Match::fact).distinct().toList()
                     : List.of(items.get(0).fact()));
         });
-        if (facts.containsKey(28)) {
-            Evidence parent = facts.get(28).get(0);
+        if (facts.containsKey(n("modelElement"))) {
+            Evidence parent = facts.get(n("modelElement")).get(0);
             Model model = models.get(parent.attributeId());
-            if (model != null) facts.put(26, List.of(fact(26, model.name(), model.make(), "MODEL_MAKE",
+            if (model != null) facts.put(n("makeElement"), List.of(fact(n("makeElement"), model.name(), model.make(), "MODEL_MAKE",
                     parent.ruleId() + "/make:" + model.make(), parent.schemaId().orElse(null), parent.keys())));
         }
         for (Conversion conversion : conversions) {
@@ -273,35 +251,28 @@ final class RichDecoder {
             try {
                 BigDecimal original = new BigDecimal(parent.value());
                 BigDecimal number = conversion.operator().equals("*") ? original.multiply(conversion.factor())
-                        : original.divide(conversion.factor(), 6, RoundingMode.HALF_UP);
-                String value = number.setScale(6, RoundingMode.HALF_UP).stripTrailingZeros().toPlainString();
+                        : original.divide(conversion.factor(), n("conversionScale"), RoundingMode.HALF_UP);
+                String value = number.setScale(n("conversionScale"), RoundingMode.HALF_UP).stripTrailingZeros().toPlainString();
                 facts.put(conversion.to(), List.of(fact(conversion.to(), value, value, "UNIT_CONVERSION",
                         parent.ruleId() + "/conversion:" + conversion.id(), parent.schemaId().orElse(null), parent.keys())));
             } catch (NumberFormatException | ArithmeticException ignored) {
                 // Non-numeric source text remains available as-is; do not invent a converted value.
             }
         }
-        if (!facts.isEmpty()) facts.put(29, List.of(fact(29, Integer.toString(year), Integer.toString(year),
-                context.modelYear().isPresent() ? "CALLER_CONTEXT" : "VIN_YEAR", "model-year", null, vin.substring(9, 10))));
+        if (!facts.isEmpty()) facts.put(n("yearElement"), List.of(fact(n("yearElement"), Integer.toString(year), Integer.toString(year),
+                context.modelYear().isPresent() ? "CALLER_CONTEXT" : "VIN_YEAR", "model-year", null, vin.substring(n("yearPosition"), n("yearPosition") + 1))));
         Map<String, List<Evidence>> fields = new LinkedHashMap<>();
         facts.forEach((element, value) -> fields.put(elements.get(element).code(), value));
-        return new Alternative(Optional.of(year), "US", fields);
+        return new Alternative(Optional.of(year), p("market"), fields);
     }
 
-    VehicleDetails decode(String vin, Structure structure, Context context) {
+    private VehicleDetails patternsResult(String vin, Structure structure, Context context) {
         if (structure != Structure.MODERN_FORMAT) return result("INVALID_INPUT", List.of(), Map.of(), List.of());
-        VehicleDetails oem = oem(vin, context);
-        if (oem != null) return oem;
-        VehicleDetails european = europe(vin);
-        if (european != null) return european;
-        if (context.market().filter(m -> !m.equals("US")).isPresent()) {
-            return result("OUT_OF_SCOPE", List.of("NHTSA rules are scoped to US reporting; no applicable non-US rule is bundled for this VIN."), Map.of(), List.of());
-        }
-        String wmi = vin.substring(0, 3) + (vin.charAt(2) == '9' ? vin.substring(11, 14) : "");
+        String wmi = vin.substring(0, 3) + (vin.charAt(n("extendedWmi.position")) == p("extendedWmi.character").charAt(0) ? vin.substring(n("extendedWmi.suffixStart"), n("extendedWmi.suffixEnd")) : "");
         if (!wmis.containsKey(wmi)) return result("UNKNOWN", List.of(), Map.of(), List.of());
         List<Integer> years = years(vin, context, wmi);
         if (years.isEmpty()) return result(context.modelYear().isPresent() ? "CONTEXT_CONFLICT" : "UNKNOWN",
-                List.of("VIN year code does not resolve within this US scheme and supplied context."), Map.of(), List.of());
+                List.of(p("yearConflictWarning")), Map.of(), List.of());
         List<Alternative> alternatives = years.stream().map(year -> decodeYear(vin, wmi, year, context)).toList();
         Set<String> codes = new TreeSet<>();
         alternatives.forEach(a -> codes.addAll(a.fields().keySet()));
@@ -320,25 +291,58 @@ final class RichDecoder {
             }
             Element element = elements.get(evidence.iterator().next().elementId());
             Knowledge status = values.size() > 1 ? Knowledge.AMBIGUOUS : missing ? Knowledge.UNKNOWN
-                    : context.market().isEmpty() ? Knowledge.NEEDS_CONTEXT : Knowledge.KNOWN;
+                    : !context.market().orElse("").equals(p("market")) ? Knowledge.NEEDS_CONTEXT : Knowledge.KNOWN;
             fields.put(code, new Field(element.label(), element.dataType(), status, new ArrayList<>(values), new ArrayList<>(evidence)));
         }
         List<String> warnings = new ArrayList<>();
-        if (context.market().isEmpty() && !codes.isEmpty())
-            warnings.add("These possibilities assume US reporting scope; supply market US only when independently known.");
+        if (!context.market().orElse("").equals(p("market")) && !codes.isEmpty())
+            warnings.add(context.market().isEmpty() ? p("unknownMarketWarning") : p("fallbackMessage").replace("{sourceMarket}", p("market")).replace("{requestedMarket}", context.market().orElseThrow()));
         if (years.size() > 1)
-            warnings.add("The VIN year code has multiple possible cycles; alternatives retain each year's associated facts.");
-        String status = codes.isEmpty() ? "UNKNOWN" : context.market().isEmpty() ? "NEEDS_CONTEXT" : "DECODED";
+            warnings.add(p("yearAlternativesWarning"));
+        String status = codes.isEmpty() ? "UNKNOWN" : !context.market().orElse("").equals(p("market")) ? "NEEDS_CONTEXT" : "DECODED";
         return result(status, warnings, fields, alternatives);
     }
 
     private VehicleDetails result(String status, List<String> warnings, Map<String, Field> fields, List<Alternative> alternatives) {
-        return new VehicleDetails(status, Optional.of(dataset), "US", referenceYear, STAGES, warnings, fields, alternatives, usedSources(fields));
+        return new VehicleDetails(status, Optional.of(dataset), p("market"), referenceYear, policy.strings("patternProfile.stages"), warnings, fields, alternatives, sourcesFor(fields, alternatives));
     }
 
-    private List<SourceDocument> usedSources(Map<String, Field> fields) {
-        return fields.values().stream().flatMap(f -> f.evidence().stream()).map(Evidence::sourceId)
-                .distinct().sorted().map(sources::get).toList();
+    private List<SourceDocument> sourcesFor(Map<String, Field> fields, List<Alternative> alternatives) {
+        Set<String> used = new TreeSet<>();
+        fields.values().forEach(f -> f.evidence().forEach(e -> used.add(e.sourceId())));
+        alternatives.forEach(a -> a.fields().values().forEach(f -> f.forEach(e -> used.add(e.sourceId()))));
+        return used.stream().map(sources::get).toList();
+    }
+
+    VehicleDetails decode(String vin, Structure structure, Context context) {
+        VehicleDetails patterns = patternsResult(vin, structure, context);
+        if (structure != Structure.MODERN_FORMAT) return patterns;
+        List<VehicleDetails> results = new ArrayList<>(literals(vin, context));
+        results.add(patterns);
+        List<VehicleDetails> meaningful = results.stream().filter(r -> !r.fields().isEmpty() || !r.alternatives().isEmpty()).toList();
+        List<VehicleDetails> conflicts = results.stream().filter(r -> r.status().equals("CONTEXT_CONFLICT") &&
+                (!r.marketScope().equals(p("market")) || context.market().orElse("").equals(p("market")))).toList();
+        List<Alternative> alternatives = meaningful.stream().flatMap(r -> r.alternatives().stream()).toList();
+        if (!conflicts.isEmpty()) {
+            VehicleDetails first = conflicts.get(0);
+            return new VehicleDetails(first.status(), first.dataset(), first.marketScope(), referenceYear, first.stages(), first.warnings(), Map.of(), alternatives, sourcesFor(Map.of(), alternatives));
+        }
+        if (meaningful.isEmpty()) return patterns;
+        if (meaningful.size() == 1) return meaningful.get(0);
+        Set<String> codes = new TreeSet<>(), scopes = new TreeSet<>();
+        meaningful.forEach(r -> { codes.addAll(r.fields().keySet()); scopes.add(r.marketScope()); });
+        Map<String, Field> fields = new TreeMap<>();
+        for (String code : codes) {
+            List<Field> all = meaningful.stream().filter(r -> r.fields().containsKey(code)).map(r -> r.fields().get(code)).toList();
+            List<Field> applicable = meaningful.stream().filter(r -> !r.status().equals("NEEDS_CONTEXT") && r.fields().containsKey(code) && r.fields().get(code).status() != Knowledge.NEEDS_CONTEXT).map(r -> r.fields().get(code)).toList();
+            List<Field> selected = applicable.isEmpty() ? all : applicable;
+            List<String> values = selected.stream().flatMap(f -> f.possibilities().stream()).distinct().sorted().toList();
+            List<Evidence> evidence = selected.stream().flatMap(f -> f.evidence().stream()).distinct().toList();
+            Knowledge status = values.size() > 1 ? Knowledge.AMBIGUOUS : selected.stream().anyMatch(f -> f.status() == Knowledge.UNKNOWN) ? Knowledge.UNKNOWN : applicable.isEmpty() ? Knowledge.NEEDS_CONTEXT : Knowledge.KNOWN;
+            fields.put(code, new Field(selected.get(0).label(), selected.get(0).dataType(), status, values, evidence));
+        }
+        return new VehicleDetails(fields.values().stream().anyMatch(f -> f.status() == Knowledge.KNOWN) ? "DECODED" : "NEEDS_CONTEXT", Optional.of(dataset), scopes.size() == 1 ? scopes.iterator().next() : "MULTIPLE", referenceYear,
+                meaningful.stream().flatMap(r -> r.stages().stream()).distinct().toList(), meaningful.stream().flatMap(r -> r.warnings().stream()).filter(w -> !w.isEmpty()).distinct().toList(), fields, alternatives, sourcesFor(fields, alternatives));
     }
 
     private record Element(String code, String label, String dataType) { }
@@ -350,6 +354,6 @@ final class RichDecoder {
     private record Rule(int id, int element, String keys, String attribute, String value,
                         String changed, Pattern regex, int capture, int length) { }
     private record Match(int priority, String changed, String keys, int id, Evidence fact) { }
-    private record OemAttribute(int position, String characters, String code, String value) { }
-    private record OemRule(Pattern pattern, int year, Map<String, List<String[]>> fields) { }
+    private record LiteralClaim(int position, String characters, String code, String value, String source, String kind, String rule, String keys) { }
+    private record LiteralRule(Pattern pattern, Pattern exclude, String scope, List<String> markets, Integer year, String stage, String warning, String conflictWarning, List<LiteralClaim> claims) { }
 }

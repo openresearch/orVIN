@@ -1,16 +1,17 @@
 # European VIN coverage
 
 Development snapshot, reviewed 2026-09-26. The target is Europe overall, with
-Germany and Austria prioritized. This expansion is included in the working tree
-for 0.2.0; it is not part of the published 0.1.0 release.
+Germany and Austria prioritized. ASTRA support shipped in 0.2.0. The next release adds a shared compiled runtime
+bundle, cross-market suggestions and .NET support; it does not add new factual coverage.
 
 ## What now works
 
-Both offline libraries load **122,273 Swiss passenger-car type approvals** from
+The offline libraries load **122,273 Swiss passenger-car type approvals** from
 ASTRA, containing **125,065 VIN templates**, **247 WMI prefixes** and **154 original
 make labels**. These counts include historical and specialist marques; they are
 not counts of fully supported manufacturers. The complete original source is
-retained losslessly in a 20.7 MB gzip archive and embedded in both packages.
+retained losslessly in a 20.7 MB gzip archive in the repository. The next release
+packages only its runtime projection, source metadata and required notices.
 
 `VinDecoder.decode(...)` now also returns `typeApprovals` (Java:
 `result.typeApprovals()`). This contains:
@@ -22,8 +23,8 @@ retained losslessly in a 20.7 MB gzip archive and embedded in both packages.
 - The full remarks for **each approval**, including restrictions and exceptions.
 - A source document with edition, locator, retrieval date, reuse basis and hashes.
 
-The CLI shows a concise list of possible types and specifications. `--json`
-retains all configurations and remarks. A long candidate list means the source
+The CLI returns the normalized short answer. `--json --long`
+retains all configurations and remarks in `details`. A long candidate list means the source
 template cannot distinguish those configurations. Values in different rows must
 not be combined into a fictitious vehicle.
 
@@ -114,7 +115,7 @@ specimens and source-correlated NHTSA comparison responses.
 `tools/astra.py --compile` reconstructs the projection from the pinned original
 archive. `tools/astra.py` independently compares that reconstruction with the
 shipped projection. `tools/dataset.py` runs this alongside the NHTSA/KBA checks.
-Both original and compressed-source SHA-256 values are recorded. Runtime loaders
+Original and compressed-source SHA-256 values are recorded. Runtime loaders
 verify the index and every accessed WMI shard; Java/Python parity tests compare
 the complete candidate results. See [source audit](provenance-audit.md) and
 [dataset terms](../data/LICENSE.md).

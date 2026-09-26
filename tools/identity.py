@@ -12,18 +12,8 @@ import nhtsa
 ROOT = nhtsa.ROOT
 VERSION = nhtsa.PINS["identityVersion"]
 SOURCE_KEYS = ("id", "publisher", "title", "url", "edition", "section", "retrievedOn", "reuseBasis", "license", "termsUrl", "modifications", "archiveSha256", "inspectedSha256", "evidencePath")
-DISPLAY = {"VOLKSWAGEN": ("vw", "VW"), "SKODA": ("skoda", "Škoda"), "BMW": ("bmw", "BMW"),
-           "MERCEDES-BENZ": ("mercedes-benz", "Mercedes-Benz"), "TESLA": ("tesla", "Tesla"),
-           "HONDA": ("honda", "Honda"), "TOYOTA": ("toyota", "Toyota"), "FORD": ("ford", "Ford"),
-           "AUDI": ("audi", "Audi"), "SEAT": ("seat", "SEAT"), "CUPRA": ("cupra", "CUPRA"),
-           "RENAULT": ("renault", "Renault"), "PEUGEOT": ("peugeot", "Peugeot"),
-           "CITROEN": ("citroen", "Citroën"), "FIAT": ("fiat", "Fiat"), "OPEL": ("opel", "Opel"),
-           "VAUXHALL": ("vauxhall", "Vauxhall"), "VOLVO": ("volvo", "Volvo"), "HYUNDAI": ("hyundai", "Hyundai"),
-           "KIA": ("kia", "Kia"), "NISSAN": ("nissan", "Nissan"), "MAZDA": ("mazda", "Mazda"),
-           "SUZUKI": ("suzuki", "Suzuki"), "MITSUBISHI": ("mitsubishi", "Mitsubishi"), "MINI": ("mini", "MINI"),
-           "PORSCHE": ("porsche", "Porsche"), "DACIA": ("dacia", "Dacia"), "LEXUS": ("lexus", "Lexus"),
-           "JEEP": ("jeep", "Jeep"), "LAND ROVER": ("land-rover", "Land Rover"), "JAGUAR": ("jaguar", "Jaguar"),
-           "CHEVROLET": ("chevrolet", "Chevrolet"), "SUBARU": ("subaru", "Subaru"), "RENAULT TRUCKS": ("renault-trucks", "Renault Trucks")}
+POLICY = json.loads((ROOT / "data/policy/identity.json").read_text())
+DISPLAY = POLICY["display"]
 
 
 def key(value):
@@ -91,22 +81,24 @@ def build():
             raise ValueError("Reviewed KBA normalization label changed; manual review required")
         return "sourceObjectId=" + row["sourceObjectId"] + "; " + field + "=" + expected
     # Explicit aliases supported by the retained OEM/KBA marque labels. Display casing is ORvin policy.
-    for alias, target, sid, locator in [
-        ("VW", "VOLKSWAGEN", "vw-golf-v-profile", "Golf V profile / Volkswagen marque; display preference VW"),
-        ("VOLKSWAGEN-VW", "VOLKSWAGEN", kba_id, kba_locator("0603", "BMT", "manufacturer", "VOLKSWAGEN-VW")),
-        ("BAYER.MOT.WERKE-BMW", "BMW", kba_id, kba_locator("0005", "AMQ", "manufacturer", "BAYER.MOT.WERKE-BMW")),
-    ]:
-        mid, name, _, _ = makes[target]
-        makes[alias] = (mid, name, sid, locator)
+    def binding_source(binding):
+        if "kba" in binding:
+            item = binding["kba"]
+            return kba_id, kba_locator(item["hsn"], item["tsn"], item["field"], item["expected"]) + binding.get("locatorSuffix", "")
+        return binding["sourceId"], binding["locator"]
+    for binding in POLICY["makeAliases"]:
+        mid, name, _, _ = makes[binding["target"]]
+        sid, locator = binding_source(binding)
+        makes[binding["alias"]] = (mid, name, sid, locator)
     names = {r["id"]: r["name"].strip() for r in tables["model"] if r["name"]}
     for row in sorted(tables["make_model"], key=lambda r: (int(r["makeid"]), int(r["modelid"]))):
         mid, name = make_ids.get(row["makeid"]), names.get(row["modelid"])
         if mid and name:
             models.setdefault((mid, key(name)), (mid + ":" + slug(key(name)), name, nhtsa.SOURCE_ID,
                 "vpic.model id=" + row["modelid"] + "; vpic.make_model makeid=" + row["makeid"]))
-    models[("vw", "GOLF")] = ("vw:golf", "Golf", "vw-golf-v-profile", "Golf V profile; model family Golf, factory type 1K")
-    models[("tesla", "MODEL Y")] = ("tesla:model-y", "Model Y", "tesla-model-y-2025-service-manual", "Model Y 2025+ service manual / VIN decoding")
-    models[("vw", "GOLF SPORTSVAN")] = ("vw:golf-sportsvan", "Golf Sportsvan", kba_id, kba_locator("0603", "BMT", "tradeName", "GOLF SPORTSVAN") + "; case-only display normalization")
+    for binding in POLICY["modelBindings"]:
+        sid, locator = binding_source(binding)
+        models[(binding["makeId"], binding["alias"])] = (binding["id"], binding["name"], sid, locator)
     rows = [["V", VERSION]]
     for source in sorted(sources.values(), key=lambda s: s["id"]):
         rows.append(["S", *[b64(source.get(k)) for k in SOURCE_KEYS]])

@@ -31,8 +31,7 @@ final class DatasetLoader {
         Map<String, Manufacturer> manufacturers = new HashMap<>();
         List<Assignment> assignments = new ArrayList<>();
         DatasetInfo info = null;
-        try (InputStream stream = Objects.requireNonNull(DatasetLoader.class.getResourceAsStream("dataset.tsv"),
-                "Bundled dataset missing");
+        try (InputStream stream = new java.io.ByteArrayInputStream(BundledResources.read("dataset.tsv"));
              BufferedReader reader = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8))) {
             for (String line; (line = reader.readLine()) != null;) {
                 String[] c = line.split("\t", -1);
@@ -55,11 +54,6 @@ final class DatasetLoader {
             throw new IllegalStateException("Cannot load the bundled Orvin dataset", e);
         }
         Objects.requireNonNull(info, "Dataset metadata missing");
-        try {
-            BundledResources.verify(BundledResources.read("/META-INF/orvin/dataset.json"), info.sha256());
-        } catch (IOException e) {
-            throw new IllegalStateException("Cannot verify bundled dataset", e);
-        }
         return new VinDecoder(info, assignments, RichDecoder.load(), ApprovalDecoder.load());
     }
 

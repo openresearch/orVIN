@@ -39,18 +39,19 @@ class DetailsTest(unittest.TestCase):
         self.assertEqual("MOSEL", golf["details"]["fields"]["PlantCity"]["value"])
         self.assertNotIn("EngineModel", golf["details"]["fields"])
         for vin in ("WVWZZZ1KZ6P000001", "WVWZZZ1KZ5A000001", "3VWZZZ1KZ5P000001", "WVWAA71K05P000001"):
-            self.assertEqual({}, self.decoder.decode(vin, Context(market="DE"))["details"]["fields"])
+            self.assertFalse(any(e["kind"].startswith("OEM_RULE") for f in self.decoder.decode(vin, Context(market="DE"))["details"]["fields"].values() for e in f["evidence"]))
         self.assertEqual("CONTEXT_CONFLICT", self.decoder.decode("WVWZZZ1KZ5P000001", Context(2006))["details"]["status"])
 
-    def test_unknown_market_keeps_conditional_values_and_german_market_does_not_use_us_rules(self):
+    def test_foreign_market_never_promotes_us_rules_to_established_facts(self):
         vin = "1HGCM82603A000000"
         result = self.decoder.decode(vin)
         self.assertEqual("NEEDS_CONTEXT", result["model"]["status"])
         self.assertEqual(["Accord"], result["model"]["possibilities"])
         self.assertIsNone(result["model"]["value"])
         german = self.decoder.decode(vin, Context(market="DE"))
-        self.assertEqual("OUT_OF_SCOPE", german["details"]["status"])
-        self.assertEqual({}, german["details"]["fields"])
+        self.assertEqual("NEEDS_CONTEXT", german["details"]["status"])
+        self.assertEqual(["Accord"], german["model"]["possibilities"])
+        self.assertIsNone(german["model"]["value"])
         self.assertEqual("HONDA", german["brand"]["value"])
 
     def test_year_cycles_keep_missing_alternative_and_explicit_year_resolves_it(self):

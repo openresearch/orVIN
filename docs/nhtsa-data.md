@@ -1,6 +1,7 @@
 # NHTSA bulk data
 
-Both libraries use the same normalized WMI dataset and embed the **complete original source ZIP**.
+All three libraries use the same compiled WMI dataset. The complete original source ZIP
+is retained in the repository; from the next release, packages contain runtime projections only.
 Consumers need neither a database server nor network access. The source is NHTSA's
 [September 2026 standalone vPIC database](https://vpic.nhtsa.dot.gov/downloads/vPICList_lite_2026_09.plain.zip),
 listed on the [official download page](https://vpic.nhtsa.dot.gov/downloads/).
@@ -20,8 +21,8 @@ The full table/column inventory, row counts, transformations and exclusions are 
 ## What is used now
 
 `tools/nhtsa.py` joins `wmi`, `manufacturer`, `wmi_make`, `make` and `vehicletype` into
-`data/dataset.json`. The importer does not execute SQL. Python reads the resulting JSON;
-Java reads a deterministic TSV compiled from exactly that JSON. Both build an in-memory index
+`data/dataset.json`. The importer does not execute SQL. The runtime compiler translates that JSON into one
+deterministic TSV consumed by Python, Java and .NET. Each builds an in-memory index
 and return manufacturer identity, possible brands, vehicle category and provenance.
 
 The source has **526 WMIs with multiple makes**. Every association is retained; `1C4`, for example,
@@ -55,7 +56,7 @@ exclude WMIs whose public-availability date is later than the recorded retrieval
 ## Rich decoding and remaining archived stages
 
 The ZIP preserves every original table and function, including detailed model, engine, fuel,
-body, restraint, plant, year, validation and enrichment data. Both libraries now execute native
+body, restraint, plant, year, validation and enrichment data. All three libraries execute compiled
 pattern matching over 1,343,387 public rules, including schema/year selection, precedence,
 dictionary values, numeric captures, engine-model facts, model-to-make resolution and displacement
 conversions. They preserve year alternatives instead of copying upstream error-scoring heuristics.
@@ -70,7 +71,7 @@ KBA HSN/TSN lookup remains separate; no VIN-to-HSN/TSN mapping is inferred.
 ## Rebuild, update and package
 
 ```sh
-# Offline regeneration from the bundled source:
+# Offline regeneration from the repository source:
 python3 tools/nhtsa.py import
 python3 tools/decoding.py import
 .venv/bin/python tools/dataset.py --update-runtime
@@ -88,17 +89,17 @@ python3 tools/nhtsa.py import --archive /path/to/vPICList_lite_2026_09.plain.zip
 The importer verifies the source hash before writing. Normal builds never refresh data.
 To adopt a newer edition, review its publication date, archive hash, schema, exclusions and
 reuse terms; update the pin/version in `tools/nhtsa.py`, regenerate, review the diff and run
-both libraries' tests. Do not edit the derived WMI JSON directly: full-source validation rejects
+all libraries' tests. Do not edit the derived WMI JSON directly: full-source validation rejects
 drift. New source families require an explicit importer/schema change with provenance.
 
-The Java main JAR embeds `data/` under `META-INF/orvin/`; the Python wheel embeds it under
-`orvin/_data/`. The complete compressed archive stays on disk unless explicitly read; ordinary
-lookup does not expand it. Rich decoding reads the additional generated compressed shards as needed.
-Outer archive compression also compresses the embedded source ZIP. Check artifacts:
+The Java main JAR embeds `data/generated/` under `META-INF/orvin/`; the Python wheel
+embeds it under `orvin/_data/`; the .NET assembly embeds the same files as resources.
+Packages retain provenance and notices without raw archives or fixtures. Rich decoding reads
+the compiled compressed shards as needed. Check artifacts:
 
 ```sh
-python3 tools/check_packages.py --jar libs/java/target/orvin-0.2.0-SNAPSHOT.jar
-python3 tools/check_packages.py --wheel libs/python/dist/orvin-0.2.0.dev0-py3-none-any.whl
+python3 tools/check_packages.py --jar libs/java/target/orvin-0.3.0-SNAPSHOT.jar
+python3 tools/check_packages.py --wheel libs/python/dist/orvin-0.3.0.dev0-py3-none-any.whl
 python3 tools/check_parity.py
 ```
 

@@ -153,11 +153,10 @@ class VinDecoderTest {
     }
 
     @Test
-    void bundledMetadataIdentifiesTheExactJsonAndCollectionsCannotBeChanged() throws Exception {
-        try (var stream = Objects.requireNonNull(getClass().getResourceAsStream("/META-INF/orvin/dataset.json"))) {
-            String digest = HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(stream.readAllBytes()));
-            assertEquals(digest, decoder.dataset().sha256());
-        }
+    void bundledProjectionRetainsSourceDigestAndCollectionsCannotBeChanged() throws Exception {
+        assertNull(getClass().getResourceAsStream("/META-INF/orvin/dataset.json"));
+        String header = new String(BundledResources.read("dataset.tsv"), java.nio.charset.StandardCharsets.UTF_8).split("\n")[0];
+        assertEquals(header.split("\t")[2], decoder.dataset().sha256());
         Result result = decoder.decode("1HGAAAAAAAAAAAAAA");
         assertThrows(UnsupportedOperationException.class, () -> result.candidates().clear());
         assertThrows(UnsupportedOperationException.class, () -> result.candidates().get(0).sources().clear());

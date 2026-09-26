@@ -5,10 +5,8 @@ import gzip
 import hashlib
 import json
 
-WARNINGS = [
-    "Matching Swiss type-approval templates identify possible approved types, not this vehicle's actual configuration or market.",
-    "Keep each approval's specifications together; remarks may further restrict variants. Approval dates are not model years or build dates.",
-]
+from .program import policy, read
+
 SOURCE_KEYS = ("id", "title", "publisher", "url", "edition", "section", "retrievedOn", "reuseBasis",
                "archivePath", "archiveSha256", "inspectedSha256", "evidencePath")
 
@@ -18,14 +16,14 @@ def _unb64(value):
 
 
 def unavailable():
-    return {"status": "UNAVAILABLE", "dataset": None, "marketScope": "CH", "warnings": [],
+    return {"status": "UNAVAILABLE", "dataset": None, "marketScope": policy().get("catalogue.market"), "warnings": [],
             "fields": {}, "candidates": [], "sources": []}
 
 
 class ApprovalDecoder:
     def __init__(self, directory):
         self.directory = directory
-        metadata = json.loads((directory / "metadata.json").read_bytes())
+        metadata = json.loads(read(directory.parent, "astra/metadata.json"))
         content = (directory / "index.tsv").read_bytes()
         self._verify(content, metadata["indexSha256"])
         self.dataset = {"version": metadata["version"], "sha256": metadata["indexSha256"]}
@@ -74,5 +72,5 @@ class ApprovalDecoder:
             if values:
                 fields[key] = {**definition, "possibilities": values}
         return {"status": "INVALID_INPUT" if structure != "MODERN_FORMAT" else "CANDIDATES" if candidates else "NO_MATCH",
-                "dataset": dict(self.dataset), "marketScope": "CH", "warnings": list(WARNINGS) if candidates else [],
+                "dataset": dict(self.dataset), "marketScope": policy().get("catalogue.market"), "warnings": policy().array("catalogue.warnings") if candidates else [],
                 "fields": fields, "candidates": candidates, "sources": [dict(self.source)] if candidates else []}

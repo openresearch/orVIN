@@ -1,8 +1,9 @@
 # ORvin contributor instructions
 
 ORvin is a standalone project. Keep the language-neutral dataset in `data/`, Python
-in `libs/python/`, and Java (including Maven configuration) in `libs/java/`.
-Both libraries must consume the same versioned data and preserve equivalent results.
+in `libs/python/`, Java (including Maven configuration) in `libs/java/`, and C#
+in `libs/dotnet/`.
+All libraries must consume the same versioned data and preserve equivalent results.
 
 The project/library display name is **ORvin** (exact casing). Keep package names,
 Maven artifact IDs, CLI commands and repository paths lowercase `orvin`.
@@ -19,7 +20,7 @@ Read [CONTRIBUTING.md](CONTRIBUTING.md) for the contribution workflow and
   store ORvin plans and research in another project's documentation tree.
 - Store new implementation plans and design notes under
   `docs/plans/<feature-or-initiative>/`. Keep cross-cutting plans together across
-  the dataset, tooling, Python, Java and release workflows. Continue updating
+  the dataset, tooling, Python, Java, .NET and release workflows. Continue updating
   existing plans in place rather than creating competing copies.
 - Keep plans current as work progresses: record status, decisions, completed and
   deferred work, validation results, open questions and implementation gotchas.
@@ -45,7 +46,7 @@ Read [CONTRIBUTING.md](CONTRIBUTING.md) for the contribution workflow and
   version, retrieval/review date, and a precise page, section, table, row or API locator.
   Retain upstream row IDs and schema IDs in generated data and decoded evidence.
 - Record the reuse basis and required attribution. Public availability alone is not
-  permission to redistribute a document. Preserve upstream notices in both packages.
+  permission to redistribute a document. Preserve upstream notices in every package.
 - Prefer the original publisher's source. Identify mirrors, secondary sources and
   forum claims as such; do not present them as OEM assertions. Record corroboration,
   contradictions and unresolved limits. AI output, a search snippet, or another
@@ -60,7 +61,7 @@ Read [CONTRIBUTING.md](CONTRIBUTING.md) for the contribution workflow and
 - Do not infer assembly location from manufacturer identity, model year from production
   year, or exact build date/engine/trim from filler characters. Preserve unknown values
   and correlated alternatives when the sources do not resolve them.
-- Keep source metadata and evidence available in installed Python and Java artifacts,
+- Keep source metadata and evidence available in installed Python, Java and .NET artifacts,
   including CLI JSON. Both short and long JSON views must carry self-contained
   credits for their sourced content, including applicable license/terms links and
   modification notices; compact output must not strip required attribution.
@@ -94,7 +95,7 @@ Read [CONTRIBUTING.md](CONTRIBUTING.md) for the contribution workflow and
   applicable copyright, database and access terms for that use; attribution alone
   does not establish permission. Do not invent SPDX identifiers or call a source
   public domain merely because it is on a government website.
-- Check obligations against distribution in both the Java JAR and Python wheel/sdist,
+- Check obligations against distribution in the Java JAR, Python wheel/sdist and .NET NuGet package,
   and exposure of sourced results in the API/CLI. Record required credit wording,
   source URI, license/terms link, notices, modification statements and any other
   applicable conditions. Use an existing approved source assessment only within
@@ -152,12 +153,14 @@ After data or rule changes, run `python tools/dataset.py` in the repository's de
 environment. It performs offline reconstruction of the complete NHTSA, KBA and native
 decoding projections, plus provenance validation. Intentional regeneration commands are
 documented in `docs/nhtsa-data.md` and `docs/rich-decoding.md`; review regenerated diffs.
-Use `--update-runtime` only to refresh the checked-in Java metadata after a reviewed change.
+Use `--update-runtime` to regenerate the common `data/generated/` bundle after a reviewed change.
 
-Run the relevant Python, Java and tooling tests for behavior changes. Before handing off
+Run the relevant Python, Java, .NET and tooling tests for behavior changes. Before handing off
 a change to the shared decoder or dataset, run `tools/check_parity.py` and
-`tools/check_packages.py` on fresh artifacts. These verify equivalent results and that
-both distributions embed every shared data file unchanged. Documentation-only changes
+`tools/check_packages.py` on fresh artifacts, plus the .NET installed-package checks
+with `--bundle-dir data/generated`. These verify equivalent results and that
+distributions embed exactly the common `data/generated/` bundle, byte-for-byte,
+with required notices. Never package raw snapshots, private evidence or fixtures. Documentation-only changes
 need a diff/link review, not new behavioral tests.
 
 Keep `docs/provenance-audit.md` and capability documentation accurate. Automated integrity

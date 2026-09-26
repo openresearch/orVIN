@@ -20,7 +20,9 @@ def encoded(value):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--jar", type=Path, default=ROOT / "libs/java/target/orvin-0.2.0-SNAPSHOT.jar")
+    parser.add_argument("--jar", type=Path, default=ROOT / "libs/java/target/orvin-0.3.0-SNAPSHOT.jar")
+    parser.add_argument("--dotnet", type=Path, help="Built ORvin.Checks DLL; compare normalized .NET projections too")
+    parser.add_argument("--dotnet-command", default="dotnet")
     args = parser.parse_args()
     requests, expected = [], []
     decoder = VinDecoder.bundled()
@@ -77,6 +79,16 @@ def main():
     for index, (left, right) in enumerate(zip(expected, actual)):
         if left != right:
             raise AssertionError(f"Parity mismatch at {requests[index]}:\nPython: {left}\nJava: {right}")
+    if args.dotnet:
+        completed = subprocess.run([args.dotnet_command, str(args.dotnet), "--parity"], input="\n".join(normalized_requests) + "\n", text=True, capture_output=True, check=True)
+        actual = [json.loads(line) for line in completed.stdout.splitlines()]
+        if len(actual) != len(normalized_expected):
+            raise AssertionError(".NET/Python returned different result counts")
+        for i, (left, right) in enumerate(zip(normalized_expected, actual)):
+            if left != right:
+                Path("/tmp/orvin-dotnet-parity.json").write_text(json.dumps({"request": normalized_requests[i], "python": left, "dotnet": right}, indent=2))
+                raise AssertionError(f".NET parity mismatch at {normalized_requests[i]}; diagnostic /tmp/orvin-dotnet-parity.json")
+        print(f".NET/Python parity passed for {len(actual)} complete normalized results")
     print(f"Java/Python parity passed for {len(expected)} complete results (including provenance and null fields)")
 
 

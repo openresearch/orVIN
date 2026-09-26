@@ -9,9 +9,7 @@ import hashlib
 import json
 import re
 
-YEAR_CODES = "ABCDEFGHJKLMNPRSTVWXY123456789"
-MULTIPLE = {121, 129, 150, 154, 155, 114, 169}
-STAGES = ["public-patterns", "model-make", "engine-model", "displacement-conversion"]
+from .program import policy, rules, read
 
 
 def _decode(value):
@@ -42,15 +40,14 @@ def unavailable():
 class RichDecoder:
     def __init__(self, directory):
         self.directory = directory
-        metadata = json.loads((directory / "metadata.json").read_bytes())
+        metadata = json.loads(read(directory.parent, "decoding/metadata.json"))
         index = _verified(directory / "index.tsv", metadata["indexSha256"]).decode("utf-8")
         self.dataset = {"version": metadata["version"], "sha256": metadata["indexSha256"]}
         self.elements, self.wmis, self.models, self.hashes = {}, {}, {}, {}
         self.schemas, self.engines = defaultdict(list), defaultdict(list)
         self.conversions = []
-        self.europe_requirements, self.europe_years = {}, {}
-        self.europe_layouts, self.europe_attributes = defaultdict(dict), []
-        self.oem_rules = {}
+        self.policy = policy()
+        self.literal_rules = rules(directory.parent)
         self.sources = {}
         for line in index.splitlines():
             c = line.split("\t")
@@ -75,20 +72,6 @@ class RichDecoder:
                 self.conversions.append((c[1], int(c[2]), int(c[3]), c[4], Decimal(c[5])))
             elif c[0] == "H":
                 self.hashes[c[1]] = c[2]
-            elif c[0] == "T":
-                self.europe_source, self.europe_url = c[1:]
-            elif c[0] == "R":
-                self.europe_requirements[int(c[1]) - 1] = c[2]
-            elif c[0] == "Y":
-                self.europe_years[c[1]] = int(c[2])
-            elif c[0] == "L":
-                self.europe_layouts[c[1] + c[2]][c[3]] = _decode(c[4])
-            elif c[0] == "A":
-                self.europe_attributes.append((int(c[1]) - 1, c[2], c[3], _decode(c[4])))
-            elif c[0] == "O":
-                self.oem_rules[c[1]] = (re.compile(_decode(c[2])), int(c[3]), defaultdict(list))
-            elif c[0] == "F":
-                self.oem_rules[c[1]][2][c[2]].append((_decode(c[3]), c[4], c[5]))
             else:
                 raise RuntimeError("Unknown decoding index row")
 
@@ -113,69 +96,57 @@ class RichDecoder:
                 "sourceUrl": self.sources[self.source]["url"],
                 "kind": kind, "ruleId": rule, "schemaId": schema, "keys": key}
 
-    def _europe(self, vin):
-        layout = self.europe_layouts.get(vin[:3] + vin[10])
-        if not layout or any(vin[p] not in chars for p, chars in self.europe_requirements.items()):
-            return None
-        # The reviewed manual defines a numeric production sequence, not a date.
-        if not re.fullmatch("[0-9]{6}", vin[11:]) or vin[11:] == "000000":
-            return None
-        values = {code: (value, "layout:" + vin[:3] + vin[10]) for code, value in layout.items()}
-        for position, chars, code, value in self.europe_attributes:
-            if vin[position] in chars:
-                values[code] = (value, f"position:{position + 1}:{vin[position]}")
-        values["ProductionYear"] = (str(self.europe_years[vin[9]]), "position:10:" + vin[9])
-        codes = {e[0]: (eid, e[1], e[2]) for eid, e in self.elements.items()}
-        fields, facts = {}, {}
-        for code, (value, rule) in sorted(values.items()):
-            eid, label, datatype = codes[code]
-            fact = {"elementId": eid, "value": value, "attributeId": value, "sourceId": self.europe_source,
-                    "sourceUrl": self.europe_url, "kind": "OEM_RULE", "ruleId": rule, "schemaId": None, "keys": ""}
-            fields[code] = {"label": label, "dataType": datatype, "status": "KNOWN", "possibilities": [value],
-                            "value": value, "evidence": [fact]}
-            facts[code] = [fact]
-        return {"status": "DECODED", "dataset": self.dataset, "marketScope": "GLOBAL", "referenceYear": self.reference_year,
-                "stages": ["tesla-model-y-2025-oem-rules"],
-                "warnings": ["Production year is a calendar year, not model year or exact build date."],
-                "fields": fields, "alternatives": [{"modelYear": None, "market": "GLOBAL", "fields": facts}]}
-
-    def _oem(self, vin, context):
-        for rule, (pattern, year, values) in self.oem_rules.items():
-            if not pattern.fullmatch(vin):
+    def _literals(self, vin, context):
+        results = []
+        for rule in self.literal_rules:
+            if not rule["pattern"].fullmatch(vin) or (rule["exclude"] and rule["exclude"].fullmatch(vin)):
                 continue
-            conflict = context.model_year is not None and context.model_year != year
+            foreign = bool(rule["markets"]) and context.market not in rule["markets"]
+            conflict = rule["year"] is not None and context.model_year is not None and rule["year"] != context.model_year
+            if conflict and foreign:
+                continue
+            facts = defaultdict(list)
             codes = {e[0]: (eid, e[1], e[2]) for eid, e in self.elements.items()}
-            fields, facts = {}, {}
-            for code, associations in sorted(values.items()):
-                eid, label, datatype = codes[code]
-                facts[code] = [{"elementId": eid, "value": value, "attributeId": value, "sourceId": source,
-                                "sourceUrl": url, "kind": "OEM_RULE_COMBINATION", "ruleId": rule,
-                                "schemaId": None, "keys": pattern.pattern} for value, source, url in associations]
-                value = associations[0][0]
-                fields[code] = {"label": label, "dataType": datatype, "status": "KNOWN", "possibilities": [value],
-                                "value": value, "evidence": facts[code]}
-            return {"status": "CONTEXT_CONFLICT" if conflict else "DECODED", "dataset": self.dataset, "marketScope": "EUROPEAN_LAYOUT",
-                    "referenceYear": self.reference_year, "stages": ["vw-europe-golf-1k-2005"],
-                    "warnings": ["Supplied model year conflicts with this documented European VIN layout."] if conflict else
-                                ["Golf family only; filler characters do not identify engine or trim. Model year is not exact build date."],
-                    "fields": {} if conflict else fields, "alternatives": [{"modelYear": year, "market": "EUROPEAN_LAYOUT", "fields": facts}]}
-        return None
+            for position, chars, code, value, source, kind, rule_id, keys in rule["claims"]:
+                if position >= 0 and vin[position] not in chars:
+                    continue
+                eid, _, _ = codes[code]
+                fact = {"elementId": eid, "value": value, "attributeId": value, "sourceId": source,
+                        "sourceUrl": self.sources[source]["url"], "kind": kind, "ruleId": rule_id,
+                        "schemaId": None, "keys": keys}
+                if fact not in facts[code]:
+                    facts[code].append(fact)
+            fields = {}
+            for code, evidence in sorted(facts.items()):
+                values = sorted({f["value"] for f in evidence})
+                status = "AMBIGUOUS" if len(values) > 1 else "NEEDS_CONTEXT" if foreign else "KNOWN"
+                fields[code] = {"label": codes[code][1], "dataType": codes[code][2], "status": status,
+                                "possibilities": values, "value": values[0] if status == "KNOWN" else None, "evidence": evidence}
+            results.append({"status": "CONTEXT_CONFLICT" if conflict else "NEEDS_CONTEXT" if foreign else "DECODED",
+                "dataset": self.dataset, "marketScope": rule["scope"], "referenceYear": self.reference_year,
+                "stages": [rule["stage"]], "warnings": [rule["conflictWarning"] if conflict else rule["warning"]],
+                "fields": {} if conflict else fields,
+                "alternatives": [{"modelYear": rule["year"], "market": rule["scope"], "fields": dict(sorted(facts.items()))}]})
+        return results
+
+    def _p(self, key):
+        return self.policy.get("patternProfile." + key)
 
     def _years(self, vin, context, wmi):
-        if vin[9] not in YEAR_CODES:
+        if vin[self._p("yearPosition")] not in self._p("yearCodes"):
             return []
-        base = 1980 + YEAR_CODES.index(vin[9])
+        base = self._p("yearBase") + self._p("yearCodes").index(vin[self._p("yearPosition")])
         if context.model_year is not None:
-            return [context.model_year] if context.model_year >= 1980 and (context.model_year - base) % 30 == 0 else []
-        years = list(range(base, self.reference_year + 3, 30))
+            return [context.model_year] if context.model_year >= self._p("yearBase") and (context.model_year - base) % self._p("yearCycle") == 0 else []
+        years = list(range(base, self.reference_year + self._p("yearHorizon") + 1, self._p("yearCycle")))
         _, vehicle_type, truck_type = self.wmis[wmi]
         # This discriminator is used only within the explicitly labelled US scheme.
-        if vehicle_type in (2, 7) or (vehicle_type == 3 and truck_type == "1"):
-            years = [y for y in years if (y < 2010) == vin[6].isdigit()]
+        if vehicle_type in self.policy.array("patternProfile.cycleDiscriminator.vehicleTypes") or (vehicle_type == self._p("cycleDiscriminator.conditionalType") and truck_type == self._p("cycleDiscriminator.truckType")):
+            years = [y for y in years if (y < self._p("cycleDiscriminator.beforeYear")) == vin[self._p("cycleDiscriminator.position")].isdigit()]
         return years
 
     def _pass(self, vin, wmi, year, context):
-        key = vin[3:8] + "|" + vin[9:]
+        key = self._p("keySeparator").join(vin[self._p(f"keySlices.{i}.0"):self._p(f"keySlices.{i}.1")] for i in range(self._p("keySlices.length")))
         matches = defaultdict(list)
         for schema, start, end in self.schemas.get(wmi, ()):
             if not start <= year <= end:
@@ -191,26 +162,26 @@ class RichDecoder:
                                   str(pid), schema, pattern)
                 # Reverse only the descending keys; stable sorts express PostgreSQL
                 # NULLS FIRST, then shortest non-star key, key text and insertion ID.
-                matches[element].append((100 if formula else start, changed, pattern, pid, fact))
-        engine = matches.get(18, [])
+                matches[element].append((self._p("formulaPriority") if formula else start, changed, pattern, pid, fact))
+        engine = matches.get(self._p("engineElement"), [])
         if engine:
             parent = sorted(engine, key=lambda p: (p[0], not p[1], p[1], p[3]), reverse=True)[0][4]
             for pid, element, attr, value, changed in self.engines.get(parent["attributeId"].strip().lower(), ()):
                 fact = self._fact(element, value, attr, "ENGINE_MODEL", parent["ruleId"] + "/engine:" + pid,
                                   parent["schemaId"], parent["keys"])
-                matches[element].append((50, changed, parent["keys"], int(pid), fact))
+                matches[element].append((self._p("enginePriority"), changed, parent["keys"], int(pid), fact))
         facts = {}
         for element, items in matches.items():
             items.sort(key=lambda p: (len(p[2].replace("*", "")), p[2].replace("[", "").replace("]", ""), p[3]))
             items.sort(key=lambda p: (not p[1], p[1]), reverse=True)
             items.sort(key=lambda p: p[0], reverse=True)
-            selected = items if element in MULTIPLE else items[:1]
+            selected = items if element in self.policy.array("patternProfile.multipleElements") else items[:1]
             facts[element] = list({json.dumps(p[4], sort_keys=True): p[4] for p in selected}.values())
-        if 28 in facts:
-            parent = facts[28][0]
+        if self._p("modelElement") in facts:
+            parent = facts[self._p("modelElement")][0]
             model = self.models.get(parent["attributeId"])
             if model:
-                facts[26] = [self._fact(26, model[1], model[0], "MODEL_MAKE", parent["ruleId"] + "/make:" + model[0],
+                facts[self._p("makeElement")] = [self._fact(self._p("makeElement"), model[1], model[0], "MODEL_MAKE", parent["ruleId"] + "/make:" + model[0],
                                        parent["schemaId"], parent["keys"])]
         # Enrich only from original facts, never chain rounded conversions.
         for cid, source, target, operator, factor in self.conversions:
@@ -220,16 +191,16 @@ class RichDecoder:
             try:
                 original = Decimal(parent["value"])
                 number = original * factor if operator == "*" else original / factor
-                text = format(number.quantize(Decimal("0.000001"), rounding=ROUND_HALF_UP), "f").rstrip("0").rstrip(".")
+                text = format(number.quantize(Decimal(1).scaleb(-self._p("conversionScale")), rounding=ROUND_HALF_UP), "f").rstrip("0").rstrip(".")
             except InvalidOperation:
                 continue
             facts[target] = [self._fact(target, text or "0", text or "0", "UNIT_CONVERSION",
                                         parent["ruleId"] + "/conversion:" + cid, parent["schemaId"], parent["keys"])]
         # A year code alone is not evidence that these vehicle-description rules matched.
         if facts:
-            facts[29] = [self._fact(29, str(year), str(year), "CALLER_CONTEXT" if context.model_year else "VIN_YEAR",
-                                    "model-year", key=vin[9])]
-        return {"modelYear": year, "market": "US", "fields": {self.elements[e][0]: f for e, f in sorted(facts.items())}}
+            facts[self._p("yearElement")] = [self._fact(self._p("yearElement"), str(year), str(year), "CALLER_CONTEXT" if context.model_year else "VIN_YEAR",
+                                    "model-year", key=vin[self._p("yearPosition")])]
+        return {"modelYear": year, "market": self._p("market"), "fields": {self.elements[e][0]: f for e, f in sorted(facts.items())}}
 
     def decode(self, vin, structure, context):
         result = self._decode(vin, structure, context)
@@ -238,29 +209,20 @@ class RichDecoder:
         result["sources"] = [copy.deepcopy(self.sources[sid]) for sid in sorted(used)]
         return result
 
-    def _decode(self, vin, structure, context):
-        result = {"status": "UNKNOWN", "dataset": self.dataset, "marketScope": "US", "referenceYear": self.reference_year,
-                  "stages": STAGES, "warnings": [], "fields": {}, "alternatives": [], "sources": []}
+    def _patterns_result(self, vin, structure, context):
+        result = {"status": "UNKNOWN", "dataset": self.dataset, "marketScope": self._p("market"), "referenceYear": self.reference_year,
+                  "stages": self.policy.array("patternProfile.stages"), "warnings": [], "fields": {}, "alternatives": [], "sources": []}
         if structure != "MODERN_FORMAT":
             result["status"] = "INVALID_INPUT"
             return result
-        oem = self._oem(vin, context)
-        if oem is not None:
-            return oem
-        european = self._europe(vin)
-        if european is not None:
-            return european
-        if context.market not in (None, "US"):
-            result["status"] = "OUT_OF_SCOPE"
-            result["warnings"].append("NHTSA rules are scoped to US reporting; no applicable non-US rule is bundled for this VIN.")
-            return result
-        wmi = vin[:3] + vin[11:14] if vin[2] == "9" else vin[:3]
+        extended = vin[self._p("extendedWmi.position")] == self._p("extendedWmi.character")
+        wmi = vin[:3] + vin[self._p("extendedWmi.suffixStart"):self._p("extendedWmi.suffixEnd")] if extended else vin[:3]
         if wmi not in self.wmis:
             return result
         years = self._years(vin, context, wmi)
         if not years:
             result["status"] = "CONTEXT_CONFLICT" if context.model_year is not None else "UNKNOWN"
-            result["warnings"].append("VIN year code does not resolve within this US scheme and supplied context.")
+            result["warnings"].append(self._p("yearConflictWarning"))
             return result
         alternatives = [self._pass(vin, wmi, year, context) for year in years]
         result["alternatives"] = alternatives
@@ -278,14 +240,57 @@ class RichDecoder:
                         values.append(fact["value"])
             element = evidence[0]["elementId"]
             status = ("AMBIGUOUS" if len(values) > 1 else "UNKNOWN" if missing else
-                      "NEEDS_CONTEXT" if context.market is None else "KNOWN")
+                      "NEEDS_CONTEXT" if context.market != self._p("market") else "KNOWN")
             result["fields"][code] = {"label": self.elements[element][1], "dataType": self.elements[element][2],
                                       "status": status, "possibilities": values,
                                       "value": values[0] if status == "KNOWN" else None, "evidence": evidence}
         if codes:
-            result["status"] = "NEEDS_CONTEXT" if context.market is None else "DECODED"
-        if context.market is None and codes:
-            result["warnings"].append("These possibilities assume US reporting scope; supply market US only when independently known.")
+            result["status"] = "NEEDS_CONTEXT" if context.market != self._p("market") else "DECODED"
+        if context.market != self._p("market") and codes:
+            result["warnings"].append(self._p("unknownMarketWarning") if context.market is None else
+                                      self._p("fallbackMessage").replace("{sourceMarket}", self._p("market")).replace("{requestedMarket}", context.market))
         if len(years) > 1:
-            result["warnings"].append("The VIN year code has multiple possible cycles; alternatives retain each year's associated facts.")
+            result["warnings"].append(self._p("yearAlternativesWarning"))
         return result
+
+    def _decode(self, vin, structure, context):
+        patterns = self._patterns_result(vin, structure, context)
+        if structure != "MODERN_FORMAT":
+            return patterns
+        results = self._literals(vin, context) + [patterns]
+        meaningful = [r for r in results if r["fields"] or r["alternatives"]]
+        applicable_conflicts = [r for r in results if r["status"] == "CONTEXT_CONFLICT" and
+                                (r["marketScope"] != self._p("market") or context.market == self._p("market"))]
+        if applicable_conflicts:
+            merged = copy.deepcopy(applicable_conflicts[0])
+            merged["fields"] = {}
+            merged["alternatives"] = [a for r in meaningful for a in r["alternatives"]]
+            return merged
+        if not meaningful:
+            return patterns
+        if len(meaningful) == 1:
+            return meaningful[0]
+        merged = copy.deepcopy(meaningful[0])
+        merged["fields"] = {}
+        merged["alternatives"] = [a for r in meaningful for a in r["alternatives"]]
+        merged["stages"] = list(dict.fromkeys(s for r in meaningful for s in r["stages"]))
+        merged["warnings"] = list(dict.fromkeys(s for r in meaningful for s in r["warnings"] if s))
+        scopes = sorted({r["marketScope"] for r in meaningful})
+        merged["marketScope"] = scopes[0] if len(scopes) == 1 else "MULTIPLE"
+        for code in sorted({code for r in meaningful for code in r["fields"]}):
+            fields = [r["fields"][code] for r in meaningful if code in r["fields"]]
+            # Applicable claims (including ambiguity) block foreign suggestions.
+            applicable = [f for f in fields if f["status"] != "NEEDS_CONTEXT" and any(
+                r["fields"].get(code) is f and r["status"] != "NEEDS_CONTEXT" for r in meaningful)]
+            selected = applicable or fields
+            values = sorted({v for f in selected for v in f["possibilities"]})
+            evidence = []
+            for f in selected:
+                for fact in f["evidence"]:
+                    if fact not in evidence:
+                        evidence.append(fact)
+            status = "AMBIGUOUS" if len(values) > 1 else "UNKNOWN" if any(f["status"] == "UNKNOWN" for f in selected) else "KNOWN" if applicable else "NEEDS_CONTEXT"
+            merged["fields"][code] = {**selected[0], "status": status, "possibilities": values,
+                                      "value": values[0] if status == "KNOWN" else None, "evidence": evidence}
+        merged["status"] = "DECODED" if any(f["status"] == "KNOWN" for f in merged["fields"].values()) else "NEEDS_CONTEXT"
+        return merged

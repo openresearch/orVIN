@@ -16,8 +16,8 @@ def _data_directory():
         return packaged
     # A source checkout uses the one canonical data directory shared with Java.
     root = Path(__file__).resolve().parents[3]
-    if (root / "libs/python/orvin/lookup.py").is_file() and (root / "data/dataset.json").is_file():
-        return root / "data"
+    if (root / "libs/python/orvin/lookup.py").is_file() and (root / "data/generated/manifest.tsv").is_file():
+        return root / "data/generated"
     raise RuntimeError("Bundled Orvin data is missing; reinstall the package")
 
 
@@ -99,8 +99,24 @@ class VinDecoder:
     @classmethod
     @lru_cache(maxsize=1)
     def bundled(cls):
-        content = (_data_directory() / "dataset.json").read_bytes()
-        decoder = cls(json.loads(content), hashlib.sha256(content).hexdigest())
+        from .program import read
+        rows = [line.split("\t") for line in read(_data_directory(), "dataset.tsv").decode().splitlines()]
+        data = {"version": rows[0][1], "sources": [], "manufacturers": [], "assignments": []}
+        for c in rows[1:]:
+            if c[0] == "S":
+                data["sources"].append(dict(zip(("id", "title", "url", "publisher", "retrievedOn", "publicationVersion", "section"), c[1:8]),
+                    reuse={"license": c[8], "url": c[9], "basis": c[10]}, snapshot=c[11] or None, sha256=c[12] or None))
+            elif c[0] == "M":
+                data["manufacturers"].append({"id": c[1], "name": c[2], "country": c[3] or None, "sourceRefs": c[4].split(",")})
+            elif c[0] == "A":
+                data["assignments"].append({"id": c[1], "wmi": c[2], "manufacturerId": c[3], "brand": c[4] or None,
+                    "category": c[5] or None, "sourceRefs": c[6].split(","), "constraints": {
+                        "markets": c[7].split(",") if c[7] else [], "fromModelYear": int(c[8]) if c[8] else None,
+                        "toModelYear": int(c[9]) if c[9] else None}, "notes": c[10],
+                    "ambiguityGroup": c[11] or None, "ambiguityReason": c[12] or None})
+            else:
+                raise RuntimeError("Unsupported assignment operation")
+        decoder = cls(data, rows[0][2])
         from .details import RichDecoder
         decoder._rich = RichDecoder(_data_directory() / "decoding")
         from .approvals import ApprovalDecoder
@@ -169,7 +185,8 @@ class HsnTsnLookup:
     @lru_cache(maxsize=1)
     def bundled(cls):
         directory = _data_directory() / "kba"
-        metadata = json.loads((directory / "metadata.json").read_bytes())
+        from .program import read
+        metadata = json.loads(read(directory.parent, "kba/metadata.json"))
         content = (directory / "types.tsv").read_bytes()
         if hashlib.sha256(content).hexdigest() != metadata["sha256"]:
             raise RuntimeError("Bundled KBA table does not match its recorded SHA-256")

@@ -1,0 +1,200 @@
+{
+  "version": "identity-v1",
+  "display": {
+    "VOLKSWAGEN": [
+      "vw",
+      "VW"
+    ],
+    "SKODA": [
+      "skoda",
+      "Škoda"
+    ],
+    "BMW": [
+      "bmw",
+      "BMW"
+    ],
+    "MERCEDES-BENZ": [
+      "mercedes-benz",
+      "Mercedes-Benz"
+    ],
+    "TESLA": [
+      "tesla",
+      "Tesla"
+    ],
+    "HONDA": [
+      "honda",
+      "Honda"
+    ],
+    "TOYOTA": [
+      "toyota",
+      "Toyota"
+    ],
+    "FORD": [
+      "ford",
+      "Ford"
+    ],
+    "AUDI": [
+      "audi",
+      "Audi"
+    ],
+    "SEAT": [
+      "seat",
+      "SEAT"
+    ],
+    "CUPRA": [
+      "cupra",
+      "CUPRA"
+    ],
+    "RENAULT": [
+      "renault",
+      "Renault"
+    ],
+    "PEUGEOT": [
+      "peugeot",
+      "Peugeot"
+    ],
+    "CITROEN": [
+      "citroen",
+      "Citroën"
+    ],
+    "FIAT": [
+      "fiat",
+      "Fiat"
+    ],
+    "OPEL": [
+      "opel",
+      "Opel"
+    ],
+    "VAUXHALL": [
+      "vauxhall",
+      "Vauxhall"
+    ],
+    "VOLVO": [
+      "volvo",
+      "Volvo"
+    ],
+    "HYUNDAI": [
+      "hyundai",
+      "Hyundai"
+    ],
+    "KIA": [
+      "kia",
+      "Kia"
+    ],
+    "NISSAN": [
+      "nissan",
+      "Nissan"
+    ],
+    "MAZDA": [
+      "mazda",
+      "Mazda"
+    ],
+    "SUZUKI": [
+      "suzuki",
+      "Suzuki"
+    ],
+    "MITSUBISHI": [
+      "mitsubishi",
+      "Mitsubishi"
+    ],
+    "MINI": [
+      "mini",
+      "MINI"
+    ],
+    "PORSCHE": [
+      "porsche",
+      "Porsche"
+    ],
+    "DACIA": [
+      "dacia",
+      "Dacia"
+    ],
+    "LEXUS": [
+      "lexus",
+      "Lexus"
+    ],
+    "JEEP": [
+      "jeep",
+      "Jeep"
+    ],
+    "LAND ROVER": [
+      "land-rover",
+      "Land Rover"
+    ],
+    "JAGUAR": [
+      "jaguar",
+      "Jaguar"
+    ],
+    "CHEVROLET": [
+      "chevrolet",
+      "Chevrolet"
+    ],
+    "SUBARU": [
+      "subaru",
+      "Subaru"
+    ],
+    "RENAULT TRUCKS": [
+      "renault-trucks",
+      "Renault Trucks"
+    ]
+  },
+  "makeAliases": [
+    {
+      "alias": "VW",
+      "target": "VOLKSWAGEN",
+      "sourceId": "vw-golf-v-profile",
+      "locator": "Golf V profile / Volkswagen marque; display preference VW"
+    },
+    {
+      "alias": "VOLKSWAGEN-VW",
+      "target": "VOLKSWAGEN",
+      "kba": {
+        "hsn": "0603",
+        "tsn": "BMT",
+        "field": "manufacturer",
+        "expected": "VOLKSWAGEN-VW"
+      }
+    },
+    {
+      "alias": "BAYER.MOT.WERKE-BMW",
+      "target": "BMW",
+      "kba": {
+        "hsn": "0005",
+        "tsn": "AMQ",
+        "field": "manufacturer",
+        "expected": "BAYER.MOT.WERKE-BMW"
+      }
+    }
+  ],
+  "modelBindings": [
+    {
+      "makeId": "vw",
+      "alias": "GOLF",
+      "id": "vw:golf",
+      "name": "Golf",
+      "sourceId": "vw-golf-v-profile",
+      "locator": "Golf V profile; model family Golf, factory type 1K"
+    },
+    {
+      "makeId": "tesla",
+      "alias": "MODEL Y",
+      "id": "tesla:model-y",
+      "name": "Model Y",
+      "sourceId": "tesla-model-y-2025-service-manual",
+      "locator": "Model Y 2025+ service manual / VIN decoding"
+    },
+    {
+      "makeId": "vw",
+      "alias": "GOLF SPORTSVAN",
+      "id": "vw:golf-sportsvan",
+      "name": "Golf Sportsvan",
+      "kba": {
+        "hsn": "0603",
+        "tsn": "BMT",
+        "field": "tradeName",
+        "expected": "GOLF SPORTSVAN"
+      },
+      "locatorSuffix": "; case-only display normalization"
+    }
+  ]
+}

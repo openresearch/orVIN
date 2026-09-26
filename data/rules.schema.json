@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ORvin reviewed conditional-literal rules",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["format", "rules"],
+  "properties": {
+    "format": {"const": "orvin-literals-1"},
+    "rules": {"type": "array", "items": {"$ref": "#/$defs/rule"}}
+  },
+  "$defs": {
+    "rule": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "pattern", "marketScope", "markets", "stage", "claims"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "pattern": {"type": "string", "minLength": 1},
+        "exclude": {"type": "string"},
+        "marketScope": {"type": "string", "minLength": 1},
+        "markets": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^[A-Z]{2}$"}},
+        "modelYear": {"type": "integer", "minimum": 1886, "maximum": 9999},
+        "stage": {"type": "string", "minLength": 1},
+        "warning": {"type": "string"},
+        "conflictWarning": {"type": "string"},
+        "claims": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/claim"}}
+      }
+    },
+    "claim": {
+      "type": "object", "additionalProperties": false,
+      "required": ["code", "value", "sourceId", "kind", "ruleId"],
+      "properties": {
+        "code": {"type": "string", "minLength": 1},
+        "value": {"type": "string", "minLength": 1},
+        "sourceId": {"type": "string", "minLength": 1},
+        "kind": {"type": "string", "minLength": 1},
+        "ruleId": {"type": "string", "minLength": 1},
+        "keys": {"type": "string"},
+        "position": {"type": "integer", "minimum": 0, "maximum": 16},
+        "characters": {"type": "string", "pattern": "^[A-HJ-NPR-Z0-9]+$"}
+      },
+      "dependentRequired": {"position": ["characters"], "characters": ["position"]}
+    }
+  }
+}

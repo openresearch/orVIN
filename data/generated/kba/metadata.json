@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "version": "2026.09.25.1",
+  "referenceDate": "2026-01-01",
+  "retrievedOn": "2026-09-25",
+  "recordCount": 63260,
+  "title": "FZ Hersteller Handelsnamen Kfz",
+  "publisher": "Kraftfahrt-Bundesamt (KBA)",
+  "url": "https://data.gov.de/suche/daten/fz-hersteller-handelsnamen-kfz?ids=c1e3a0b6-0d34-4e99-8181-91bdfb639208",
+  "serviceUrl": "https://services-eu1.arcgis.com/U09msXRZoxesNntH/arcgis/rest/services/SP_HSN_TSN_92a1e/FeatureServer/0",
+  "license": "dl-de/by-2-0",
+  "licenseUrl": "https://www.govdata.de/dl-de/by-2-0",
+  "modifications": "Selected one reference date; renamed columns, sorted rows and represented null as \\N. Source labels, counts and statistical markers unchanged.",
+  "snapshot": "source.json.gz",
+  "snapshotSha256": "82c874fec7078690fe8f69fb60fbdfc45e0c346bac84d0c8002e8a0a9f5d929d",
+  "table": "types.tsv",
+  "sha256": "3a17dccb5599723ba174ae1bbeedcdb8fb7a386887b5de61f0acfa50039257c4"
+}

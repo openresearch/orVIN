@@ -1,7 +1,7 @@
 # Builds, releases and consumption
 
-Java and Python releases share a `vMAJOR.MINOR.PATCH` tag and version. Development descriptors
-are `0.2.0-SNAPSHOT` and `0.2.0.dev0`; the workflow stamps build copies from the tag.
+Java, Python and .NET releases share a `vMAJOR.MINOR.PATCH` tag and version. Development descriptors
+are `0.3.0-SNAPSHOT`, `0.3.0.dev0` and `0.3.0-dev`; the workflow stamps build copies from the tag.
 [Version 0.1.0](https://github.com/openresearch/orvin/releases/tag/v0.1.0) was published on
 2026-09-25 from commit `4641b5c61af219ff18c937685d5ba2e3ddc5198e`; its
 [release workflow passed](https://github.com/openresearch/orvin/actions/runs/36189579018).
@@ -23,14 +23,15 @@ reproducibility. Candidate JARs are retained for seven days.
 [`release.yml`](../.github/workflows/release.yml) runs for pushed `v*` tags. It:
 
 1. Requires the complete CI matrix to pass.
-2. Validates a stable `vMAJOR.MINOR.PATCH` tag and stamps matching Maven/Python versions and SCM tag.
+2. Validates a stable `vMAJOR.MINOR.PATCH` tag and stamps matching Maven/Python/NuGet versions and SCM tag.
 3. Builds/tests release artifacts, checks Python metadata, compares every embedded data file,
-   compares Java/Python results, and exercises the installed wheel outside the checkout.
+   compares all three runtimes, and exercises the installed wheel and NuGet package outside the checkout.
 4. Checks artifact coordinates/versions and creates `release.json` with source commit and dataset
    identities (including the rich-decoding index and source catalog), plus `SHA256SUMS` covering all release assets.
 5. Publishes the exact tested Java JAR, sources, Javadoc and POM to **GitHub Packages** at
    `https://maven.pkg.github.com/openresearch/orvin`.
-6. Creates a **GitHub Release** with those Java files, Python wheel/sdist, manifest and checksums.
+6. Publishes the tested NuGet package to GitHub Packages and creates a **GitHub Release**
+   with the Java files, Python wheel/sdist, NuGet package, manifest and checksums.
 
 The workflow uses the repository's automatic `GITHUB_TOKEN`; no publishing PAT or PyPI secret
 is required. Its publishing job requests `packages: write` and `contents: write`. Organization
@@ -44,16 +45,16 @@ Stable releases only are supported; prerelease/build-metadata tags fail validati
 ## Publish a version
 
 Merge the reviewed implementation/workflows into `main`, confirm CI is green, then tag the
-specific reviewed commit. For example, for the next patch release:
+specific reviewed commit. For example, for the compiled-runtime release:
 
 ```sh
-git tag -a v0.2.2 <reviewed-commit-sha> -m "ORvin 0.2.2"
-git push origin v0.2.2
+git tag -a v0.3.0 <reviewed-commit-sha> -m "ORvin 0.3.0"
+git push origin v0.3.0
 ```
 
 The tag push triggers publication. Confirm both the GitHub package and release assets exist
 before declaring the version available. Never move a published tag or replace an existing
-version. A failure after Maven publication can leave the package available before release assets
+version. A failure after Maven or NuGet publication can leave the package available before release assets
 exist; inspect the run and complete only the missing step using its verified artifacts. Blindly
 rerunning deployment can fail on existing coordinates. Use a new version for changed content.
 
@@ -147,12 +148,35 @@ signing have not been provisioned.
 (cd libs/java && ./mvnw -Dpython=../../.venv/bin/python clean verify)
 PYTHONPATH=libs/python python3 -m unittest discover -s libs/python/tests
 .venv/bin/python -m build libs/python
-python3 tools/check_parity.py
-python3 tools/check_packages.py --jar libs/java/target/orvin-0.2.0-SNAPSHOT.jar --wheel libs/python/dist/orvin-0.2.0.dev0-py3-none-any.whl
+dotnet run --project libs/dotnet/ORvin.Checks -c Release -- --bundle-dir "$PWD/data/generated"
+python3 tools/check_parity.py --dotnet libs/dotnet/ORvin.Checks/bin/Release/net8.0/ORvin.Checks.dll
+python3 tools/check_packages.py --jar libs/java/target/orvin-0.3.0-SNAPSHOT.jar --wheel libs/python/dist/orvin-0.3.0.dev0-py3-none-any.whl
 ```
 
 To rehearse release stamping, use a disposable copy/worktree: `python3 tools/release.py prepare
-v0.1.0` changes its POM/Python version, then follow the workflow's build/check commands.
+v0.3.0` changes its Maven/Python/NuGet versions, then follow the workflow's build/check commands.
 `tools/release.py` never publishes. CI does not write version changes back to the source branch.
 Review source authority, attribution and dataset diffs with data updates. Repository protection
 is separate organization configuration; CODEOWNERS/templates alone do not enforce review.
+
+## .NET packages (next release)
+
+`libs/dotnet/ORvin` targets .NET 8+. CI tests .NET 8 on Windows and .NET 10 on Linux,
+checks package consumers, and compares full short/long output with Python and Java.
+The NuGet package has no runtime dependencies; its assembly embeds the common
+compiled bundle. Data notices are also included at the package root.
+
+The release workflow stamps `OpenResearch.ORvin` with the same tag version as Java
+and Python, tests the installed package, attaches its `.nupkg` and checksums to the
+GitHub Release, and publishes to the existing GitHub Packages owner:
+`https://nuget.pkg.github.com/openresearch/index.json`.
+Configure that feed with your normal GitHub package-read credentials, then use
+`dotnet add package OpenResearch.ORvin --version <released-version>`. A downloaded
+release `.nupkg` can instead be installed from a local NuGet source. This workflow
+does not publish to nuget.org.
+
+All packages now embed only `data/generated/`. Release manifests include its SHA-256;
+raw snapshots and regression fixtures are excluded. Run `tools/compile_dataset.py
+--generate` after reviewed input changes, then `tools/dataset.py` to reconstruct and
+validate source projections, provenance and the exact generated bundle. Ordinary
+builds fail on stale data rather than downloading upstream sources.

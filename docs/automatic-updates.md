@@ -42,13 +42,13 @@ a separate review; it never assigns new rights automatically.
 
 Source bytes are compared before changing the checkout. Identical content produces
 no commit, tag, or release. For changed content, offline reconstruction/provenance,
-both libraries, tooling tests, installed-wheel behavior, cross-language parity and
-embedded-package equality must all pass before committing.
+all libraries, tooling tests, installed-wheel behavior, cross-language parity and
+embedded-package equality and .NET/Python/Java answer parity must all pass before committing.
 
 Publication checks a strict file allowlist, confirms main has not moved, and atomically
 pushes the generated-data commit plus the next stable patch tag. A reused release
 workflow validates the exact new commit on the supported language versions and publishes
-both packages. Explicit workflow reuse is necessary because workflow-token tag pushes
+all packages. Explicit workflow reuse is necessary because workflow-token tag pushes
 do not trigger another GitHub workflow. Failed publication is visible in Actions;
 retry the failed release jobs without creating a replacement version/tag.
 
@@ -104,3 +104,7 @@ References: [NHTSA downloads](https://vpic.nhtsa.dot.gov/downloads/),
 [ASTRA directory](https://opendata.astra.admin.ch/ivzod/2000-Typengenehmigungen_TG_TARGA/2200-Basisdaten_TG_ab_1995/),
 [GitHub workflow-token behavior](https://docs.github.com/en/actions/how-tos/writing-workflows/choosing-when-your-workflow-runs/triggering-a-workflow#triggering-a-workflow-from-a-workflow),
 [GitLab job-token pushes](https://docs.gitlab.com/ci/jobs/ci_job_token/#allow-git-push-requests-to-your-project-repository).
+
+The refresh regenerates `data/generated/` through `tools/compile_dataset.py`. Its
+output is publication-allowlisted; `data/policy/`, `data/rules/`, the rule schema and
+compiler code are not. Schema/semantics changes remain manual review boundaries.

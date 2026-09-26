@@ -1,4 +1,4 @@
-"""Prepare matching Java/Python release versions and verified release assets.
+"""Prepare matching Java/Python/.NET release versions and verified release assets.
 
 This tool never publishes. GitHub Actions publishes only for pushed vX.Y.Z tags;
 manual workflow runs exercise the same build without publication.
@@ -26,6 +26,11 @@ def version_from_tag(tag):
 
 def prepare(tag, root=ROOT):
     version = version_from_tag(tag)
+    dotnet_path = root / "libs/dotnet/ORvin/ORvin.csproj"
+    dotnet = dotnet_path.read_text(encoding="utf-8")
+    dotnet, count = re.subn(r"<Version>[^<]+</Version>", "<Version>" + version + "</Version>", dotnet)
+    if count != 1:
+        raise ValueError("Expected one .NET package version")
     pom_path = root / "libs/java/pom.xml"
     python_path = root / "libs/python/pyproject.toml"
     pom = pom_path.read_text(encoding="utf-8")
@@ -44,7 +49,8 @@ def prepare(tag, root=ROOT):
     python, count = re.subn(r'^version = "[^"]+"$', 'version = "' + version + '"', python, flags=re.MULTILINE)
     if count != 1:
         raise ValueError("Expected one Python project version")
-    # Validate both files before changing either one.
+    # Validate all package versions before changing any file.
+    dotnet_path.write_text(dotnet, encoding="utf-8", newline="\n")
     pom_path.write_text(pom, encoding="utf-8", newline="\n")
     python_path.write_text(python, encoding="utf-8", newline="\n")
     return version
@@ -63,6 +69,16 @@ def check_python_metadata(content, version):
         raise ValueError("Python artifact name/version differs from the release tag")
 
 
+
+def check_nuget_metadata(content, version):
+    # NuGet chooses the schema namespace for the metadata it emits; it is not fixed
+    # to one SDK version. Identity and version still must match the release exactly.
+    metadata = ET.fromstring(content)
+    if (metadata.findtext("{*}metadata/{*}id") != "OpenResearch.ORvin"
+            or metadata.findtext("{*}metadata/{*}version") != version):
+        raise ValueError("NuGet artifact name/version differs from release tag")
+
+
 def bundle(tag, commit, root=ROOT):
     version = version_from_tag(tag)
     if not re.fullmatch(r"[0-9a-f]{40}", commit):
@@ -72,10 +88,13 @@ def bundle(tag, commit, root=ROOT):
     jars = [java / "target" / f"orvin-{version}{suffix}.jar" for suffix in ("", "-sources", "-javadoc")]
     wheel = python / f"orvin-{version}-py3-none-any.whl"
     sdist = python / f"orvin-{version}.tar.gz"
+    nuget = root / "libs/dotnet/dist" / f"OpenResearch.ORvin.{version}.nupkg"
     pom = java / "pom.xml"
-    for path in [*jars, wheel, sdist, pom]:
+    for path in [*jars, wheel, sdist, nuget, pom]:
         if not path.is_file():
             raise ValueError(f"Release artifact missing: {path.name}")
+    with zipfile.ZipFile(nuget) as archive:
+        check_nuget_metadata(archive.read("OpenResearch.ORvin.nuspec"), version)
     check_pom(pom.read_bytes(), version)
     with zipfile.ZipFile(jars[0]) as archive:
         check_pom(archive.read("META-INF/maven/com.openresearch/orvin/pom.xml"), version)
@@ -88,7 +107,7 @@ def bundle(tag, commit, root=ROOT):
     if destination.exists():
         shutil.rmtree(destination)
     destination.mkdir(parents=True)
-    for path in [*jars, wheel, sdist]:
+    for path in [*jars, wheel, sdist, nuget]:
         shutil.copyfile(path, destination / path.name)
     shutil.copyfile(pom, destination / f"orvin-{version}.pom")
     dataset = json.loads((root / "data/dataset.json").read_text(encoding="utf-8"))
@@ -96,6 +115,8 @@ def bundle(tag, commit, root=ROOT):
     decoding = json.loads((root / "data/decoding/metadata.json").read_text(encoding="utf-8"))
     manifest = {"version": version, "tag": tag, "commit": commit,
                 "javaCoordinates": "com.openresearch:orvin:" + version,
+                "nugetPackage": "OpenResearch.ORvin", "runtimeFormat": "orvin-runtime-1",
+                "runtimeManifestSha256": sha256(root / "data/generated/manifest.tsv"),
                 "wmiDatasetVersion": dataset["version"], "wmiDatasetSha256": sha256(root / "data/dataset.json"),
                 "kbaDatasetVersion": kba["version"], "kbaTableSha256": kba["sha256"],
                 "decodingDatasetVersion": decoding["version"], "decodingIndexSha256": decoding["indexSha256"],

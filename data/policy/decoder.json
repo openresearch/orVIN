@@ -1,0 +1,104 @@
+{
+  "version": "vehicle-identity-v2",
+  "primaryFields": [
+    {
+      "name": "make",
+      "code": "Make",
+      "kind": "identity"
+    },
+    {
+      "name": "model",
+      "code": "Model",
+      "kind": "identity",
+      "parent": "make"
+    },
+    {
+      "name": "modelYear",
+      "code": "ModelYear",
+      "kind": "year"
+    },
+    {
+      "name": "productionYear",
+      "code": "ProductionYear",
+      "kind": "year"
+    }
+  ],
+  "patternProfile": {
+    "market": "US",
+    "referenceYear": 2026,
+    "yearCodes": "ABCDEFGHJKLMNPRSTVWXY123456789",
+    "yearBase": 1980,
+    "yearCycle": 30,
+    "yearHorizon": 2,
+    "yearPosition": 9,
+    "cycleDiscriminator": {
+      "position": 6,
+      "beforeYear": 2010,
+      "vehicleTypes": [
+        2,
+        7
+      ],
+      "conditionalType": 3,
+      "truckType": "1"
+    },
+    "extendedWmi": {
+      "position": 2,
+      "character": "9",
+      "suffixStart": 11,
+      "suffixEnd": 14
+    },
+    "keySlices": [
+      [
+        3,
+        8
+      ],
+      [
+        9,
+        17
+      ]
+    ],
+    "keySeparator": "|",
+    "multipleElements": [
+      121,
+      129,
+      150,
+      154,
+      155,
+      114,
+      169
+    ],
+    "engineElement": 18,
+    "modelElement": 28,
+    "makeElement": 26,
+    "yearElement": 29,
+    "formulaPriority": 100,
+    "enginePriority": 50,
+    "conversionScale": 6,
+    "stages": [
+      "public-patterns",
+      "model-make",
+      "engine-model",
+      "displacement-conversion"
+    ],
+    "assumptionCode": "US_MARKET_ASSUMED",
+    "fallbackCode": "CROSS_MARKET_MATCH",
+    "fallbackMessage": "Possible match from {sourceMarket} data; applicability to {requestedMarket} is unverified.",
+    "unknownMarketWarning": "These possibilities assume US reporting scope; supply market US only when independently known.",
+    "yearConflictWarning": "VIN year code does not resolve within this scheme and supplied context.",
+    "yearAlternativesWarning": "The VIN year code has multiple possible cycles; alternatives retain each year's associated facts."
+  },
+  "catalogue": {
+    "market": "CH",
+    "warnings": [
+      "Matching Swiss type-approval templates identify possible approved types, not this vehicle's actual configuration or market.",
+      "Keep each approval's specifications together; remarks may further restrict variants. Approval dates are not model years or build dates."
+    ],
+    "assumptionCode": "CATALOGUE_MEMBERSHIP_UNCONFIRMED"
+  },
+  "statuses": {
+    "KNOWN": "RESOLVED",
+    "NEEDS_CONTEXT": "SUGGESTED",
+    "UNKNOWN": "UNKNOWN",
+    "AMBIGUOUS": "AMBIGUOUS"
+  }
+}

@@ -268,6 +268,7 @@ def refresh(apply=False):
         pins["identityVersion"] = version
         write(ROOT / "tools/source-pins.json", pins)
         command(sys.executable, "tools/identity.py", "--generate")
+        command(sys.executable, "tools/compile_dataset.py", "--generate")
         command(sys.executable, "tools/dataset.py", "--update-runtime")
         report["datasetVersion"] = version
         return report

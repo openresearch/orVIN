@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <RollForward>Major</RollForward>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <ItemGroup Condition="'$(UsePackageVersion)' == ''">
+    <ProjectReference Include="../ORvin/ORvin.csproj" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(UsePackageVersion)' != ''">
+    <PackageReference Include="OpenResearch.ORvin" Version="$(UsePackageVersion)" />
+  </ItemGroup>
+</Project>

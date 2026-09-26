@@ -19,13 +19,13 @@ for changes to these areas; incomplete rights assessments stay research-only.
    retrieval date, and relevant section, row, page or API fields.
 4. A concrete reuse basis and link to the source's applicable terms. An open code repository,
    public download or citation alone does not establish redistribution rights.
-5. Behavior fixtures in the relevant shared fixture file, plus focused Python and Java
+5. Behavior fixtures in the relevant shared fixture file, plus focused Python, Java and .NET
    tests for new matching behavior such as ambiguity or scope restrictions. Prefer
    synthetic VINs; real VINs require the publication permission specified in `AGENTS.md`.
    Expected values must come from reviewed
    evidence; never generate a regression's expected output from the implementation being tested.
 6. Required source credits, terms links and modification notices in source metadata,
-   `data/LICENSE.md`, both library distributions, and short/long output where applicable.
+   `data/LICENSE.md`, all library distributions, and short/long output where applicable.
 
 Retain source files only where their redistribution is permitted. Otherwise retain precise
 references and any permitted supporting extracts. Do not upload customer VINs, private vehicle
@@ -70,7 +70,8 @@ python3 -m venv .venv
 .venv/bin/python tools/dataset.py
 PYTHONPATH=libs/python python3 -m unittest discover -s libs/python/tests
 (cd libs/java && ./mvnw -Dpython=../../.venv/bin/python verify)
-python3 tools/check_parity.py
+dotnet run --project libs/dotnet/ORvin.Checks -c Release
+python3 tools/check_parity.py --dotnet libs/dotnet/ORvin.Checks/bin/Release/net8.0/ORvin.Checks.dll
 git diff --check
 ```
 
@@ -90,11 +91,11 @@ See [data/LICENSE.md](data/LICENSE.md). Do not apply CC0 to someone else's prote
 KBA has separate canonical data and terms in `data/kba/`; see [import instructions](docs/kba-data.md).
 Keep leading zeroes, model labels, nulls, statistical markers and reference dates. Retain all
 candidates for repeated HSN/TSN pairs; never turn a missing entry into evidence of invalidity.
-Use reviewed KBA rows in `data/kba/fixtures.json`; those same expectations run in both libraries.
+Use reviewed KBA rows in `data/kba/fixtures.json`; those expectations participate in complete cross-language parity checks.
 Synthetic tests cover ambiguity and missing counts even when the current source has unique keys.
 
-Update Python and Java together when changing lookup semantics. `tools/check_parity.py` compares
+Update Python, Java and .NET together when changing lookup semantics. `tools/check_parity.py` compares
 complete public results, including unknown fields and provenance. After intentional data edits,
-run `.venv/bin/python tools/dataset.py --update-runtime` to refresh the derived Java resources
+run `.venv/bin/python tools/dataset.py --update-runtime` to refresh the shared compiled runtime bundle
 and include the diff. The source snapshot/table is shared; do not add separate editable copies
-to either language directory. Python packaging copies the shared data only into build artifacts.
+to any language directory. Python packaging copies the shared data only into build artifacts.
