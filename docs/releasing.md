@@ -11,6 +11,12 @@ are `0.3.0-SNAPSHOT`, `0.3.0.dev0` and `0.3.0-dev`; the workflow stamps build co
 including Java package publication and all eight GitHub release assets.
 [Version 0.2.1](https://github.com/openresearch/orvin/releases/tag/v0.2.1) was published on
 2026-09-26; its [release workflow passed](https://github.com/openresearch/orvin/actions/runs/36231490657).
+[Version 0.3.0](https://github.com/openresearch/orvin/releases/tag/v0.3.0) was published on
+2026-09-26 from commit `7947e498e98c76b3b7192e221edfd926f44d1b6a`; its
+[release workflow passed](https://github.com/openresearch/orvin/actions/runs/36239609402).
+It publishes Java and NuGet packages to GitHub Packages and all nine GitHub Release assets.
+The runtime JAR, Python wheel and NuGet package are each approximately 35 MB and contain
+only the shared compiled runtime dataset, source metadata and required notices.
 Pushing a code/CI branch does not publish packages.
 
 ## GitHub Actions
@@ -64,8 +70,8 @@ distributions also include data. Dataset versions/hashes remain independent of l
 
 ## Use Java from Gradle or Maven
 
-These examples consume the published **0.2.1** release. Both build systems consume
-the same `com.openresearch:orvin:0.2.1` artifact.
+These examples consume the published **0.3.0** release. Both build systems consume
+the same `com.openresearch:orvin:0.3.0` artifact.
 
 GitHub requires authentication for Maven/Gradle packages, including public ones. Set
 `ORVIN_GITHUB_USER` to your username and `ORVIN_GITHUB_TOKEN` to a classic PAT with
@@ -88,7 +94,7 @@ repositories {
     }
 }
 dependencies {
-    implementation("com.openresearch:orvin:0.2.1")
+    implementation("com.openresearch:orvin:0.3.0")
 }
 ```
 
@@ -106,7 +112,7 @@ Maven `pom.xml`:
   <dependency>
     <groupId>com.openresearch</groupId>
     <artifactId>orvin</artifactId>
-    <version>0.2.1</version>
+    <version>0.3.0</version>
   </dependency>
 </dependencies>
 ```
@@ -133,7 +139,7 @@ Consuming the JAR needs Java 17+, without Python, a database or runtime network 
 The wheel/sdist are GitHub Release assets, **not PyPI publications**. After publication:
 
 ```sh
-python -m pip install https://github.com/openresearch/orvin/releases/download/v0.2.1/orvin-0.2.1-py3-none-any.whl
+python -m pip install https://github.com/openresearch/orvin/releases/download/v0.3.0/orvin-0.3.0-py3-none-any.whl
 ```
 
 Alternatively download the wheel, verify `SHA256SUMS`, and install it locally. Python 3.10+
@@ -159,7 +165,7 @@ v0.3.0` changes its Maven/Python/NuGet versions, then follow the workflow's buil
 Review source authority, attribution and dataset diffs with data updates. Repository protection
 is separate organization configuration; CODEOWNERS/templates alone do not enforce review.
 
-## .NET packages (next release)
+## .NET packages
 
 `libs/dotnet/orVIN` targets .NET 8+. CI tests .NET 8 on Windows and .NET 10 on Linux,
 checks package consumers, and compares full short/long output with Python and Java.
@@ -171,7 +177,7 @@ and Python, tests the installed package, attaches its `.nupkg` and checksums to 
 GitHub Release, and publishes to the existing GitHub Packages owner:
 `https://nuget.pkg.github.com/openresearch/index.json`.
 Configure that feed with your normal GitHub package-read credentials, then use
-`dotnet add package OpenResearch.orVIN --version <released-version>`. A downloaded
+`dotnet add package OpenResearch.orVIN --version 0.3.0`. A downloaded
 release `.nupkg` can instead be installed from a local NuGet source. This workflow
 does not publish to nuget.org.
 

@@ -38,7 +38,7 @@ See the [European coverage report](docs/european-coverage.md) and
 Requires **Python 3.10+**. Install the released package from GitHub:
 
 ```sh
-python3 -m pip install https://github.com/openresearch/orvin/releases/download/v0.2.1/orvin-0.2.1-py3-none-any.whl
+python3 -m pip install https://github.com/openresearch/orvin/releases/download/v0.3.0/orvin-0.3.0-py3-none-any.whl
 ```
 
 ```python
@@ -74,11 +74,11 @@ Requires **Java 17+**. Configure the GitHub Packages repository using the
 <dependency>
   <groupId>com.openresearch</groupId>
   <artifactId>orvin</artifactId>
-  <version>0.2.1</version>
+  <version>0.3.0</version>
 </dependency>
 ```
 
-For Gradle: `implementation("com.openresearch:orvin:0.2.1")`.
+For Gradle: `implementation("com.openresearch:orvin:0.3.0")`.
 GitHub Packages requires authentication, including for public packages.
 
 ```java
@@ -94,8 +94,11 @@ The JAR includes the same dataset as Python. It needs no Python installation at 
 
 ## .NET / C#
 
-The next release adds **`OpenResearch.orVIN` for .NET 8+**. Build the NuGet package
-from this checkout with `dotnet pack libs/dotnet/orVIN -c Release`.
+Requires **.NET 8+**. Configure the [GitHub Packages NuGet feed](docs/releasing.md#net-packages), then install:
+
+```sh
+dotnet add package OpenResearch.orVIN --version 0.3.0
+```
 
 ```csharp
 using OpenResearch.orVIN;

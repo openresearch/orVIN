@@ -20,7 +20,10 @@ var germanType = HsnTsnLookup.Bundled().LookupVehicle("0603", "BMT");
 `SUGGESTED`, with its source market and attribution; unknown values stay null.
 Model year and production year are distinct.
 
-Build: `dotnet pack libs/dotnet/orVIN -c Release`. Install the generated `.nupkg`
-from a local NuGet source, or use the release package when published. Dataset
-rights and source notices are embedded and included as `DATA-LICENSE.md` and
+Configure the [GitHub Packages feed](../../docs/releasing.md#net-packages), then
+install with `dotnet add package OpenResearch.orVIN --version 0.3.0`. You can also
+download the `.nupkg` from the GitHub Release and use a local NuGet source.
+Build from a checkout with `dotnet pack libs/dotnet/orVIN -c Release`.
+
+Dataset rights and source notices are embedded and included as `DATA-LICENSE.md` and
 `NOTICE`; the code license does not relicense upstream data.

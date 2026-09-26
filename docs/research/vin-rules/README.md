@@ -41,14 +41,14 @@ implementation work.
 
 ## Bulk foundation and runtime boundary
 
-Both libraries now use 12,998 usable WMIs, covering 11,604 manufacturer entities and 14,169
+All three libraries use 12,998 usable WMIs, covering 11,604 manufacturer entities and 14,169
 WMI/brand associations from the
 [September 2026 NHTSA PostgreSQL snapshot](https://vpic.nhtsa.dot.gov/downloads/vPICList_lite_2026_09.plain.zip).
-The **complete original ZIP** is embedded in both Python and Java distribution
-artifacts. The generated WMI data gives the libraries broad offline manufacturer,
-make-association and vehicle-category evidence. The original archive preserves
-the complete source snapshot for further work; runtime does not require a JDK
-for Python, PostgreSQL or an online VIN request.
+Since 0.3.0, Python, Java and .NET packages embed the common compiled runtime
+bundle. The generated WMI data gives the libraries broad offline manufacturer,
+make-association and vehicle-category evidence. The complete original ZIP remains
+in the repository for traceability and further work, outside runtime packages.
+Runtime does not require a JDK for Python/.NET, PostgreSQL or an online VIN request.
 
 **The full rich vPIC decoder is not implemented.** The development libraries now
 execute scoped public patterns, year alternatives, numeric captures, model/make and

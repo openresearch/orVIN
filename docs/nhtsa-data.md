@@ -1,7 +1,7 @@
 # NHTSA bulk data
 
 All three libraries use the same compiled WMI dataset. The complete original source ZIP
-is retained in the repository; from the next release, packages contain runtime projections only.
+is retained in the repository; packages from 0.3.0 contain runtime projections only.
 Consumers need neither a database server nor network access. The source is NHTSA's
 [September 2026 standalone vPIC database](https://vpic.nhtsa.dot.gov/downloads/vPICList_lite_2026_09.plain.zip),
 listed on the [official download page](https://vpic.nhtsa.dot.gov/downloads/).

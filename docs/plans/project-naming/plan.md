@@ -18,3 +18,7 @@ tests, 44 tooling tests, .NET behavioral checks, 4,866 Java/Python and 3,244 .NE
 parity comparisons. The fresh JAR/wheel have identical runtime data. API lint and
 15 tests passed; the browser preview shows the renamed wordmark/title/footer.
 GitHub already uses `orVIN`; the GitLab display name was updated to `orVIN-api`.
+
+Released in 0.3.0 and verified on the public API on 2026-09-26. The page tagline
+and wordmark dot were removed. The daily updater accepts GitHub owner/repository
+casing changes while preserving exact host, release-tag, filename and checksum checks.

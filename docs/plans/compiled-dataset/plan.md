@@ -1,7 +1,7 @@
 # Compiled dataset and generic runtimes
 
-Status: implemented and locally verified on `codex/compiled-runtime`, authorized on
-2026-09-26. Not yet released. Initial audit based on `main` at `b2b8ac8`.
+Status: implemented, merged to `main` and published as **0.3.0** on 2026-09-26.
+Initial audit based on `main` at `b2b8ac8`. The API rollout is recorded below.
 
 ## Objective
 
@@ -224,18 +224,18 @@ consensus mechanics remain in each runtime; their shared invariants are document
 
 .NET uses namespace `OpenResearch.orVIN`, targets .NET 8+, and packages embedded
 resources as `OpenResearch.orVIN`. CI covers all three languages, installed NuGet
-consumption on Windows, byte checks, parity and tagged release publication. No
-NuGet release has been published yet.
+consumption on Windows, byte checks, parity and tagged release publication.
+Version 0.3.0 is the first .NET release, published to GitHub Packages and as a release asset.
 
 Cross-market fallback works for any pair of two-letter country codes. Supported
 claims and conflicts block foreign fallback. Foreign values remain suggestions,
 with the requested/source markets, lineage and notices. This does not expand any
 rule's reviewed scope. Synthetic JP/BR/NZ rules exercise the generic operation.
 
-The separate `orvin-api` branch requires a country for VIN requests, defaults only
+The separate `orvin-api` application requires a country for VIN requests, defaults only
 from an explicit browser-locale region, and shows flag plus two-letter code before
-the query. HSN/TSN disables the country field. The release dependency remains pinned
-until the existing daily updater adopts the next stable orVIN release.
+the query. HSN/TSN disables the country field. The existing daily updater has adopted
+the stable 0.3.0 wheel with its verified SHA-256 and passed all API tests.
 
 ## Local validation and rollout
 
@@ -258,7 +258,22 @@ until the existing daily updater adopts the next stable orVIN release.
 - API ruff checks, 15 tests including real Valkey, a container startup/contract smoke
   check and a local browser check passed. This records local work, not deployment.
 
-Remaining rollout: review the migration, run hosted CI, publish a stable release,
-then let the API's daily dependency update build and deploy that release. No source
-refresh, new manufacturer rule, production deployment or release tag is part of
-this architectural change itself.
+## Release and deployment
+
+The user authorized committing, pushing and deploying all completed work on
+2026-09-26. Main CI passed at `7947e498e98c76b3b7192e221edfd926f44d1b6a`;
+the immutable `v0.3.0` tag references that commit. The
+[release workflow](https://github.com/openresearch/orvin/actions/runs/36239609402)
+passed the full matrix again, validated the versioned artifacts and published
+the Java/NuGet packages and all nine GitHub Release assets.
+
+The API's existing daily update schedule was run immediately. Its
+[updater pipeline](https://gitlab.openresearch.com/dispoxyz/code/orvin-api/-/pipelines/143168)
+validated the release checksum and API tests, committed the 0.3.0 pin, and triggered
+the successful [image pipeline](https://gitlab.openresearch.com/dispoxyz/code/orvin-api/-/pipelines/143169).
+Flux commit `5f705ab9` selected immutable API image
+`main-2026-09-26-11-50-59-20`. Production `/healthz` returned orVIN 0.3.0;
+live synthetic VIN/HSN lookups, short/long extension, source credits and missing-market
+HTTP 400 checks passed. The browser showed the required country selector and updated
+branding. This release adds no new manufacturer rules or upstream data refresh;
+the KBA WMI assessment remains research.
