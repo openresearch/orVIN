@@ -1,7 +1,7 @@
 using System.Text.RegularExpressions;
-using static OpenResearch.ORvin.J;
+using static OpenResearch.orVIN.J;
 
-namespace OpenResearch.ORvin;
+namespace OpenResearch.orVIN;
 
 /// <summary>Offline decoding from the versioned, embedded runtime bundle.</summary>
 public sealed class VinDecoder

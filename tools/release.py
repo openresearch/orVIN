@@ -26,7 +26,7 @@ def version_from_tag(tag):
 
 def prepare(tag, root=ROOT):
     version = version_from_tag(tag)
-    dotnet_path = root / "libs/dotnet/ORvin/ORvin.csproj"
+    dotnet_path = root / "libs/dotnet/orVIN/orVIN.csproj"
     dotnet = dotnet_path.read_text(encoding="utf-8")
     dotnet, count = re.subn(r"<Version>[^<]+</Version>", "<Version>" + version + "</Version>", dotnet)
     if count != 1:
@@ -74,7 +74,7 @@ def check_nuget_metadata(content, version):
     # NuGet chooses the schema namespace for the metadata it emits; it is not fixed
     # to one SDK version. Identity and version still must match the release exactly.
     metadata = ET.fromstring(content)
-    if (metadata.findtext("{*}metadata/{*}id") != "OpenResearch.ORvin"
+    if (metadata.findtext("{*}metadata/{*}id") != "OpenResearch.orVIN"
             or metadata.findtext("{*}metadata/{*}version") != version):
         raise ValueError("NuGet artifact name/version differs from release tag")
 
@@ -88,13 +88,13 @@ def bundle(tag, commit, root=ROOT):
     jars = [java / "target" / f"orvin-{version}{suffix}.jar" for suffix in ("", "-sources", "-javadoc")]
     wheel = python / f"orvin-{version}-py3-none-any.whl"
     sdist = python / f"orvin-{version}.tar.gz"
-    nuget = root / "libs/dotnet/dist" / f"OpenResearch.ORvin.{version}.nupkg"
+    nuget = root / "libs/dotnet/dist" / f"OpenResearch.orVIN.{version}.nupkg"
     pom = java / "pom.xml"
     for path in [*jars, wheel, sdist, nuget, pom]:
         if not path.is_file():
             raise ValueError(f"Release artifact missing: {path.name}")
     with zipfile.ZipFile(nuget) as archive:
-        check_nuget_metadata(archive.read("OpenResearch.ORvin.nuspec"), version)
+        check_nuget_metadata(archive.read("OpenResearch.orVIN.nuspec"), version)
     check_pom(pom.read_bytes(), version)
     with zipfile.ZipFile(jars[0]) as archive:
         check_pom(archive.read("META-INF/maven/com.openresearch/orvin/pom.xml"), version)
@@ -115,7 +115,7 @@ def bundle(tag, commit, root=ROOT):
     decoding = json.loads((root / "data/decoding/metadata.json").read_text(encoding="utf-8"))
     manifest = {"version": version, "tag": tag, "commit": commit,
                 "javaCoordinates": "com.openresearch:orvin:" + version,
-                "nugetPackage": "OpenResearch.ORvin", "runtimeFormat": "orvin-runtime-1",
+                "nugetPackage": "OpenResearch.orVIN", "runtimeFormat": "orvin-runtime-1",
                 "runtimeManifestSha256": sha256(root / "data/generated/manifest.tsv"),
                 "wmiDatasetVersion": dataset["version"], "wmiDatasetSha256": sha256(root / "data/dataset.json"),
                 "kbaDatasetVersion": kba["version"], "kbaTableSha256": kba["sha256"],

@@ -1,4 +1,4 @@
-ORvin
+orVIN
 Copyright 2026 OPENRESEARCH contributors
 
 Swiss type-approval factual data: Swiss Federal Roads Office (ASTRA),
@@ -23,7 +23,7 @@ compiled runtime projections, provenance and notices. Each active source is
 identified in the compiled catalogues and repository data/dataset.json.
 The original ZIP is unmodified. Runtime projection joins WMI/make associations, normalizes
 label whitespace, uppercases brands and records exclusions; see data/nhtsa/metadata.json.
-These upstream materials are not relicensed under ORvin's Apache or CC0 licenses.
+These upstream materials are not relicensed under orVIN's Apache or CC0 licenses.
 NHTSA's published-information reuse statement permits distribution and copying:
 https://www.nhtsa.gov/about-nhtsa/terms-use
 No endorsement by NHTSA or any vehicle manufacturer is implied.
@@ -32,7 +32,7 @@ German HSN/TSN data: Kraftfahrt-Bundesamt (KBA), FZ Hersteller Handelsnamen Kfz.
 Reference date 2026-01-01; retrieved 2026-09-25. License: dl-de/by-2-0.
 https://www.govdata.de/dl-de/by-2-0
 https://data.gov.de/suche/daten/fz-hersteller-handelsnamen-kfz?ids=c1e3a0b6-0d34-4e99-8181-91bdfb639208
-Modified for ORvin: selected one reference date, renamed columns, sorted rows and
+Modified for orVIN: selected one reference date, renamed columns, sorted rows and
 represented nulls as \N; original labels, counts and statistical markers are unchanged.
 See data/kba/metadata.json and data/LICENSE.md for provenance and attribution.
 No endorsement by KBA is implied.

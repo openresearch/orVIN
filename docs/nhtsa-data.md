@@ -9,7 +9,7 @@ listed on the [official download page](https://vpic.nhtsa.dot.gov/downloads/).
 | Item | Pinned value |
 | --- | --- |
 | Publication / retrieval | 2026-09-19 / 2026-09-25 |
-| ORvin WMI dataset version | `2026.09.25.2` |
+| orVIN WMI dataset version | `2026.09.25.2` |
 | Source ZIP | 76,201,016 bytes |
 | SHA-256 | `1ee4a1e22526a606b492ce4ab301894465afbf43dc00946df6d503c3102d5911` |
 | Complete source | 97 tables, including 13,001 WMIs and 1,678,690 VIN patterns; 15 SQL functions |
@@ -108,4 +108,4 @@ Java classes/resources from the main JAR and tests samples across the WMI and KB
 The wheel is also installed and exercised outside the checkout in CI.
 
 Preserve [upstream notices](../data/LICENSE.md). NHTSA data, source SQL and manufacturer documents
-are not covered by ORvin's CC0 dedication or Apache code license.
+are not covered by orVIN's CC0 dedication or Apache code license.

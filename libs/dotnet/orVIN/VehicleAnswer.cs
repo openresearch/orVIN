@@ -1,6 +1,6 @@
 using System.Text.Json.Nodes;
 
-namespace OpenResearch.ORvin;
+namespace OpenResearch.orVIN;
 
 /// <summary>One decision with independent, mutable JSON projections. Long extends short with details.</summary>
 public sealed class VehicleAnswer

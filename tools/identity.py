@@ -41,16 +41,16 @@ def build():
     sources[kba_id] = {**kba, "id": kba_id, "edition": kba["referenceDate"],
         "section": "FeatureServer layer 0; sourceObjectId", "reuseBasis": kba["license"], "termsUrl": kba["licenseUrl"],
         "archiveSha256": kba["snapshotSha256"], "evidencePath": "kba/metadata.json",
-        "modifications": kba["modifications"] + " Normalized output labels by ORvin; original labels retained in long evidence."}
+        "modifications": kba["modifications"] + " Normalized output labels by orVIN; original labels retained in long evidence."}
     for sid, source in sources.items():
         if sid == nhtsa.SOURCE_ID:
             source.update(license="LicenseRef-NHTSA-Public-Information", termsUrl="https://www.nhtsa.gov/about-nhtsa/terms-use",
                           modifications="Selected and normalized factual associations from the retained vPIC snapshot.")
         elif sid == astra["source"]["id"]:
             source.update(termsUrl="https://www.fedlex.admin.ch/eli/cc/2023/682/de",
-                          modifications="Passenger approvals filtered; VIN masks interpreted conservatively; labels normalized by ORvin.")
+                          modifications="Passenger approvals filtered; VIN masks interpreted conservatively; labels normalized by orVIN.")
         elif sid != kba_id:
-            source["modifications"] = "Selected factual associations structured and combined as scoped ORvin rules; labels normalized. Original documents not redistributed."
+            source["modifications"] = "Selected factual associations structured and combined as scoped orVIN rules; labels normalized. Original documents not redistributed."
     makes, models, make_ids = {}, {}, {}
     for row in sorted(tables["make"], key=lambda r: int(r["id"])):
         label = key(row["name"])
@@ -80,7 +80,7 @@ def build():
         if row[field] != expected:
             raise ValueError("Reviewed KBA normalization label changed; manual review required")
         return "sourceObjectId=" + row["sourceObjectId"] + "; " + field + "=" + expected
-    # Explicit aliases supported by the retained OEM/KBA marque labels. Display casing is ORvin policy.
+    # Explicit aliases supported by the retained OEM/KBA marque labels. Display casing is orVIN policy.
     def binding_source(binding):
         if "kba" in binding:
             item = binding["kba"]
@@ -136,7 +136,7 @@ if __name__ == "__main__":
         content = build()
         (directory / "index.tsv").write_bytes(content)
         (directory / "metadata.json").write_text(json.dumps({"version": VERSION, "sha256": hashlib.sha256(content).hexdigest(),
-            "policy": "Exact make-scoped labels only; ASCII case comparison and explicit sourced aliases. No fuzzy model-family inference. Canonical display names are ORvin policy.",
+            "policy": "Exact make-scoped labels only; ASCII case comparison and explicit sourced aliases. No fuzzy model-family inference. Canonical display names are orVIN policy.",
             "reviewedOn": "2026-09-26", "generator": "tools/identity.py",
             "fixturesSha256": hashlib.sha256((directory / "fixtures.json").read_bytes()).hexdigest()}, indent=2) + "\n")
     else:

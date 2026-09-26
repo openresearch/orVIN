@@ -278,7 +278,7 @@ class _Builder:
             "edition": source.get("edition") or source.get("publicationVersion"), "license": source.get("license"),
             "termsUrl": terms, "reuseBasis": source.get("reuseBasis"),
             "attribution": str(source.get("publisher", "")) + " — " + str(source.get("title", "")),
-            "modifications": source.get("modifications") or "Source labels normalized by ORvin; original facts retained in evidence.",
+            "modifications": source.get("modifications") or "Source labels normalized by orVIN; original facts retained in evidence.",
             "fields": sorted(fields)}
 
     def finish(self):
@@ -333,7 +333,7 @@ class _Builder:
                 record = item["record"]
                 rule = {key: record[key] for key in ("sourceId", "ruleId", "schemaId", "keys", "kind")}
                 rules["rule:" + _id(rule)] = rule
-        details = {"meta": {"library": "ORvin", "policyVersion": policy().get("version"), "datasets": datasets}, "input": input_data,
+        details = {"meta": {"library": "orVIN", "policyVersion": policy().get("version"), "datasets": datasets}, "input": input_data,
             "decisions": self.decisions, "specifications": specifications, "alternatives": self.alternatives,
             "evidence": dict(sorted(self.evidence.items())), "provenance": {"rules": dict(sorted(rules.items())), "variables": variables, "normalizationRules": dict(sorted(self.normalizations.items())),
                 "sourceDetails": source_details,

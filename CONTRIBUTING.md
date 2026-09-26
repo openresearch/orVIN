@@ -70,8 +70,8 @@ python3 -m venv .venv
 .venv/bin/python tools/dataset.py
 PYTHONPATH=libs/python python3 -m unittest discover -s libs/python/tests
 (cd libs/java && ./mvnw -Dpython=../../.venv/bin/python verify)
-dotnet run --project libs/dotnet/ORvin.Checks -c Release
-python3 tools/check_parity.py --dotnet libs/dotnet/ORvin.Checks/bin/Release/net8.0/ORvin.Checks.dll
+dotnet run --project libs/dotnet/orVIN.Checks -c Release
+python3 tools/check_parity.py --dotnet libs/dotnet/orVIN.Checks/bin/Release/net8.0/orVIN.Checks.dll
 git diff --check
 ```
 

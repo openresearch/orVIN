@@ -1,12 +1,14 @@
-# ORvin contributor instructions
+# orVIN contributor instructions
 
-ORvin is a standalone project. Keep the language-neutral dataset in `data/`, Python
+orVIN is a standalone project. Keep the language-neutral dataset in `data/`, Python
 in `libs/python/`, Java (including Maven configuration) in `libs/java/`, and C#
 in `libs/dotnet/`.
 All libraries must consume the same versioned data and preserve equivalent results.
 
-The project/library display name is **ORvin** (exact casing). Keep package names,
-Maven artifact IDs, CLI commands and repository paths lowercase `orvin`.
+The project/library display name is **orVIN** (exact casing). Keep Python/Java
+package names, Maven artifact IDs and CLI commands lowercase `orvin`. The .NET
+package and namespace use `OpenResearch.orVIN`; its projects live in `libs/dotnet/orVIN`
+and `libs/dotnet/orVIN.Checks`. Preserve existing lowercase checkout paths and URLs.
 
 This file is the canonical contributor policy for people and coding agents.
 Read [CONTRIBUTING.md](CONTRIBUTING.md) for the contribution workflow and
@@ -15,9 +17,9 @@ Read [CONTRIBUTING.md](CONTRIBUTING.md) for the contribution workflow and
 
 ## Plans, research and documentation
 
-- Keep ORvin documentation in this repository's `docs/`. These conventions apply
+- Keep orVIN documentation in this repository's `docs/`. These conventions apply
   to standalone checkouts; do not depend on a parent repository's instructions or
-  store ORvin plans and research in another project's documentation tree.
+  store orVIN plans and research in another project's documentation tree.
 - Store new implementation plans and design notes under
   `docs/plans/<feature-or-initiative>/`. Keep cross-cutting plans together across
   the dataset, tooling, Python, Java, .NET and release workflows. Continue updating
@@ -84,7 +86,7 @@ Read [CONTRIBUTING.md](CONTRIBUTING.md) for the contribution workflow and
 
 ## Licenses, redistribution and attribution
 
-- Separate ORvin's code/documentation license (Apache-2.0), the dedication of
+- Separate orVIN's code/documentation license (Apache-2.0), the dedication of
   original dataset work (CC0-1.0 only to the extent the contributor owns the rights),
   and each upstream source's terms. Imported material keeps its own terms; neither
   repository license automatically applies to it. Preserve third-party notices.

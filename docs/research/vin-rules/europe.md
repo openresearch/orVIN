@@ -68,7 +68,7 @@ supplies only 5=2005 and P=Mosel/W=Wolfsburg. Both documents are Volkswagen-auth
 but hosted by third-party mirrors. The North American chart's 1K=new Jetta model
 mapping must not be applied to European ZZZ layouts.
 
-ORvin combines these sources only for `WVWZZZ1KZ5[PW]` and a numeric serial.
+orVIN combines these sources only for `WVWZZZ1KZ5[PW]` and a numeric serial.
 Model/family and year/plant fields have separate source references. This is a
 bounded synthesis, not a claim that one document provides a universal decoder.
 The maintenance PDF was inspected through indexed text; its direct download

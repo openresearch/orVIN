@@ -270,7 +270,7 @@ final class AnswerBuilder {
                 "edition", first(source, "edition", "publicationVersion"), "license", source.get("license"),
                 "termsUrl", first(source, "termsUrl", "licenseUrl", "reuseUrl"), "reuseBasis", source.get("reuseBasis"),
                 "attribution", source.getOrDefault("publisher", "") + " — " + source.getOrDefault("title", ""),
-                "modifications", modifications == null || modifications.equals("") ? "Source labels normalized by ORvin; original facts retained in evidence." : modifications,
+                "modifications", modifications == null || modifications.equals("") ? "Source labels normalized by orVIN; original facts retained in evidence." : modifications,
                 "fields", List.copyOf(new TreeSet<>(fields)));
     }
     private VehicleAnswer finish() {
@@ -338,7 +338,7 @@ final class AnswerBuilder {
             for (String key : List.of("sourceId", "ruleId", "schemaId", "keys", "kind")) rule.put(key, record.get(key));
             rules.put("rule:" + IdentityCatalogue.id(rule), rule);
         }
-        Map<String, Object> details = map("meta", map("library", "ORvin", "policyVersion", POLICY.text("version"), "datasets", datasets), "input", input,
+        Map<String, Object> details = map("meta", map("library", "orVIN", "policyVersion", POLICY.text("version"), "datasets", datasets), "input", input,
                 "decisions", decisions, "specifications", specifications, "alternatives", alternatives, "evidence", evidence,
                 "provenance", map("rules", rules, "variables", variables, "normalizationRules", normalizations, "sourceDetails", sourceDetails,
                         "additionalSources", allSources.stream().filter(sid -> !common.containsKey(sid)).map(sid -> credit(sid, Set.of("/details/evidence"))).toList()),

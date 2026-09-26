@@ -99,7 +99,7 @@ For every source here, retain publisher, exact URL, document revision, retrieval
 date, market/model/year constraints and evidence location. Redistribution
 permission for OEM-hosted manuals and wholesale OEM tables remains
 **not established**. This report records small factual summaries and links;
-it does not vendor the documents or transplant their tables into ORvin.
+it does not vendor the documents or transplant their tables into orVIN.
 
 ## Recommended order
 

@@ -1,4 +1,4 @@
-# ORvin for Python
+# orVIN for Python
 
 `VinDecoder.bundled().decode(vin)["typeApprovals"]` provides sourced Swiss
 type-approval candidates, including original type names, engine/power alternatives
@@ -9,7 +9,7 @@ bundled for offline use.
 Offline VIN manufacturer and German HSN/TSN lookup. Python 3.10+, no runtime dependencies.
 The next-release wheel includes the same compiled dataset used by Java and .NET:
 12,998 usable NHTSA WMIs, 63,260 KBA HSN/TSN records and 122,273 Swiss approval rows.
-Original source archives and test fixtures stay in the repository. ORvin uses 1,343,387 public patterns to decode model, year,
+Original source archives and test fixtures stay in the repository. orVIN uses 1,343,387 public patterns to decode model, year,
 factory and other vehicle fields with explicit scope/provenance. Selected European Tesla
 Model Y rules distinguish production year from model year. Runtime loads required compressed
 shards through bounded caches and never executes SQL or uses a database server.
@@ -77,5 +77,5 @@ attribution and assumptions. Unknown/unreviewed model-family mappings stay null;
 source-specific candidate configurations and remarks remain in the long evidence.
 
 Code: Apache-2.0. Bundled KBA data: dl-de/by-2-0. NHTSA data retains its source notice;
-ORvin-owned data contributions alone are CC0. Preserve the bundled `_data/LICENSE.md`,
+orVIN-owned data contributions alone are CC0. Preserve the bundled `_data/LICENSE.md`,
 `_data/CODE-NOTICE`, source records and license links when redistributing data.

@@ -1,7 +1,7 @@
 using System.Text.RegularExpressions;
-using static OpenResearch.ORvin.J;
+using static OpenResearch.orVIN.J;
 
-namespace OpenResearch.ORvin;
+namespace OpenResearch.orVIN;
 
 /// <summary>Exact lookup of independently supplied German type codes, preserving leading zeros.</summary>
 public sealed class HsnTsnLookup

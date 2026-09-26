@@ -3,7 +3,7 @@ using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace OpenResearch.ORvin;
+namespace OpenResearch.orVIN;
 
 internal sealed class Bundle
 {
@@ -14,13 +14,13 @@ internal sealed class Bundle
     private readonly Dictionary<string, string> policy = new();
     private Bundle()
     {
-        names = assembly.GetManifestResourceNames().Where(n => n.StartsWith("ORvin.Data.", StringComparison.Ordinal))
+        names = assembly.GetManifestResourceNames().Where(n => n.StartsWith("orVIN.Data.", StringComparison.Ordinal))
             .ToDictionary(n => n[11..].Replace('\\', '/'), n => n);
         var lines = Encoding.UTF8.GetString(Raw("manifest.tsv")).Split('\n', StringSplitOptions.RemoveEmptyEntries);
         var version = lines[0].Split('\t');
         string[] supported = ["patterns", "conditional-literals", "year-cycles", "relations", "decimal-scaling", "catalogue-consensus", "cross-market"];
         if (version[1] != "orvin-runtime-1" || version[2].Split(',').Except(supported).Any())
-            throw new InvalidDataException("Unsupported ORvin runtime format/capabilities");
+            throw new InvalidDataException("Unsupported orVIN runtime format/capabilities");
         foreach (var line in lines) { var c = line.Split('\t'); if (c[0] == "F") hashes.Add(c[1], c[2]); }
         foreach (var c in Rows("policy.tsv")) policy.Add(c[0], c[1] == "S" ? J.Decode(c[2]) : c[2]);
     }

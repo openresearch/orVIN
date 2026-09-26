@@ -33,7 +33,7 @@ def write(path, value):
 
 
 def download(url, target, maximum):
-    request = Request(url, headers={"User-Agent": "ORvin structured-data refresh"})
+    request = Request(url, headers={"User-Agent": "orVIN structured-data refresh"})
     with urlopen(request, timeout=120) as response, target.open("wb") as output:
         if response.url.split("/", 3)[:3] != url.split("/", 3)[:3]:
             raise ValueError("Source redirected to another origin; review required")

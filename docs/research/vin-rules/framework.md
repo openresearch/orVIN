@@ -3,7 +3,7 @@
 Research date: 2026-09-25. This describes possible extensions, not additional implemented decoding.
 No customer VIN was sent to research services or added to fixtures.
 
-## What ORvin currently returns
+## What orVIN currently returns
 
 Both libraries now use 12,998 WMIs from the September 2026 NHTSA bulk snapshot, replacing the
 six-assignment seed. See [import and coverage](../../nhtsa-data.md). This does not establish

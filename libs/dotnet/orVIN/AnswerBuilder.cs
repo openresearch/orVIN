@@ -1,6 +1,6 @@
-using static OpenResearch.ORvin.J;
+using static OpenResearch.orVIN.J;
 
-namespace OpenResearch.ORvin;
+namespace OpenResearch.orVIN;
 
 internal sealed class AnswerBuilder
 {
@@ -202,7 +202,7 @@ internal sealed class AnswerBuilder
         var s = sources[sid]; object? First(params string[] keys) => keys.Select(k => s.GetValueOrDefault(k)).FirstOrDefault(v => v is not null && Str(v) != "");
         return Map("id", sid, "publisher", s.GetValueOrDefault("publisher"), "title", s.GetValueOrDefault("title"), "url", s.GetValueOrDefault("url"),
             "edition", First("edition", "publicationVersion"), "license", s.GetValueOrDefault("license"), "termsUrl", First("termsUrl", "licenseUrl", "reuseUrl"), "reuseBasis", s.GetValueOrDefault("reuseBasis"),
-            "attribution", Str(s.GetValueOrDefault("publisher")) + " — " + Str(s.GetValueOrDefault("title")), "modifications", First("modifications") ?? "Source labels normalized by ORvin; original facts retained in evidence.", "fields", Sorted(fields));
+            "attribution", Str(s.GetValueOrDefault("publisher")) + " — " + Str(s.GetValueOrDefault("title")), "modifications", First("modifications") ?? "Source labels normalized by orVIN; original facts retained in evidence.", "fields", Sorted(fields));
     }
     private VehicleAnswer Finish()
     {
@@ -252,7 +252,7 @@ internal sealed class AnswerBuilder
         {
             var record = O(item, "record"); var rule = new[] { "sourceId", "ruleId", "schemaId", "keys", "kind" }.ToDictionary(k => k, k => record[k]); rules["rule:" + Id(rule)] = rule;
         }
-        var details = Map("meta", Map("library", "ORvin", "policyVersion", policy.Text("version"), "datasets", datasets), "input", input,
+        var details = Map("meta", Map("library", "orVIN", "policyVersion", policy.Text("version"), "datasets", datasets), "input", input,
             "decisions", decisions.ToDictionary(p => p.Key, p => (object?)p.Value), "specifications", specifications, "alternatives", alternatives,
             "evidence", evidence.ToDictionary(p => p.Key, p => (object?)p.Value), "provenance", Map("rules", rules, "variables", variables,
             "normalizationRules", normalizations.ToDictionary(p => p.Key, p => (object?)p.Value), "sourceDetails", sourceDetails,

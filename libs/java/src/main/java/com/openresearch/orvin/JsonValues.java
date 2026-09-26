@@ -46,7 +46,7 @@ final class JsonValues {
                 for (RecordComponent component : value.getClass().getRecordComponents())
                     out.put(component.getName(), tree(component.getAccessor().invoke(value)));
             } catch (ReflectiveOperationException e) {
-                throw new IllegalStateException("Cannot read ORvin result record", e);
+                throw new IllegalStateException("Cannot read orVIN result record", e);
             }
             if (value instanceof VinDecoder.Result r) {
                 out.put("brand", tree(r.brand()));

@@ -1,9 +1,9 @@
-# ORvin
+# orVIN
 
 **An open VIN database. Offline decoding for Python, Java and .NET.**
 
 We’re building an open, traceable database for identifying vehicles from their VINs.
-ORvin brings public vehicle datasets and documented decoding rules together in one
+orVIN brings public vehicle datasets and documented decoding rules together in one
 language-neutral dataset, with Python, Java and .NET libraries that return consistent results.
 
 **[Try it online →](https://orvin.openresearch.com)** ·
@@ -80,11 +80,11 @@ The JAR includes the same dataset as Python. It needs no Python installation at 
 
 ## .NET / C#
 
-The next release adds **`OpenResearch.ORvin` for .NET 8+**. Build the NuGet package
-from this checkout with `dotnet pack libs/dotnet/ORvin -c Release`.
+The next release adds **`OpenResearch.orVIN` for .NET 8+**. Build the NuGet package
+from this checkout with `dotnet pack libs/dotnet/orVIN -c Release`.
 
 ```csharp
-using OpenResearch.ORvin;
+using OpenResearch.orVIN;
 
 var answer = VinDecoder.Bundled().DecodeVehicle(
     "WVWZZZ1KZ5P000001", new Context(market: "AT"));
@@ -98,7 +98,7 @@ package alongside the JAR and wheel.
 
 ## Data and coverage
 
-ORvin combines [NHTSA VIN data](docs/nhtsa-data.md),
+orVIN combines [NHTSA VIN data](docs/nhtsa-data.md),
 [German KBA type records](docs/kba-data.md),
 [Swiss ASTRA type approvals](docs/research/astra-review.md) and reviewed manufacturer-specific rules.
 The language-neutral files in [`data/`](data/) can also be used independently of the libraries.

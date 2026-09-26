@@ -54,7 +54,7 @@ Observed with synthetic specimens in the current checkout:
 | Reviewed European Tesla Model Y | TESLA, Model Y; model year unknown | Custom rule provides production year 2026, which is not model year |
 
 The application should not implement joins, name mappings, source precedence or
-model-family parsing to display a vehicle. That belongs in ORvin.
+model-family parsing to display a vehicle. That belongs in orVIN.
 
 ## Proposed public contract
 
@@ -211,7 +211,7 @@ Short-form contract:
 Both views must include a self-contained `sources` array. Compact output must not
 strip source credits or make consumers perform another lookup to obtain them.
 Detailed rule evidence can be omitted from short output; applicable notices cannot.
-This is ORvin's output policy even for sources without an attribution obligation.
+This is orVIN's output policy even for sources without an attribution obligation.
 
 Each entry has a stable source ID, publisher, title, original dataset/document URL,
 source edition or snapshot, a nullable license identifier, a nullable terms URL,
@@ -236,12 +236,12 @@ attached to the Golf VIN response above merely because the package contains it:
       "publisher": "Kraftfahrt-Bundesamt (KBA)",
       "title": "FZ Hersteller Handelsnamen Kfz",
       "url": "https://data.gov.de/suche/daten/fz-hersteller-handelsnamen-kfz?ids=c1e3a0b6-0d34-4e99-8181-91bdfb639208",
-      "edition": "Reference date 2026-01-01; ORvin dataset 2026.09.25.1",
+      "edition": "Reference date 2026-01-01; orVIN dataset 2026.09.25.1",
       "license": "dl-de/by-2-0",
       "termsUrl": "https://www.govdata.de/dl-de/by-2-0",
       "reuseBasis": "Data licence Germany — attribution — version 2.0",
-      "attribution": "Kraftfahrt-Bundesamt (KBA), FZ Hersteller Handelsnamen Kfz; dl-de/by-2-0. Data modified by ORvin.",
-      "modifications": "Selected one reference date; renamed columns, sorted rows and encoded nulls. Make/model labels normalized by ORvin.",
+      "attribution": "Kraftfahrt-Bundesamt (KBA), FZ Hersteller Handelsnamen Kfz; dl-de/by-2-0. Data modified by orVIN.",
+      "modifications": "Selected one reference date; renamed columns, sorted rows and encoded nulls. Make/model labels normalized by orVIN.",
       "fields": ["/vehicle/makeId", "/vehicle/make", "/vehicle/modelId", "/vehicle/model"]
     }
   ]
@@ -274,7 +274,7 @@ Selection and preservation rules:
   `vw-golf-maintenance-2009`, `vw-golf-v-profile` and `vw-vin-chart-2005`. Preserve
   their individual field associations, plus any additional sources actually used
   by the future resolver/normalization catalogue. Do not blanket-credit all sources
-  against all fields. ORvin display-name policy is identified separately from OEM
+  against all fields. orVIN display-name policy is identified separately from OEM
   factual support.
 - Do not include every bundled dataset indiscriminately. Test-only WA data and
   market-ranking research are not runtime answer sources. Sources needed only for
@@ -288,7 +288,7 @@ Selection and preservation rules:
   source catalogue and actual processing, never guessed by the serializer.
 - Preserve all applicable attribution/notices without truncation. Source metadata
   helps consumers meet obligations; emitting JSON alone does not discharge every
-  application's display, redistribution or other license obligations. ORvin's code
+  application's display, redistribution or other license obligations. orVIN's code
   license does not replace dataset or upstream document terms.
 
 ### Long output is a strict extension of short output
@@ -313,7 +313,7 @@ Organize `details` by purpose:
 
 | Property | Contents | Avoid duplication |
 | --- | --- | --- |
-| `meta` | ORvin version, resolver-policy version, identity-catalogue version and the versions/hashes of used datasets | Reproducibility metadata lives here once |
+| `meta` | orVIN version, resolver-policy version, identity-catalogue version and the versions/hashes of used datasets | Reproducibility metadata lives here once |
 | `input` | Original input, caller context, detailed format/check-digit findings and applicability | Normalized VIN remains at the root; checksum findings are not authenticity claims |
 | `decisions` | One entry per primary field: stable reason code, evidence references, normalization-rule references and relevant alternative references | Selected value and status stay in root `vehicle` / `fieldStatus` |
 | `specifications` | Additional selected information, such as legal manufacturer, factory, body, fuel or engine, each with value, status, units where relevant and evidence references | These require their own reviewed selection policy; an approval candidate is not a selected specification |
@@ -513,7 +513,7 @@ mapping or a recorded unresolved disposition. Cover the common 50 makes and all
 pass an unmapped raw name into the normalized answer; preserve it in evidence and
 report `UNKNOWN / UNMAPPED_IDENTITY` when it is needed for a decision.
 
-Display-name choices are ORvin policy (including the user's VW preference).
+Display-name choices are orVIN policy (including the user's VW preference).
 Factual alias/model equivalence mappings additionally need supporting evidence;
 record both kinds of provenance rather than pretending a display preference came
 from an OEM document.

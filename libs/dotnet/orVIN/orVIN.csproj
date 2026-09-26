@@ -4,7 +4,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <PackageId>OpenResearch.ORvin</PackageId>
+    <PackageId>OpenResearch.orVIN</PackageId>
     <Version>0.3.0-dev</Version>
     <Authors>OPENRESEARCH contributors</Authors>
     <Description>Offline, sourced VIN and HSN/TSN lookup with normalized vehicle answers.</Description>
@@ -15,7 +15,7 @@
     <Deterministic>true</Deterministic>
   </PropertyGroup>
   <ItemGroup>
-    <EmbeddedResource Include="../../../data/generated/**/*" LogicalName="ORvin.Data.%(RecursiveDir)%(Filename)%(Extension)" />
+    <EmbeddedResource Include="../../../data/generated/**/*" LogicalName="orVIN.Data.%(RecursiveDir)%(Filename)%(Extension)" />
     <None Include="../README.md" Pack="true" PackagePath="/" />
     <None Include="../../../data/generated/LICENSE.md" Pack="true" PackagePath="/DATA-LICENSE.md" />
     <None Include="../../../NOTICE" Pack="true" PackagePath="/" />

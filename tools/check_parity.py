@@ -21,7 +21,7 @@ def encoded(value):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--jar", type=Path, default=ROOT / "libs/java/target/orvin-0.3.0-SNAPSHOT.jar")
-    parser.add_argument("--dotnet", type=Path, help="Built ORvin.Checks DLL; compare normalized .NET projections too")
+    parser.add_argument("--dotnet", type=Path, help="Built orVIN.Checks DLL; compare normalized .NET projections too")
     parser.add_argument("--dotnet-command", default="dotnet")
     args = parser.parse_args()
     requests, expected = [], []

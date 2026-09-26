@@ -3,7 +3,7 @@
 Reviewed **2026-09-25**. Follow-up implementation now imports all public usable WMIs and embeds
 the complete source ZIP in both distributions; see [implemented import](../../nhtsa-data.md).
 This assessment describes the source and remaining detailed decoder work, not a claim that
-ORvin reproduces NHTSA's full decoding. The original six WMI records were a seed choice.
+orVIN reproduces NHTSA's full decoding. The original six WMI records were a seed choice.
 
 **Recommendation:** use the official monthly standalone dataset as the shared
 data source for both libraries. Export language-neutral tables, retain source
@@ -18,7 +18,7 @@ The official [standalone download page](https://vpic.nhtsa.dot.gov/downloads/)
 provides a PostgreSQL plain SQL dump and a SQL Server backup. Its documentation
 describes the standalone product as VIN-decoding focused, not a replacement for
 all catalog APIs. PostgreSQL 17+ is required **to restore/run that database**;
-ORvin can instead parse the text during data preparation and use portable files
+orVIN can instead parse the text during data preparation and use portable files
 at runtime. No database server is inherently required for a native library.
 
 - Source: [September 2026 PostgreSQL plain ZIP](https://vpic.nhtsa.dot.gov/downloads/vPICList_lite_2026_09.plain.zip)
@@ -83,7 +83,7 @@ bytes (21,483,261 bytes with zlib level 9); `wmiyearvalidchars` is 212,755,320
 bytes (47,832,790 compressed); `vehiclespecpattern` is 13,632,341 bytes
 (2,869,663 compressed). The character-validation cache accounts for most bytes.
 These are measurements of individual COPY payloads, not forecasts of the final
-ORvin JAR or a claim that the cache can be omitted while preserving every feature.
+orVIN JAR or a claim that the cache can be omitted while preserving every feature.
 
 ## What broad WMI coverage actually means
 
@@ -148,7 +148,7 @@ implementation review.
 
 1. **Input and WMI extraction.** `fvinwmi` takes three characters and appends
    positions 12–14 when the third character is `9` and enough input exists.
-   Decide explicitly how ORvin's stricter input normalization and unsupported
+   Decide explicitly how orVIN's stricter input normalization and unsupported
    formats relate to the NHTSA procedure; do not accidentally inherit truncation
    from PostgreSQL fixed-length declarations.
 2. **Construct the pattern key.** Full-VIN matching uses positions **4–8**, a
@@ -215,7 +215,7 @@ artifact rather than adding a 336 MB SQL file to routine source control.
 
 **Lossless output equivalence requires more than lossless rows.** Choices must
 be explicit: port NHTSA precedence/year/error semantics faithfully, or expose
-ORvin's own conservative results with documented differences. A best-effort
+orVIN's own conservative results with documented differences. A best-effort
 pattern stage must not be described as all NHTSA decoding. Preserve unmatched,
 conflicting and unsupported results; do not invent engine, trim or years merely
 because other rows for the same manufacturer contain them.
@@ -247,6 +247,6 @@ tables do not establish a universal VIN-to-HSN/TSN mapping.
 permits copying/distributing published information and disclaims accuracy and
 third-party-rights warranties. Retain this source-specific reuse basis and
 attribution. Do not relabel imported facts, SQL procedures or third-party OEM
-documents as ORvin-owned CC0 material. Any literal port of stored-function code
+documents as orVIN-owned CC0 material. Any literal port of stored-function code
 needs its own recorded provenance/reuse assessment; an implementation from
 reviewed semantics should also cite the snapshot used.

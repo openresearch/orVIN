@@ -18,7 +18,7 @@ def _data_directory():
     root = Path(__file__).resolve().parents[3]
     if (root / "libs/python/orvin/lookup.py").is_file() and (root / "data/generated/manifest.tsv").is_file():
         return root / "data/generated"
-    raise RuntimeError("Bundled Orvin data is missing; reinstall the package")
+    raise RuntimeError("Bundled orVIN data is missing; reinstall the package")
 
 
 def _normalize(value):
@@ -135,7 +135,7 @@ class VinDecoder:
     def decode(self, supplied, context=None):
         context = Context() if context is None else context
         if not isinstance(context, Context):
-            raise TypeError("context must be an Orvin Context")
+            raise TypeError("context must be an orVIN Context")
         normalized = _normalize(supplied)
         # Java String.length counts UTF-16 code units; use the same boundary for unusual input.
         length = len(normalized.encode("utf-16-le", errors="surrogatepass")) // 2

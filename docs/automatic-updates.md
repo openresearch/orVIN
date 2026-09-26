@@ -70,7 +70,7 @@ found no changes and skipped publication. A separate disposable-checkout simulat
 exercised all three changed-source paths, historical archive retention and the
 publication file allowlist. Simulated bytes were never published.
 
-[ORvin v0.2.1](https://github.com/openresearch/orvin/releases/tag/v0.2.1) exercised the
+[orVIN v0.2.1](https://github.com/openresearch/orvin/releases/tag/v0.2.1) exercised the
 real downstream chain: GitLab schedule 31 verified and tested the new wheel, pushed
 the pin update, triggered image pipeline 143155, and Flux deployed it. Public health
 and synthetic VIN/HSN/TSN checks confirmed 0.2.1 with source credits intact. Future

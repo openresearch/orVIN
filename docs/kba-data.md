@@ -56,7 +56,7 @@ KBA document or service. Imported records must keep their KBA terms rather than 
 The imported data retain attribution in `data/LICENSE.md`, `NOTICE`, package data and API results:
 
 > Datenquelle: Kraftfahrt-Bundesamt, FZ Hersteller Handelsnamen Kfz, Abrufdatum 2026-09-25;
-> Datenlizenz Deutschland – Namensnennung – Version 2.0; Daten für ORvin normalisiert.
+> Datenlizenz Deutschland – Namensnennung – Version 2.0; Daten für orVIN normalisiert.
 
 Include active links to the exact dataset and license alongside this notice. Use the actual
 retrieval date for the imported snapshot, not the research date by default.

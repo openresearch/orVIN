@@ -48,7 +48,7 @@ Merge the reviewed implementation/workflows into `main`, confirm CI is green, th
 specific reviewed commit. For example, for the compiled-runtime release:
 
 ```sh
-git tag -a v0.3.0 <reviewed-commit-sha> -m "ORvin 0.3.0"
+git tag -a v0.3.0 <reviewed-commit-sha> -m "orVIN 0.3.0"
 git push origin v0.3.0
 ```
 
@@ -148,8 +148,8 @@ signing have not been provisioned.
 (cd libs/java && ./mvnw -Dpython=../../.venv/bin/python clean verify)
 PYTHONPATH=libs/python python3 -m unittest discover -s libs/python/tests
 .venv/bin/python -m build libs/python
-dotnet run --project libs/dotnet/ORvin.Checks -c Release -- --bundle-dir "$PWD/data/generated"
-python3 tools/check_parity.py --dotnet libs/dotnet/ORvin.Checks/bin/Release/net8.0/ORvin.Checks.dll
+dotnet run --project libs/dotnet/orVIN.Checks -c Release -- --bundle-dir "$PWD/data/generated"
+python3 tools/check_parity.py --dotnet libs/dotnet/orVIN.Checks/bin/Release/net8.0/orVIN.Checks.dll
 python3 tools/check_packages.py --jar libs/java/target/orvin-0.3.0-SNAPSHOT.jar --wheel libs/python/dist/orvin-0.3.0.dev0-py3-none-any.whl
 ```
 
@@ -161,17 +161,17 @@ is separate organization configuration; CODEOWNERS/templates alone do not enforc
 
 ## .NET packages (next release)
 
-`libs/dotnet/ORvin` targets .NET 8+. CI tests .NET 8 on Windows and .NET 10 on Linux,
+`libs/dotnet/orVIN` targets .NET 8+. CI tests .NET 8 on Windows and .NET 10 on Linux,
 checks package consumers, and compares full short/long output with Python and Java.
 The NuGet package has no runtime dependencies; its assembly embeds the common
 compiled bundle. Data notices are also included at the package root.
 
-The release workflow stamps `OpenResearch.ORvin` with the same tag version as Java
+The release workflow stamps `OpenResearch.orVIN` with the same tag version as Java
 and Python, tests the installed package, attaches its `.nupkg` and checksums to the
 GitHub Release, and publishes to the existing GitHub Packages owner:
 `https://nuget.pkg.github.com/openresearch/index.json`.
 Configure that feed with your normal GitHub package-read credentials, then use
-`dotnet add package OpenResearch.ORvin --version <released-version>`. A downloaded
+`dotnet add package OpenResearch.orVIN --version <released-version>`. A downloaded
 release `.nupkg` can instead be installed from a local NuGet source. This workflow
 does not publish to nuget.org.
 

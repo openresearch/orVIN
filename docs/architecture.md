@@ -1,6 +1,6 @@
 # Architecture
 
-ORvin builds a language-neutral vehicle database from pinned public sources and
+orVIN builds a language-neutral vehicle database from pinned public sources and
 reviewed factual rules. Acquisition is explicit; compilation and lookup work offline.
 
 ```mermaid

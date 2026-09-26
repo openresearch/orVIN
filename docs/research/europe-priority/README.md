@@ -2,7 +2,7 @@
 
 Reviewed **2026-09-26**. [Machine-readable selection](models-100.json).
 
-This is a concrete research queue, **not an exact pan-European Top 100** and not a claim that ORvin can decode all 100 models. Each record is a nameplate target; generations, model years, markets, WMI and variant boundaries still need decoding evidence.
+This is a concrete research queue, **not an exact pan-European Top 100** and not a claim that orVIN can decode all 100 models. Each record is a nameplate target; generations, model years, markets, WMI and variant boundaries still need decoding evidence.
 
 ## Selection
 

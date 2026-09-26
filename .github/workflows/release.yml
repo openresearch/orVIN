@@ -72,13 +72,13 @@ jobs:
           python -m twine check --strict libs/python/dist/*
       - name: Build and verify the .NET package
         run: |
-          dotnet pack libs/dotnet/ORvin -c Release -o libs/dotnet/dist
-          dotnet restore libs/dotnet/ORvin.Checks -p:UsePackageVersion="$VERSION" --source "$PWD/libs/dotnet/dist" --source https://api.nuget.org/v3/index.json
-          dotnet run --project libs/dotnet/ORvin.Checks -c Release -p:UsePackageVersion="$VERSION" --no-restore -- --bundle-dir "$PWD/data/generated"
+          dotnet pack libs/dotnet/orVIN -c Release -o libs/dotnet/dist
+          dotnet restore libs/dotnet/orVIN.Checks -p:UsePackageVersion="$VERSION" --source "$PWD/libs/dotnet/dist" --source https://api.nuget.org/v3/index.json
+          dotnet run --project libs/dotnet/orVIN.Checks -c Release -p:UsePackageVersion="$VERSION" --no-restore -- --bundle-dir "$PWD/data/generated"
       - name: Check embedded data and cross-language behavior
         run: |
           python tools/check_packages.py --jar "libs/java/target/orvin-$VERSION.jar" --wheel "libs/python/dist/orvin-$VERSION-py3-none-any.whl"
-          python tools/check_parity.py --jar "libs/java/target/orvin-$VERSION.jar" --dotnet libs/dotnet/ORvin.Checks/bin/Release/net8.0/ORvin.Checks.dll
+          python tools/check_parity.py --jar "libs/java/target/orvin-$VERSION.jar" --dotnet libs/dotnet/orVIN.Checks/bin/Release/net8.0/orVIN.Checks.dll
       - name: Verify installed release wheel outside the checkout
         run: |
           python -m pip install --no-index --no-deps "libs/python/dist/orvin-$VERSION-py3-none-any.whl"
@@ -107,11 +107,11 @@ jobs:
         if: github.repository == 'openresearch/orvin' && ((github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')) || (inputs.publish && github.ref == 'refs/heads/main'))
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: dotnet nuget push "libs/dotnet/dist/OpenResearch.ORvin.$VERSION.nupkg" --source https://nuget.pkg.github.com/openresearch/index.json --api-key "$GITHUB_TOKEN"
+        run: dotnet nuget push "libs/dotnet/dist/OpenResearch.orVIN.$VERSION.nupkg" --source https://nuget.pkg.github.com/openresearch/index.json --api-key "$GITHUB_TOKEN"
       - name: Publish GitHub Release with Java, Python and .NET assets
         if: github.repository == 'openresearch/orvin' && ((github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')) || (inputs.publish && github.ref == 'refs/heads/main'))
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh release create "$RELEASE_TAG" target/release/* \
-            --repo "$GITHUB_REPOSITORY" --verify-tag --generate-notes --title "ORvin $VERSION"
+            --repo "$GITHUB_REPOSITORY" --verify-tag --generate-notes --title "orVIN $VERSION"

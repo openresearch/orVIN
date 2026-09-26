@@ -50,8 +50,8 @@ jobs:
           (cd libs/java && ./mvnw -B -ntp clean verify)
           python -m build libs/python
           python tools/check_packages.py --jar libs/java/target/orvin-0.3.0-SNAPSHOT.jar --wheel libs/python/dist/orvin-0.3.0.dev0-py3-none-any.whl
-          dotnet run --project libs/dotnet/ORvin.Checks -c Release -- --bundle-dir "$PWD/data/generated"
-          python tools/check_parity.py --dotnet libs/dotnet/ORvin.Checks/bin/Release/net8.0/ORvin.Checks.dll
+          dotnet run --project libs/dotnet/orVIN.Checks -c Release -- --bundle-dir "$PWD/data/generated"
+          python tools/check_parity.py --dotnet libs/dotnet/orVIN.Checks/bin/Release/net8.0/orVIN.Checks.dll
           python -m pip install --no-deps libs/python/dist/*.whl
           cd "$RUNNER_TEMP"
           python -c 'from orvin import VinDecoder; assert VinDecoder.bundled().decode_vehicle("WVWZZZ1KZ5P000001").vehicle["model"] == "Golf"'

@@ -3,7 +3,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 
-namespace OpenResearch.ORvin;
+namespace OpenResearch.orVIN;
 
 internal static class J
 {

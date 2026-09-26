@@ -24,7 +24,7 @@
     "vin": "1HGCM82603A000000",
     "market": "US",
     "source": "https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVinValues/1HGCM826*3A?format=json&modelyear=2003",
-    "note": "Synthetic suffix/check digit; public partial-VIN response reviewed 2026-09-25. Converted units follow Orvin's documented six-decimal rounding.",
+    "note": "Synthetic suffix/check digit; public partial-VIN response reviewed 2026-09-25. Converted units follow orVIN's documented six-decimal rounding.",
     "expected": {
       "Make": "HONDA",
       "Model": "Accord",

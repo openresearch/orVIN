@@ -40,7 +40,7 @@ final class BundledResources {
                 String[] lines = new String(raw("/META-INF/orvin/manifest.tsv"), StandardCharsets.UTF_8).split("\n");
                 String[] version = lines[0].split("\t");
                 if (!version[1].equals("orvin-runtime-1") || !capabilities.containsAll(java.util.List.of(version[2].split(","))))
-                    throw new IllegalStateException("Unsupported ORvin runtime format/capabilities");
+                    throw new IllegalStateException("Unsupported orVIN runtime format/capabilities");
                 Map<String, String> hashes = new HashMap<>();
                 for (String line : lines) {
                     String[] c = line.split("\t", -1);

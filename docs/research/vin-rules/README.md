@@ -94,7 +94,7 @@ do not establish a universal VIN-to-HSN/TSN conversion.
 provides the source-specific copying/distribution basis for its published
 information, with accuracy and third-party-rights disclaimers. Retain the
 download URL, release date, original archive, hashes and attribution. This does
-not make imported records or stored procedures ORvin-owned CC0 material.
+not make imported records or stored procedures orVIN-owned CC0 material.
 
 That assessment must not be silently extended to every OEM PDF hosted by NHTSA
 or linked elsewhere. OEM-specific redistribution permission was not established

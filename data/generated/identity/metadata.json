@@ -1,7 +1,7 @@
 {
   "version": "2026.09.26.1",
-  "sha256": "2c9cc1f453d95da061dd284d3cb9012a8c78ed31d1f9e05ef85f778601131c49",
-  "policy": "Exact make-scoped labels only; ASCII case comparison and explicit sourced aliases. No fuzzy model-family inference. Canonical display names are ORvin policy.",
+  "sha256": "a3943237e9fc8eeda298c0c38a60019951e7b9cef785d31025ae160517f82fc1",
+  "policy": "Exact make-scoped labels only; ASCII case comparison and explicit sourced aliases. No fuzzy model-family inference. Canonical display names are orVIN policy.",
   "reviewedOn": "2026-09-26",
   "generator": "tools/identity.py",
   "fixturesSha256": "1f38448dc4e5d17bd3875a9cf4754e940cf1629b2b2d6efbe2399a98345265b0"

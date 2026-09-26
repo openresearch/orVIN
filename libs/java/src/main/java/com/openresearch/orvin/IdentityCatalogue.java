@@ -61,7 +61,7 @@ final class IdentityCatalogue {
                     throw new IllegalStateException("Invalid identity catalogue record/version");
                 }
             }
-        } catch (IOException e) { throw new IllegalStateException("Cannot load ORvin identity catalogue", e); }
+        } catch (IOException e) { throw new IllegalStateException("Cannot load orVIN identity catalogue", e); }
     }
     Map<String, Object> make(Object name) { return makes.get(key(name)); }
     Map<String, Object> model(Object makeId, Object name) { return models.get(string(makeId) + "\u0000" + key(name)); }

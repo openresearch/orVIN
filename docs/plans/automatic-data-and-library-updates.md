@@ -8,14 +8,14 @@ Status: steps 1, 2, 3 and 5 delivered and verified, 2026-09-26. Step 4 research 
    structured datasets, then release both libraries when validation succeeds.
 2. Keep PDF- and forum-derived rules under manual research and review. They are never
    automatically rewritten or expanded by the dataset updater.
-3. Detect new stable ORvin library releases from a GitLab schedule, update the API's
+3. Detect new stable orVIN library releases from a GitLab schedule, update the API's
    pinned library, test it, publish a new container and deploy through existing Flux automation.
 4. Add the two newly contributed vehicles as attributed regression fixtures, then
    research better European BMW model-family and year coverage.
 
 ## Baseline at the planning checkpoint
 
-- ORvin source, library releases and Maven packages currently live in
+- orVIN source, library releases and Maven packages currently live in
   https://github.com/openresearch/orvin. Python release wheels include SHA256SUMS.
   The latest published release inspected for this plan is v0.2.0.
 - The API lives in https://gitlab.openresearch.com/dispoxyz/code/orvin-api. GitLab
@@ -38,7 +38,7 @@ GitLab schedules for API upgrades, and the existing Flux configuration for deplo
 
 ## 1. Add contributed fixtures and establish a baseline
 
-Files: ORvin `data/identity/fixtures.json`, relevant Python/Java tests, provenance
+Files: orVIN `data/identity/fixtures.json`, relevant Python/Java tests, provenance
 validation and documentation where needed.
 
 - BMW VIN ending `VR72507`: user reports BMW, Austrian context, and the registration
@@ -130,7 +130,7 @@ complete controlled refresh/release with matching Python and Java data.
 
 ## 4. Schedule API upgrades in GitLab
 
-Proposed schedule: daily stable-release checks against the existing ORvin GitHub
+Proposed schedule: daily stable-release checks against the existing orVIN GitHub
 release endpoint. Drafts/prereleases are excluded and versions are compared numerically.
 
 - Confirm the wheel belongs to the expected project/version and verify its checksum
@@ -208,9 +208,9 @@ with the real v0.2.1 release. No BMW/Subaru runtime decoding rule was added.
   [release notes](https://vpic.nhtsa.dot.gov/Downloads/ReleaseNotes): versioned bulk
   archives and recent roughly monthly updates.
 - [KBA Kfz service](https://services-eu1.arcgis.com/U09msXRZoxesNntH/arcgis/rest/services/SP_HSN_TSN_92a1e/FeatureServer/0)
-  and existing ORvin KBA importer/source assessment: structured dated reference data.
+  and existing orVIN KBA importer/source assessment: structured dated reference data.
 - [ASTRA source directory](https://opendata.astra.admin.ch/ivzod/2000-Typengenehmigungen_TG_TARGA/2200-Basisdaten_TG_ab_1995/)
-  and ORvin's retained metadata/importer: stable file source and pinned byte digests.
+  and orVIN's retained metadata/importer: stable file source and pinned byte digests.
 - [GitLab schedules](https://docs.gitlab.com/ci/pipelines/schedules/) and
   [job token permissions](https://docs.gitlab.com/ci/jobs/ci_job_token/): scheduled
   execution, same-project repository push and explicit downstream pipeline triggering.

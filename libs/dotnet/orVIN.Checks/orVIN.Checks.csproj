@@ -8,9 +8,9 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup Condition="'$(UsePackageVersion)' == ''">
-    <ProjectReference Include="../ORvin/ORvin.csproj" />
+    <ProjectReference Include="../orVIN/orVIN.csproj" />
   </ItemGroup>
   <ItemGroup Condition="'$(UsePackageVersion)' != ''">
-    <PackageReference Include="OpenResearch.ORvin" Version="$(UsePackageVersion)" />
+    <PackageReference Include="OpenResearch.orVIN" Version="$(UsePackageVersion)" />
   </ItemGroup>
 </Project>

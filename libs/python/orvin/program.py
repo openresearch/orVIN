@@ -11,7 +11,7 @@ CAPABILITIES = {"patterns", "conditional-literals", "year-cycles", "relations", 
 def manifest(directory):
     rows = [line.split("\t") for line in (directory / "manifest.tsv").read_text().splitlines()]
     if rows[0][1] != FORMAT or not set(rows[0][2].split(",")) <= CAPABILITIES:
-        raise RuntimeError("Unsupported ORvin runtime format/capabilities")
+        raise RuntimeError("Unsupported orVIN runtime format/capabilities")
     return {c[1]: c[2] for c in rows if c[0] == "F"}
 
 

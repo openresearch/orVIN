@@ -1,8 +1,8 @@
 using System.Globalization;
 using System.Text.RegularExpressions;
-using static OpenResearch.ORvin.J;
+using static OpenResearch.orVIN.J;
 
-namespace OpenResearch.ORvin;
+namespace OpenResearch.orVIN;
 
 internal sealed class RichDecoder
 {

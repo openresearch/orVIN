@@ -1,6 +1,6 @@
 # Normalized answers and JSON output
 
-Available in ORvin 0.2.0 and later. All libraries resolve one identity and expose
+Available in orVIN 0.2.0 and later. All libraries resolve one identity and expose
 two views:
 
 - Short: `schemaVersion`, normalized `vin` (or string `hsn`/`tsn`), `inputStatus`,
@@ -70,7 +70,7 @@ long evidence and specifications, with datatype/variable metadata preserved.
 C# (.NET 8+, next release):
 
 ```csharp
-using OpenResearch.ORvin;
+using OpenResearch.orVIN;
 var answer = VinDecoder.Bundled().DecodeVehicle("WVWZZZ1KZ5P000001", new Context(market: "AT"));
 var shortJson = answer.Short(); // System.Text.Json.Nodes.JsonObject
 var longJson = answer.Long();

@@ -1,6 +1,6 @@
 using System.Text;
 using System.Text.Json.Nodes;
-using OpenResearch.ORvin;
+using OpenResearch.orVIN;
 
 static void Check(bool condition, string label)
 {
@@ -48,7 +48,7 @@ Check(type["sources"]!.AsArray().Any(s => s!["license"]?.GetValue<string>() == "
 var names = typeof(VinDecoder).Assembly.GetManifestResourceNames();
 Check(!names.Any(n => n.Contains(".plain.zip") || n.Contains("source.json.gz") || n.Contains("fixtures") || n.Contains("TG-Automobil")), "no raw archives/fixtures packaged");
 // Verify every embedded runtime file against the manifest, not just lazily read shards.
-using (var stream = typeof(VinDecoder).Assembly.GetManifestResourceStream("ORvin.Data.manifest.tsv")!)
+using (var stream = typeof(VinDecoder).Assembly.GetManifestResourceStream("orVIN.Data.manifest.tsv")!)
 using (var reader = new StreamReader(stream))
 {
     var manifestText = reader.ReadToEnd();
@@ -63,4 +63,4 @@ using (var reader = new StreamReader(stream))
         if (position >= 0) Check(bytes.SequenceEqual(File.ReadAllBytes(Path.Combine(args[position + 1], file))), "compiled bytes: " + file);
     }
 }
-Console.WriteLine("ORvin .NET behavioral checks passed");
+Console.WriteLine("orVIN .NET behavioral checks passed");

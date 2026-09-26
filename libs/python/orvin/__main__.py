@@ -32,7 +32,7 @@ def main():
                   if args.mode == "vin" else HsnTsnLookup.bundled().lookup(args.hsn, args.tsn))
         answer = vin_answer(result) if args.mode == "vin" else hsntsn_answer(result)
     except (OSError, RuntimeError, ValueError, KeyError) as error:
-        print(f"ORvin: {error}", file=sys.stderr)
+        print(f"orVIN: {error}", file=sys.stderr)
         return 1
     print(json.dumps(answer.long() if args.long else answer.short(), indent=2, ensure_ascii=True, allow_nan=False))
     valid = result["structure"] == "MODERN_FORMAT" if args.mode == "vin" else result["inputStatus"] == "VALID"

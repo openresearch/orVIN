@@ -51,7 +51,7 @@ final class DatasetLoader {
                 }
             }
         } catch (IOException | RuntimeException e) {
-            throw new IllegalStateException("Cannot load the bundled Orvin dataset", e);
+            throw new IllegalStateException("Cannot load the bundled orVIN dataset", e);
         }
         Objects.requireNonNull(info, "Dataset metadata missing");
         return new VinDecoder(info, assignments, RichDecoder.load(), ApprovalDecoder.load());

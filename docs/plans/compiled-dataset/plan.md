@@ -5,7 +5,7 @@ Status: implemented and locally verified on `codex/compiled-runtime`, authorized
 
 ## Objective
 
-Make ORvin's vehicle knowledge live in reviewed data and build tooling. Python, Java and
+Make orVIN's vehicle knowledge live in reviewed data and build tooling. Python, Java and
 .NET execute the same generated dataset through small, generic evaluators.
 Adding a make, model, alias or rule expressible by the supported operations should
 require no library source changes. New operations still require an explicit format
@@ -121,7 +121,7 @@ The bundle should contain:
   Store explanatory reason codes/messages with the policy or rule they explain.
 
 Separate upstream selection semantics (such as NHTSA's ordering of matching
-patterns) from ORvin's cross-source resolution. Preserve the former while reviewing
+patterns) from orVIN's cross-source resolution. Preserve the former while reviewing
 changes to the latter explicitly. A US-scoped rule and an approval catalogue are
 different evidence roles, not universally higher/lower ranked providers.
 
@@ -150,7 +150,7 @@ the runtime must still evaluate query-dependent conditions and captures.
 ## Implementation sequence
 
 1. **Specify the contract and establish the baseline.** Inventory existing runtime
-   decisions; distinguish generic mechanics, source semantics and ORvin policy.
+   decisions; distinguish generic mechanics, source semantics and orVIN policy.
    Specify the minimal operations against actual existing inputs. Record behavior,
    package size, cold-start time and warm-query performance. Keep independent
    sourced fixtures as the correctness authority; old output is a regression aid.
@@ -222,8 +222,8 @@ replace OEM dispatch. All engines use the same WMI, KBA, ASTRA, pattern and iden
 bytes. Source-specific import/adaptation remains in tooling. Generic selection and
 consensus mechanics remain in each runtime; their shared invariants are documented.
 
-.NET uses namespace `OpenResearch.ORvin`, targets .NET 8+, and packages embedded
-resources as `OpenResearch.ORvin`. CI covers all three languages, installed NuGet
+.NET uses namespace `OpenResearch.orVIN`, targets .NET 8+, and packages embedded
+resources as `OpenResearch.orVIN`. CI covers all three languages, installed NuGet
 consumption on Windows, byte checks, parity and tagged release publication. No
 NuGet release has been published yet.
 
@@ -235,7 +235,7 @@ rule's reviewed scope. Synthetic JP/BR/NZ rules exercise the generic operation.
 The separate `orvin-api` branch requires a country for VIN requests, defaults only
 from an explicit browser-locale region, and shows flag plus two-letter code before
 the query. HSN/TSN disables the country field. The release dependency remains pinned
-until the existing daily updater adopts the next stable ORvin release.
+until the existing daily updater adopts the next stable orVIN release.
 
 ## Local validation and rollout
 

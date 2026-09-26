@@ -29,9 +29,9 @@ of a vehicle's make/model, configuration, market, model year or build date.
 See `astra/metadata.json` and the repository's `docs/research/astra-review.md` for
 the source locators, original-byte hashes and reviewed scope.
 
-## Orvin's original work
+## orVIN's original work
 
-Orvin contributors dedicate their original dataset selection, arrangement, annotations and
+orVIN contributors dedicate their original dataset selection, arrangement, annotations and
 synthetic fixtures under [CC0-1.0](CC0-1.0.txt), **only to the extent they own the relevant rights**.
 This does not relicense imported content, trademarks, manufacturer documents or third-party rights.
 The schema and validation software are covered by the repository's Apache-2.0 code license.
@@ -46,7 +46,7 @@ reference, **not an SPDX-listed license or a claim that NHTSA chose CC0**.
 
 The [NHTSA Terms of Use, Ownership section](https://www.nhtsa.gov/about-nhtsa/terms-use) states that
 published information may be distributed or copied. The [vPIC About page](https://vpic.nhtsa.dot.gov/About)
-describes the public reuse of its data. Orvin relies on those statements for the factual API
+describes the public reuse of its data. orVIN relies on those statements for the factual API
 records and published standalone database retained here. This is not a separate license grant
 over third-party material or an Apache license for the archived SQL. NHTSA also disclaims accuracy
 and completeness. Sources were reviewed on
@@ -56,7 +56,7 @@ uppercase brand labels, preserve ambiguity, and record three exclusions. The ful
 is unmodified. See `nhtsa/metadata.json` and `docs/nhtsa-data.md` in the repository.
 
 This is deliberately narrower than treating everything linked from a government website as public
-domain. No underlying manufacturer PDFs, illustrations or manuals have been copied into Orvin.
+domain. No underlying manufacturer PDFs, illustrations or manuals have been copied into orVIN.
 The [NHTSA linking policy](https://www.nhtsa.gov/privacy-policy/linking-policy) does not authorize
 reuse of externally linked copyrighted materials.
 
@@ -75,7 +75,7 @@ Reference date: 2026-01-01. Retrieved: 2026-09-25.
 License: **Datenlizenz Deutschland – Namensnennung – Version 2.0 (dl-de/by-2-0)**,
 [license text](https://www.govdata.de/dl-de/by-2-0). Preserve provider attribution, dataset URI
 and license link with redistributed data, and identify modifications. These imported data are
-not covered by Orvin's CC0 dedication.
+not covered by orVIN's CC0 dedication.
 
 Modifications: selected one reference date, renamed columns, sorted rows, represented nulls as
 `\N`, and packaged the data for lookup. Source labels, counts and statistical markers are unchanged.
@@ -104,7 +104,7 @@ checked by the offline provenance and source-reconstruction validators.
 
 The identity catalogue is a derived exact-label projection of the NHTSA, ASTRA and
 selected OEM/KBA facts above. Each binding records its source and locator; display
-names are ORvin policy. These transformations do not replace upstream reuse terms.
+names are orVIN policy. These transformations do not replace upstream reuse terms.
 
 `identity/fixtures.json` contains a **User-contributed Golf 5 from Austria**, whose
 owner explicitly permitted the VIN in repository tests on 2026-09-26. The fixture

@@ -28,7 +28,7 @@ class ProgramTest(unittest.TestCase):
             compiled = rules(path)
         rich = RichDecoder(_data_directory() / "decoding")
         rich.literal_rules = compiled
-        rich.sources["test-only"] = {"id": "test-only", "url": "https://example.invalid/test-only", "title": "Synthetic policy test", "publisher": "ORvin tests"}
+        rich.sources["test-only"] = {"id": "test-only", "url": "https://example.invalid/test-only", "title": "Synthetic policy test", "publisher": "orVIN tests"}
         decoder = VinDecoder({"version": "test", "sources": [], "manufacturers": [], "assignments": []}, "test")
         decoder._rich = rich
         return decoder

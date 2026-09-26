@@ -1,4 +1,4 @@
-namespace OpenResearch.ORvin;
+namespace OpenResearch.orVIN;
 
 /// <summary>Independently supplied context. Country does not prove original sales specification.</summary>
 public sealed record Context

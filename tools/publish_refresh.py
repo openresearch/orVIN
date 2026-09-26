@@ -54,12 +54,12 @@ def main():
     if run("git", "rev-parse", "HEAD") != run("git", "rev-parse", "origin/main"):
         raise ValueError("main advanced during validation; retry from its new revision")
     tag = next_tag(run("git", "tag", "--list").splitlines())
-    run("git", "config", "user.name", "ORvin data updater")
+    run("git", "config", "user.name", "orVIN data updater")
     run("git", "config", "user.email", "orvin-updater@openresearch.com")
     run("git", "add", "--", *sorted(paths))
     run("git", "commit", "-m", "Refresh structured vehicle data: " + ", ".join(report["changed"]))
     commit = run("git", "rev-parse", "HEAD")
-    run("git", "tag", "-a", tag, "-m", "ORvin " + tag[1:] + " structured data refresh")
+    run("git", "tag", "-a", tag, "-m", "orVIN " + tag[1:] + " structured data refresh")
     run("git", "push", "--atomic", "origin", "HEAD:main", tag)
     with open(os.environ["GITHUB_OUTPUT"], "a") as stream:
         stream.write(f"tag={tag}\ncommit={commit}\n")

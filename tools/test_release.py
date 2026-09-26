@@ -20,7 +20,7 @@ class ReleaseTest(unittest.TestCase):
             root = Path(directory)
             java = root / "libs/java/pom.xml"
             python = root / "libs/python/pyproject.toml"
-            dotnet = root / "libs/dotnet/ORvin/ORvin.csproj"
+            dotnet = root / "libs/dotnet/orVIN/orVIN.csproj"
             dotnet.parent.mkdir(parents=True)
             dotnet.write_text("<Project><PropertyGroup><Version>0.3.0-dev</Version></PropertyGroup></Project>")
             java.parent.mkdir(parents=True)
@@ -48,12 +48,12 @@ class ReleaseTest(unittest.TestCase):
         release.check_pom(pom, "1.2.3")
         release.check_python_metadata(b"Name: orvin\nVersion: 1.2.3\n", "1.2.3")
         for schema in ("2012/06", "2013/05"):
-            nuspec = f'<package xmlns="http://schemas.microsoft.com/packaging/{schema}/nuspec.xsd"><metadata><id>OpenResearch.ORvin</id><version>1.2.3</version></metadata></package>'.encode()
+            nuspec = f'<package xmlns="http://schemas.microsoft.com/packaging/{schema}/nuspec.xsd"><metadata><id>OpenResearch.orVIN</id><version>1.2.3</version></metadata></package>'.encode()
             release.check_nuget_metadata(nuspec, "1.2.3")
             with self.assertRaisesRegex(ValueError, "differs"):
                 release.check_nuget_metadata(nuspec, "1.2.4")
             with self.assertRaisesRegex(ValueError, "differs"):
-                release.check_nuget_metadata(nuspec.replace(b"OpenResearch.ORvin", b"another-package"), "1.2.3")
+                release.check_nuget_metadata(nuspec.replace(b"OpenResearch.orVIN", b"another-package"), "1.2.3")
         with self.assertRaisesRegex(ValueError, "version"):
             release.check_pom(pom, "1.2.4")
         with self.assertRaisesRegex(ValueError, "artifactId"):
