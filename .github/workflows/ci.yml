@@ -90,7 +90,7 @@ jobs:
         run: |
           python -m pip install --no-deps libs/python/dist/*.whl
           cd "$RUNNER_TEMP"
-          python -c 'from orvin import HsnTsnLookup, VinDecoder; assert HsnTsnLookup.bundled().lookup("0005", "AMQ")["value"]["tradeName"] == "1ER REIHE"; assert VinDecoder.bundled().decode("1HGAAAAAAAAAAAAAA")["status"] == "RECOGNIZED"; golf = VinDecoder.bundled().decode("WVWZZZ1KZ5P000001"); assert golf["model"]["value"] == "Golf"; assert len(golf["details"]["sources"]) == 3'
+          python -c 'from orvin import HsnTsnLookup, VinDecoder; assert HsnTsnLookup.bundled().lookup("0005", "AMQ")["value"]["tradeName"] == "1ER REIHE"; assert VinDecoder.bundled().decode("1HGAAAAAAAAAAAAAA")["status"] == "RECOGNIZED"; golf = VinDecoder.bundled().decode("WVWZZZ1KZ5P000001"); assert golf["model"]["value"] == "Golf"; assert {"vw-golf-maintenance-2009", "vw-golf-v-profile", "vw-vin-chart-2005"} <= {s["id"] for s in golf["details"]["sources"]}'
       - run: git diff --exit-code
 
   dotnet-windows:

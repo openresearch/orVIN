@@ -83,7 +83,7 @@ jobs:
         run: |
           python -m pip install --no-index --no-deps "libs/python/dist/orvin-$VERSION-py3-none-any.whl"
           cd "$RUNNER_TEMP"
-          python -c 'from orvin import HsnTsnLookup, VinDecoder; assert VinDecoder.bundled().decode("5YJAAAAAAAAAAAAAA")["brand"]["value"] == "TESLA"; assert HsnTsnLookup.bundled().lookup("0005", "AMQ")["value"]["tradeName"] == "1ER REIHE"; golf = VinDecoder.bundled().decode("WVWZZZ1KZ5P000001"); assert golf["model"]["value"] == "Golf"; assert len(golf["details"]["sources"]) == 3'
+          python -c 'from orvin import HsnTsnLookup, VinDecoder; assert VinDecoder.bundled().decode("5YJAAAAAAAAAAAAAA")["brand"]["value"] == "TESLA"; assert HsnTsnLookup.bundled().lookup("0005", "AMQ")["value"]["tradeName"] == "1ER REIHE"; golf = VinDecoder.bundled().decode("WVWZZZ1KZ5P000001"); assert golf["model"]["value"] == "Golf"; assert {"vw-golf-maintenance-2009", "vw-golf-v-profile", "vw-vin-chart-2005"} <= {s["id"] for s in golf["details"]["sources"]}'
       - name: Assemble verified release assets and checksums
         run: python tools/release.py bundle "$RELEASE_TAG" --commit "$(git rev-parse HEAD)"
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4

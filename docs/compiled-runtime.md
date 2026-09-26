@@ -100,7 +100,10 @@ reviewed factual tables, scope, aliases, profile parameters and messages are com
 Public entry points and short/long structure remain compatible. The policy version is
 `vehicle-identity-v2`; decoding bundle hashes change because the generated index excludes
 legacy OEM opcodes. Explicit foreign markets now expose conditional evidence instead of
-`OUT_OF_SCOPE`. Do not compare provenance hashes across versions as if they were facts.
+`OUT_OF_SCOPE`. The raw source catalogue can contain additional sources because
+all matching paths are evaluated; verify evidence references rather than a fixed catalogue
+length. Short output still credits its selected evidence. Do not compare provenance
+hashes across versions as if they were facts.
 
 The test suite checks independent sourced examples, synthetic data-only rules with JP/BR/NZ
 scope, duplicate/order invariance, conflicts, unsupported programs, near misses and source
