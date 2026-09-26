@@ -3,18 +3,29 @@
 Submit dataset changes through a reviewed GitHub pull request. Keep the data, provenance and
 regression fixtures together. Do not import a large unreviewed list to improve apparent coverage.
 
+Read [AGENTS.md](AGENTS.md), the canonical source, licensing and attribution policy
+for human and AI-assisted contributions. It covers runtime data, decoding rules,
+normalization, research, fixtures and packaged output. Claude Code imports the same
+policy through `CLAUDE.md`. Use the [data-change PR template](.github/PULL_REQUEST_TEMPLATE/data-change.md)
+for changes to these areas; incomplete rights assessments stay research-only.
+
 ## Required evidence
 
-1. The actual additions or corrections in `data/dataset.json`, regenerated from the reviewed
-   source pin/importer. Direct edits to the bulk projection fail validation; see [NHTSA updates](docs/nhtsa-data.md).
+1. The canonical additions or corrections in the relevant `data/` source/rule files,
+   source pins and importers, plus their regenerated projections. Direct edits to a
+   generated bulk projection fail validation; see [NHTSA updates](docs/nhtsa-data.md).
 2. An authoritative source for every factual mapping and manufacturer field.
 3. Publisher, exact URL, publication/version/date (or an explicit reason it is unavailable),
    retrieval date, and relevant section, row, page or API fields.
 4. A concrete reuse basis and link to the source's applicable terms. An open code repository,
    public download or citation alone does not establish redistribution rights.
-5. Synthetic behavior fixtures in `data/fixtures.json`, plus focused Java tests for new matching
-   behavior such as ambiguity or scope restrictions. Expected values must come from reviewed
+5. Behavior fixtures in the relevant shared fixture file, plus focused Python and Java
+   tests for new matching behavior such as ambiguity or scope restrictions. Prefer
+   synthetic VINs; real VINs require the publication permission specified in `AGENTS.md`.
+   Expected values must come from reviewed
    evidence; never generate a regression's expected output from the implementation being tested.
+6. Required source credits, terms links and modification notices in source metadata,
+   `data/LICENSE.md`, both library distributions, and short/long output where applicable.
 
 Retain source files only where their redistribution is permitted. Otherwise retain precise
 references and any permitted supporting extracts. Do not upload customer VINs, private vehicle
