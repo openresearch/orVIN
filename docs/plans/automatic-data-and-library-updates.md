@@ -13,7 +13,7 @@ Status: implementation authorized, 2026-09-26. Step 4 runs in a research-only su
 4. Add the two newly contributed vehicles as attributed regression fixtures, then
    research better European BMW model-family and year coverage.
 
-## Current state and repository ownership
+## Baseline at the planning checkpoint
 
 - ORvin source, library releases and Maven packages currently live in
   https://github.com/openresearch/orvin. Python release wheels include SHA256SUMS.
@@ -163,9 +163,28 @@ library release solely for testing.
 1. Add the attributed fixtures and record the current decoding gaps.
 2. Complete the GitLab API updater and verify the existing Flux deployment path.
 3. Implement and validate the structured-data updater and reusable library release flow.
-4. Finish the manual BMW/Subaru research and add the defensible decoding improvements.
+4. Complete all-BMW and relevant Subaru research in a subagent. Review proposed implementation only after step 5; do not add decoding rules during this delivery.
 5. Release the verified library changes; use that real release to confirm the complete
    library-to-API automatic upgrade chain.
+
+## Implementation progress (2026-09-26)
+
+- Step 1: both attributed contributions are committed. Their independent reported
+  identities and current decoding gaps remain separate. Python/Java parity passes
+  for 4,866 full results, including the new examples.
+- Step 2: API updater is on GitLab main. Active schedule 31 runs daily at 04:30
+  Europe/Vienna. A real unchanged run skipped rebuilding; a controlled recovery run
+  successfully triggered a normal main build. GitLab 18 requires the job token in
+  the trigger form field. No personal access token is stored.
+- Step 3: structured-data updater and reusable release workflow are implemented.
+  Online comparison found all three pinned sources unchanged. A simulated change
+  to all three sources in a disposable checkout passed complete offline regeneration
+  and provenance checks, including retention of fixture-cited historical archives.
+  No simulated source bytes are committed or published.
+- Step 4: [all-BMW and Subaru research](../research/vin-rules/bmw-subaru-followup.md)
+  is complete and its citations are registered. Implementation remains deferred.
+- Step 5: GitHub workflow validation, v0.2.1 publication and the real GitLab
+  library-upgrade-to-Flux rollout remain in progress.
 
 ## Sources inspected for feasibility
 

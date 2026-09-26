@@ -67,6 +67,11 @@ def count_guard(label, old, new):
         raise ValueError(f"{label}: unexpected count change {old} -> {new}; review required")
 
 
+def exclusion_guard(label, old_excluded, old_total, new_excluded, new_total):
+    if not old_total or not new_total or new_excluded / new_total > old_excluded / old_total + 0.01:
+        raise ValueError(f"{label}: exclusion rate increased by more than one percentage point; review required")
+
+
 def sql_contract(archive):
     """Pin schema and function bodies as a contract; changing SQL semantics needs review."""
     with zipfile.ZipFile(archive) as zipped:
@@ -117,6 +122,7 @@ def refresh(apply=False):
     old_nhtsa = read(ROOT / "data/nhtsa/metadata.json")
     old_astra = read(ROOT / "data/astra/metadata.json")
     old_kba = read(ROOT / "data/kba/metadata.json")
+    old_decoding = read(ROOT / "data/decoding/metadata.json")
     today = date.today().isoformat()
     pins = read(ROOT / "tools/source-pins.json")
     versions = [pins["nhtsa"]["version"], pins["identityVersion"], pins["decodingVersion"], old_kba["version"]]
@@ -136,7 +142,8 @@ def refresh(apply=False):
         sha = nhtsa.sha256(archive)
         nhtsa_changed = sha != old_nhtsa["source"]["sha256"]
         report["sources"]["nhtsa"] = {"url": DOWNLOADS + filename, "edition": edition,
-            "sha256": sha, "previousSha256": old_nhtsa["source"]["sha256"]}
+            "sha256": sha, "previousSha256": old_nhtsa["source"]["sha256"],
+            "previousCounts": old_decoding["counts"]}
         if nhtsa_changed:
             previous = ROOT / "data" / old_nhtsa["source"]["snapshot"]
             if sql_contract(archive) != sql_contract(previous):
@@ -152,7 +159,8 @@ def refresh(apply=False):
         if edition_date > today:
             raise ValueError("ASTRA modification date is in the future")
         report["sources"]["astra"] = {"url": astra.SOURCE_URL, "sha256": astra_sha,
-            "lastModified": modified, "previousSha256": old_astra["source"]["inspectedSha256"]}
+            "lastModified": modified, "previousSha256": old_astra["source"]["inspectedSha256"],
+            "previousCounts": old_astra["counts"]}
         if astra_changed:
             with astra_raw.open("rb") as new, gzip.open(ROOT / "data" / old_astra["source"]["archivePath"], "rb") as old:
                 if new.readline() != old.readline():
@@ -226,6 +234,11 @@ def refresh(apply=False):
                 if old["rowCount"]:
                     count_guard("NHTSA table " + table, old["rowCount"], new["tables"][table]["rowCount"])
             command(sys.executable, "tools/decoding.py", "import")
+            counts = read(ROOT / "data/decoding/metadata.json")["counts"]
+            count_guard("NHTSA exported patterns", old_decoding["counts"]["exportedPatterns"], counts["exportedPatterns"])
+            exclusion_guard("NHTSA decoding", old_decoding["counts"]["sourcePatterns"] - old_decoding["counts"]["exportedPatterns"],
+                            old_decoding["counts"]["sourcePatterns"], counts["sourcePatterns"] - counts["exportedPatterns"], counts["sourcePatterns"])
+            report["sources"]["nhtsa"]["counts"] = counts
         if astra_changed:
             source = dict(old_astra["source"])
             previous = ROOT / "data" / source["archivePath"]
@@ -242,6 +255,9 @@ def refresh(apply=False):
             new = astra.compile_snapshot(destination, astra.DIRECTORY, source, "astra-" + version)
             for key in ("sourceRows", "passengerRows", "approvalRows", "patterns", "wmis"):
                 count_guard("ASTRA " + key, old_astra["counts"][key], new["counts"][key])
+            exclusion_guard("ASTRA patterns", old_astra["counts"]["excludedPatternRows"], old_astra["counts"]["passengerRows"],
+                            new["counts"]["excludedPatternRows"], new["counts"]["passengerRows"])
+            report["sources"]["astra"]["counts"] = new["counts"]
             write(astra.DIRECTORY / "metadata.json", new)
             if not keep_old:
                 previous.unlink()

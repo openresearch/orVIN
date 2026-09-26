@@ -26,6 +26,9 @@ class StructuredRefreshTest(unittest.TestCase):
             with self.subTest(old=old, new=new), self.assertRaises(ValueError):
                 refresh_data.count_guard("rows", old, new)
         refresh_data.count_guard("rows", 1000, 1020)
+        refresh_data.exclusion_guard("patterns", 50, 1000, 52, 1000)
+        with self.assertRaises(ValueError):
+            refresh_data.exclusion_guard("patterns", 50, 1000, 70, 1000)
 
     def test_sql_data_changes_are_allowed_but_schema_and_functions_are_not(self):
         def archive(path, columns="id, name", body="SELECT 1", value="1\tfirst"):

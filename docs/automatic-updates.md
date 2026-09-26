@@ -29,7 +29,8 @@ Changes must remain within the reviewed source contract:
 - ASTRA must retain the exact column header and the reviewed conservative template
   grammar. Invalid/ambiguous templates remain excluded.
 - Empty data, more than 5% row loss, or more than 50% growth in checked counts stops
-  the run. These are conservative operational review thresholds, not statistical
+  the run. An increase of more than one percentage point in NHTSA decoding or ASTRA
+  passenger-template exclusion rates also stops the run. These are conservative operational review thresholds, not statistical
   guarantees or a license to ignore smaller regressions.
 
 Reuse assessments and legal-document interpretations remain manually reviewed. The
