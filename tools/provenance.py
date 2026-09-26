@@ -17,7 +17,7 @@ import identity
 ROOT = nhtsa.ROOT
 RESEARCH_FILES = ("README.md", "framework.md", "nhtsa-bulk.md", "europe.md", "asia.md", "americas-uk.md",
                   "../astra-review.md", "../europe-priority/README.md", "bmw-subaru-followup.md",
-                  "../data-redistribution/README.md")
+                  "../data-redistribution/README.md", "../kba-wmi/README.md")
 
 
 def read(path):

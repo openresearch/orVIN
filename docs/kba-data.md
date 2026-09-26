@@ -69,8 +69,9 @@ Keep WMI decoding and German type lookup as separate operations and combine thei
 when the caller supplies independently known HSN/TSN or an authoritative cross-reference exists.
 
 KBA's [WMI portal](https://www.kba-online.de/wmi_prod/webapp-nezo/) describes its German WMI assignment
-role and annual manufacturer directory. The current official directory, row semantics and its own
-reuse notice still need review before using it to connect HSN manufacturer identities with WMIs.
+role and annual manufacturer directory. The [2026 WMI assessment](research/kba-wmi/README.md)
+records the inspected SV 3.1 edition, hash, international applicability and conflicting reuse
+notices that need clarification before import. This source is not yet included in the dataset.
 Do not assume a one-to-one HSN/WMI or manufacturer/brand relationship.
 
 Richer technical type data, CoC data or individual registered-vehicle information needs a separate

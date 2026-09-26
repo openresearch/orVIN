@@ -331,6 +331,17 @@
     ]
   },
   {
+    "id": "research-b65e5defa6a26e11",
+    "url": "https://vpic.nhtsa.dot.gov/api/Home/Index/FAQ",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "../kba-wmi/README.md",
+        "section": "Inspected sources"
+      }
+    ]
+  },
+  {
     "id": "research-d8a9532445403475",
     "url": "https://vpic.nhtsa.dot.gov/api/vehicles/DecodeWMI/WVW?format=json",
     "role": "research-citation",
@@ -1035,6 +1046,17 @@
     ]
   },
   {
+    "id": "research-c016b793ac20826f",
+    "url": "https://www.iso.org/standard/45844.html",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "../kba-wmi/README.md",
+        "section": "Inspected sources"
+      }
+    ]
+  },
+  {
     "id": "research-0d514e71284cbbe8",
     "url": "https://www.jato.com/hubfs/Top%2050%20best-selling%20models%202024.jpg",
     "role": "research-citation",
@@ -1064,6 +1086,39 @@
       {
         "document": "../europe-priority/README.md",
         "section": "Source scope and reuse"
+      }
+    ]
+  },
+  {
+    "id": "research-c7a75f6f6033316c",
+    "url": "https://www.kba-online.de/wmi_prod/webapp-nezo/",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "../kba-wmi/README.md",
+        "section": "Inspected sources"
+      }
+    ]
+  },
+  {
+    "id": "research-fd9afcd8c57c5a52",
+    "url": "https://www.kba.de/DE/Themen/Typgenehmigung/CoC_Daten_Fahrzeugtypdaten/Veroeffentlichungen/SV3.html?nn=3505666",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "../kba-wmi/README.md",
+        "section": "Inspected sources"
+      }
+    ]
+  },
+  {
+    "id": "research-29b0db926c6590f0",
+    "url": "https://www.kba.de/SharedDocs/Downloads/DE/SV/sv31_pdf.pdf?__blob=publicationFile&v=3",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "../kba-wmi/README.md",
+        "section": "Inspected sources"
       }
     ]
   },
@@ -1113,6 +1168,17 @@
       {
         "document": "../data-redistribution/README.md",
         "section": "Structured production inputs"
+      }
+    ]
+  },
+  {
+    "id": "research-3c1ffdce28f860a5",
+    "url": "https://www.nhtsa.gov/es/node/141061",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "../kba-wmi/README.md",
+        "section": "Inspected sources"
       }
     ]
   },
