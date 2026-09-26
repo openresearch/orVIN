@@ -16,7 +16,7 @@ import identity
 
 ROOT = nhtsa.ROOT
 RESEARCH_FILES = ("README.md", "framework.md", "nhtsa-bulk.md", "europe.md", "asia.md", "americas-uk.md",
-                  "../astra-review.md", "../europe-priority/README.md")
+                  "../astra-review.md", "../europe-priority/README.md", "bmw-subaru-followup.md")
 
 
 def read(path):
@@ -143,7 +143,7 @@ def validate(root=ROOT):
     for item in data["manufacturers"] + data["assignments"]:
         references(item["sourceRefs"], sources, item["id"])
     kba = read(data_dir / "kba/metadata.json")
-    source_record({"id": "kba-fz-types-2026-01-01", "publisher": kba["publisher"], "title": kba["title"],
+    source_record({"id": "kba-fz-types-" + kba["referenceDate"], "publisher": kba["publisher"], "title": kba["title"],
                    "url": kba["serviceUrl"], "edition": kba["referenceDate"], "retrievedOn": kba["retrievedOn"],
                    "section": "Complete FeatureServer layer 0; sourceObjectId identifies each retained row",
                    "reuseBasis": kba["license"] + " " + kba["licenseUrl"] + "; " + kba["modifications"]})

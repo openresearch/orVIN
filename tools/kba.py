@@ -78,7 +78,7 @@ def query(**params):
     return result
 
 
-def download(reference_date, version):
+def download(reference_date, version, directory=DIRECTORY):
     source_date = date.fromisoformat(reference_date).strftime("%d.%m.%Y")
     where = f"Berichtszeitpunkt = '{source_date}'"
     count = query(where=where, returnCountOnly="true")["count"]
@@ -114,10 +114,10 @@ def download(reference_date, version):
         "snapshot": "source.json.gz", "snapshotSha256": digest(snapshot),
         "table": "types.tsv", "sha256": digest(table),
     }
-    DIRECTORY.mkdir(parents=True, exist_ok=True)
-    (DIRECTORY / metadata["snapshot"]).write_bytes(snapshot)
-    (DIRECTORY / metadata["table"]).write_bytes(table)
-    (DIRECTORY / "metadata.json").write_text(json.dumps(metadata, ensure_ascii=False, indent=2) + "\n",
+    directory.mkdir(parents=True, exist_ok=True)
+    (directory / metadata["snapshot"]).write_bytes(snapshot)
+    (directory / metadata["table"]).write_bytes(table)
+    (directory / "metadata.json").write_text(json.dumps(metadata, ensure_ascii=False, indent=2) + "\n",
                                                encoding="utf-8", newline="\n")
     print(f"Imported {count} source records for {reference_date}")
 

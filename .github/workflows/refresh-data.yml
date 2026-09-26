@@ -1,0 +1,73 @@
+name: Refresh structured datasets
+on:
+  schedule:
+    - cron: '17 0 * * *'
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: 'Publish a changed snapshot after all checks (otherwise validate only)'
+        required: true
+        default: false
+        type: boolean
+permissions:
+  contents: read
+concurrency:
+  group: structured-data-refresh
+  cancel-in-progress: false
+jobs:
+  refresh:
+    if: github.repository == 'openresearch/orvin' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    permissions:
+      contents: write
+    outputs:
+      changed: ${{ steps.refresh.outputs.changed }}
+      tag: ${{ steps.publish.outputs.tag }}
+      commit: ${{ steps.publish.outputs.commit }}
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.13'
+      - uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6
+        with:
+          distribution: temurin
+          java-version: '17'
+      - run: python -m pip install -r tools/release-requirements.txt
+      - id: refresh
+        run: python tools/refresh_data.py --apply
+      - name: Validate changed data before committing
+        if: steps.refresh.outputs.changed == 'true'
+        run: |
+          python -m unittest discover -s tools
+          PYTHONPATH=libs/python python -m unittest discover -s libs/python/tests
+          (cd libs/java && ./mvnw -B -ntp clean verify)
+          python -m build libs/python
+          python tools/check_packages.py --jar libs/java/target/orvin-0.2.0-SNAPSHOT.jar --wheel libs/python/dist/orvin-0.2.0.dev0-py3-none-any.whl
+          python tools/check_parity.py
+          python -m pip install --no-deps libs/python/dist/*.whl
+          cd "$RUNNER_TEMP"
+          python -c 'from orvin import VinDecoder; assert VinDecoder.bundled().decode_vehicle("WVWZZZ1KZ5P000001").vehicle["model"] == "Golf"'
+      - id: publish
+        if: steps.refresh.outputs.changed == 'true' && (github.event_name == 'schedule' || inputs.publish)
+        run: python tools/publish_refresh.py
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: always()
+        with:
+          name: structured-data-refresh-report
+          path: target/data-refresh.json
+          if-no-files-found: warn
+  release:
+    needs: refresh
+    if: needs.refresh.outputs.tag != ''
+    permissions:
+      contents: write
+      packages: write
+    uses: ./.github/workflows/release.yml
+    with:
+      tag: ${{ needs.refresh.outputs.tag }}
+      ref: ${{ needs.refresh.outputs.commit }}
+      publish: true

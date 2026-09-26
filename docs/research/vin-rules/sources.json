@@ -106,6 +106,10 @@
       {
         "document": "../astra-review.md",
         "section": "Inspected-byte provenance"
+      },
+      {
+        "document": "bmw-subaru-followup.md",
+        "section": "astra-targa-automobil-2026-07-30 — existing runtime source"
       }
     ]
   },
@@ -187,6 +191,28 @@
     ]
   },
   {
+    "id": "research-ce97b9293857607a",
+    "url": "https://sl-i.net/FORUM/archive/index.php/t-20241.html",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "bmw-subaru-followup.md",
+        "section": "Secondary leads and rejection notes"
+      }
+    ]
+  },
+  {
+    "id": "research-b1540306d6f52904",
+    "url": "https://sl-i.net/FORUM/showthread.php?18087-Subaru-Factory-Service-Manuals",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "bmw-subaru-followup.md",
+        "section": "Secondary leads and rejection notes"
+      }
+    ]
+  },
+  {
     "id": "research-f9164b47fc4790c8",
     "url": "https://static.nhtsa.gov/nhtsa/downloads/MfrMail/01-022-N11B-8603.pdf",
     "role": "research-citation",
@@ -216,6 +242,17 @@
       {
         "document": "europe.md",
         "section": "Porsche"
+      }
+    ]
+  },
+  {
+    "id": "research-033f51713c763aec",
+    "url": "https://ucar.subaru.jp/php/catalog/grade.php?cat_id=4501997",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "bmw-subaru-followup.md",
+        "section": "subaru-jp-catalogue-bg5-1997-06"
       }
     ]
   },
@@ -408,6 +445,10 @@
       {
         "document": "europe.md",
         "section": "BMW"
+      },
+      {
+        "document": "bmw-subaru-followup.md",
+        "section": "Year, plant and production-date limits"
       }
     ]
   },
@@ -673,6 +714,72 @@
       {
         "document": "../astra-review.md",
         "section": "Reuse basis"
+      }
+    ]
+  },
+  {
+    "id": "research-2a9ebe70e1978345",
+    "url": "https://www.bimmerarchiv.de/code/vp11.html",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "bmw-subaru-followup.md",
+        "section": "Secondary leads and rejection notes"
+      }
+    ]
+  },
+  {
+    "id": "research-569025c7728e4d85",
+    "url": "https://www.bmw.co.uk/en/more-bmw/exporting-or-importing-a-bmw-or-mini.html",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "bmw-subaru-followup.md",
+        "section": "bmw-uk-dating-documents-2026-09-26"
+      }
+    ]
+  },
+  {
+    "id": "research-88ec969760638dc8",
+    "url": "https://www.bmw.gr/content/dam/bmw/marketGR/bmw_gr/footer/BMW_Group_Hellas_Pricelist_08.07.2026.pdf.asset.1785212028335.pdf",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "bmw-subaru-followup.md",
+        "section": "bmw-gr-pricelist-2026-07-08"
+      }
+    ]
+  },
+  {
+    "id": "research-3b83631dc9277b0c",
+    "url": "https://www.bmw.gr/content/dam/bmw/marketGR/bmw_gr/footer/explore-bmw/pricelists-archive/2004/model-pricelists/BMW%20Hellas%20%CE%A4%CE%B9%CE%BC%CE%BF%CE%BA%CE%B1%CF%84%CE%AC%CE%BB%CE%BF%CE%B3%CE%BF%CF%82%2009.2004.pdf.asset.1627480084018.pdf",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "bmw-subaru-followup.md",
+        "section": "bmw-gr-pricelist-archive-2026-09-26"
+      }
+    ]
+  },
+  {
+    "id": "research-6da2d7167b406424",
+    "url": "https://www.bmw.gr/content/dam/bmw/marketGR/bmw_gr/footer/explore-bmw/pricelists-archive/2018/model-pricelists/BMW%20Hellas%20%CE%A4%CE%B9%CE%BC%CE%BF%CE%BA%CE%B1%CF%84%CE%AC%CE%BB%CE%BF%CE%B3%CE%BF%CF%82%2012.2018.pdf.asset.1627480431747.pdf",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "bmw-subaru-followup.md",
+        "section": "bmw-gr-pricelist-2018-12-19"
+      }
+    ]
+  },
+  {
+    "id": "research-9dc6404402c2f207",
+    "url": "https://www.bmw.gr/el/footer/bmw-explore/pricelists-archive.html",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "bmw-subaru-followup.md",
+        "section": "bmw-gr-pricelist-archive-2026-09-26"
       }
     ]
   },
@@ -953,6 +1060,39 @@
     ]
   },
   {
+    "id": "research-b5c6bfe8891ae486",
+    "url": "https://www.northursalia.com/techdocs/pdf/misc/vin.pdf",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "bmw-subaru-followup.md",
+        "section": "Year, plant and production-date limits"
+      }
+    ]
+  },
+  {
+    "id": "research-f9a76fb25a416454",
+    "url": "https://www.press.bmwgroup.com/austria/article/attachment/T0084722DE/130754",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "bmw-subaru-followup.md",
+        "section": "bmw-at-programm-2010-09"
+      }
+    ]
+  },
+  {
+    "id": "research-6d6e13bd83cf4f4a",
+    "url": "https://www.scribd.com/document/633986993/bmw",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "bmw-subaru-followup.md",
+        "section": "Secondary leads and rejection notes"
+      }
+    ]
+  },
+  {
     "id": "research-a729b132a4fe4d46",
     "url": "https://www.seat.com/datamanual-manual/leon/my15_w22/en-uk/Gama%20Leon_EN.pdf",
     "role": "research-citation",
@@ -1092,6 +1232,17 @@
       {
         "document": "europe.md",
         "section": "Volkswagen"
+      }
+    ]
+  },
+  {
+    "id": "research-1d48e3d652a55b74",
+    "url": "https://www.x1forum.de/forum/thread/3635-fahrzeugkenndaten/",
+    "role": "research-citation",
+    "locations": [
+      {
+        "document": "bmw-subaru-followup.md",
+        "section": "Secondary leads and rejection notes"
       }
     ]
   }

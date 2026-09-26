@@ -35,5 +35,81 @@
       "vw-vin-chart-2005",
       "vw-golf-v-profile"
     ]
+  },
+  {
+    "id": "user-bmw-x1-austria-2026-09-26",
+    "vin": "WBAVP11070VR72507",
+    "source": {
+      "kind": "USER_CONTRIBUTION",
+      "id": "user-bmw-x1-austria-2026-09-26",
+      "attribution": "User-contributed BMW X1 test vehicle.",
+      "permission": "The user explicitly requested adding this VIN and reported vehicle facts to repository test data on 2026-09-26. Ownership is not asserted.",
+      "reported": {
+        "make": "BMW",
+        "tradeDesignation": "X1 xDrive18d E84 N47",
+        "model": "X1",
+        "variant": "xDrive18d",
+        "generation": "E84",
+        "engineFamily": "N47",
+        "country": "AT"
+      },
+      "url": null,
+      "license": null,
+      "publisher": "User contribution",
+      "title": "User-supplied BMW X1 test vehicle",
+      "edition": "User statement 2026-09-26",
+      "retrievedOn": "2026-09-26",
+      "section": "Explicit request to add this vehicle to the test data; reported labels retained verbatim where supplied.",
+      "reuseBasis": "Explicit user permission for repository tests with attribution; no standardized license asserted.",
+      "urlUnavailableReason": "Direct contribution in this conversation; no public source document."
+    },
+    "expected": {
+      "makeId": "bmw",
+      "make": "BMW"
+    },
+    "reportedExpectations": {
+      "make": "BMW",
+      "model": "X1"
+    },
+    "coverageGap": "Model is currently unknown; year and production date not supplied.",
+    "expectationBasis": "Reported identity is independent user evidence. Only supported current fields are asserted unconditionally; any future resolved make/model must agree with the reported identity. No year is independently confirmed.",
+    "ruleSourceRefs": [
+      "nhtsa-vpic-2026-09"
+    ]
+  },
+  {
+    "id": "user-subaru-legacy-2026-09-26",
+    "vin": "JF1BG5LJ4VG068909",
+    "source": {
+      "kind": "USER_CONTRIBUTION",
+      "id": "user-subaru-legacy-2026-09-26",
+      "attribution": "User-contributed Subaru Legacy test vehicle.",
+      "permission": "The user explicitly requested adding this VIN and reported vehicle facts to repository test data on 2026-09-26. Ownership is not asserted.",
+      "reported": {
+        "make": "Subaru",
+        "model": "Legacy",
+        "body": "Kombi",
+        "designation": "C22"
+      },
+      "url": null,
+      "license": null,
+      "publisher": "User contribution",
+      "title": "User-supplied Subaru Legacy test vehicle",
+      "edition": "User statement 2026-09-26",
+      "retrievedOn": "2026-09-26",
+      "section": "Explicit request to add this vehicle to the test data; reported labels retained verbatim where supplied.",
+      "reuseBasis": "Explicit user permission for repository tests with attribution; no standardized license asserted.",
+      "urlUnavailableReason": "Direct contribution in this conversation; no public source document."
+    },
+    "expected": {},
+    "reportedExpectations": {
+      "make": "Subaru",
+      "model": "Legacy"
+    },
+    "coverageGap": "Current make is ambiguous and model unknown. C22 meaning, country and year are not established.",
+    "expectationBasis": "Reported identity is independent user evidence. Only supported current fields are asserted unconditionally; any future resolved make/model must agree with the reported identity. No year is independently confirmed.",
+    "ruleSourceRefs": [
+      "nhtsa-vpic-2026-09"
+    ]
   }
 ]

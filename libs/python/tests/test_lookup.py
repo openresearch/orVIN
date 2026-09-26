@@ -119,8 +119,12 @@ class HsnTsnTest(unittest.TestCase):
             with self.subTest(hsn=expected["hsn"], tsn=expected["tsn"]):
                 result = self.lookup.lookup(expected["hsn"], expected["tsn"])
                 self.assertEqual("RECOGNIZED", result["status"])
-                self.assertEqual(expected, result["value"])
-                self.assertEqual("2026-01-01", result["dataset"]["referenceDate"])
+                # These independently reviewed identities survive statistical refreshes.
+                # Counts, object IDs and reference dates belong to each source snapshot;
+                # full offline reconstruction verifies them against that snapshot.
+                for field in ("hsn", "tsn", "manufacturer", "tradeName"):
+                    self.assertEqual(expected[field], result["value"][field])
+                self.assertRegex(result["dataset"]["referenceDate"], r"^\d{4}-\d{2}-\d{2}$")
                 self.assertEqual("dl-de/by-2-0", result["dataset"]["source"]["license"])
 
     def test_leading_zeroes_ascii_only_normalization_and_strict_tsn(self):

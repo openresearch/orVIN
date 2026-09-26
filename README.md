@@ -243,3 +243,9 @@ Code/documentation: [Apache-2.0](LICENSE). KBA data: **dl-de/by-2-0**, attribute
 under its [license](https://www.govdata.de/dl-de/by-2-0). Imported NHTSA facts retain their reuse
 notice. Only ORvin-owned data contributions are CC0. Preserve [data notices](data/LICENSE.md);
 source data are not relicensed Apache or CC0. Names and marks do not imply endorsement.
+
+## Automatic data maintenance
+
+The three structured sources are checked daily; verified changes can publish a new
+patch release of both libraries. PDF/forum-derived rules remain manually reviewed.
+See [automatic updates and rollback](docs/automatic-updates.md).

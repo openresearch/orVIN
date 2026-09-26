@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -26,10 +25,14 @@ class HsnTsnLookupTest {
                     .map(c -> DynamicTest.dynamicTest(c[0] + "/" + c[1], () -> {
                         Result result = lookup.lookup(c[0], c[1]);
                         assertEquals(MatchStatus.RECOGNIZED, result.status());
-                        assertEquals(new TypeEntry(c[0], c[1], optional(c[2]), optional(c[3]),
-                                optional(c[4]).map(Long::valueOf), optional(c[5]), Long.parseLong(c[6])),
-                                result.value().orElseThrow());
-                        assertEquals(LocalDate.of(2026, 1, 1), result.dataset().referenceDate());
+                        // Population and row IDs change with statistical snapshots.
+                        // dataset.py verifies their exact source-to-runtime projection.
+                        TypeEntry value = result.value().orElseThrow();
+                        assertEquals(c[0], value.hsn());
+                        assertEquals(c[1], value.tsn());
+                        assertEquals(optional(c[2]), value.manufacturer());
+                        assertEquals(optional(c[3]), value.tradeName());
+                        assertNotNull(result.dataset().referenceDate());
                         assertEquals("dl-de/by-2-0", result.dataset().source().license());
                     }));
         }

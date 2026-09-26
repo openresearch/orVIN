@@ -19,7 +19,8 @@ import nhtsa
 
 ROOT = nhtsa.ROOT
 DIRECTORY = ROOT / "data/decoding"
-VERSION = "2026.09.25.1"
+VERSION = nhtsa.PINS["decodingVersion"]
+REFERENCE_YEAR = nhtsa.PINS["referenceYear"]
 SHARDS = 256
 EXCLUDED = {26, 27, 29, 39}
 
@@ -124,7 +125,7 @@ def compile_archive(destination):
                 return result.strip()
             return attr.strip()
 
-        index = [["V", VERSION, "2026", nhtsa.SOURCE_ID, nhtsa.SHA256]]
+        index = [["V", VERSION, str(REFERENCE_YEAR), nhtsa.SOURCE_ID, nhtsa.SHA256]]
         europe = json.loads((ROOT / "data/europe/tesla-model-y.json").read_text())
         index.append(["T", europe["source"]["id"], europe["source"]["url"]])
         for position, characters in europe["requirements"].items():
@@ -207,7 +208,7 @@ def compile_archive(destination):
             index.append(["H", name, nhtsa.sha256(destination / name)])
         (destination / "index.tsv").write_text("".join("\t".join(row) + "\n" for row in index), encoding="utf-8", newline="\n")
     metadata = {"formatVersion": 1, "version": VERSION, "sourceId": nhtsa.SOURCE_ID,
-                "sourceSha256": nhtsa.SHA256, "referenceYear": 2026,
+                "sourceSha256": nhtsa.SHA256, "referenceYear": REFERENCE_YEAR,
                 "indexSha256": nhtsa.sha256(destination / "index.tsv"),
                 "sourcesSha256": nhtsa.sha256(destination / "sources.json"), "counts": dict(sorted(counts.items())),
                 "stages": ["public-patterns", "model-make", "engine-model", "displacement-conversion"],

@@ -1,0 +1,14 @@
+{
+  "nhtsa": {
+    "edition": "2026_09",
+    "version": "2026.09.25.2",
+    "retrievedOn": "2026-09-25",
+    "publishedOn": "2026-09-19",
+    "sha256": "1ee4a1e22526a606b492ce4ab301894465afbf43dc00946df6d503c3102d5911",
+    "title": "NHTSA vPIC standalone database, September 2026",
+    "sourceId": "nhtsa-vpic-2026-09"
+  },
+  "decodingVersion": "2026.09.25.1",
+  "identityVersion": "2026.09.26.1",
+  "referenceYear": 2026
+}

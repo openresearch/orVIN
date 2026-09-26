@@ -10,7 +10,7 @@ import zipfile
 import nhtsa
 
 ROOT = nhtsa.ROOT
-VERSION = "2026.09.26.1"
+VERSION = nhtsa.PINS["identityVersion"]
 SOURCE_KEYS = ("id", "publisher", "title", "url", "edition", "section", "retrievedOn", "reuseBasis", "license", "termsUrl", "modifications", "archiveSha256", "inspectedSha256", "evidencePath")
 DISPLAY = {"VOLKSWAGEN": ("vw", "VW"), "SKODA": ("skoda", "Škoda"), "BMW": ("bmw", "BMW"),
            "MERCEDES-BENZ": ("mercedes-benz", "Mercedes-Benz"), "TESLA": ("tesla", "Tesla"),
@@ -47,7 +47,7 @@ def build():
     astra = json.loads((ROOT / "data/astra/metadata.json").read_text())
     sources[astra["source"]["id"]] = dict(astra["source"])
     kba = json.loads((ROOT / "data/kba/metadata.json").read_text())
-    kba_id = "kba-fz-types-2026-01-01"
+    kba_id = "kba-fz-types-" + kba["referenceDate"]
     sources[kba_id] = {**kba, "id": kba_id, "edition": kba["referenceDate"],
         "section": "FeatureServer layer 0; sourceObjectId", "reuseBasis": kba["license"], "termsUrl": kba["licenseUrl"],
         "archiveSha256": kba["snapshotSha256"], "evidencePath": "kba/metadata.json",
@@ -82,11 +82,19 @@ def build():
             if label and label not in makes:
                 mid, name = DISPLAY.get(label, (slug(label), label))
                 makes[label] = (mid, name, astra["source"]["id"], "TG-Automobil.txt row=" + cells[1] + "; approval=" + cells[0] + "; 04 Marke")
+    import csv
+    with (ROOT / "data/kba/types.tsv").open() as stream:
+        kba_rows = {(r["hsn"], r["tsn"]): r for r in csv.DictReader(stream, delimiter="\t", quoting=csv.QUOTE_NONE)}
+    def kba_locator(hsn, tsn, field, expected):
+        row = kba_rows[(hsn, tsn)]
+        if row[field] != expected:
+            raise ValueError("Reviewed KBA normalization label changed; manual review required")
+        return "sourceObjectId=" + row["sourceObjectId"] + "; " + field + "=" + expected
     # Explicit aliases supported by the retained OEM/KBA marque labels. Display casing is ORvin policy.
     for alias, target, sid, locator in [
         ("VW", "VOLKSWAGEN", "vw-golf-v-profile", "Golf V profile / Volkswagen marque; display preference VW"),
-        ("VOLKSWAGEN-VW", "VOLKSWAGEN", kba_id, "sourceObjectId=196017; manufacturer=VOLKSWAGEN-VW"),
-        ("BAYER.MOT.WERKE-BMW", "BMW", kba_id, "sourceObjectId=186388; manufacturer=BAYER.MOT.WERKE-BMW"),
+        ("VOLKSWAGEN-VW", "VOLKSWAGEN", kba_id, kba_locator("0603", "BMT", "manufacturer", "VOLKSWAGEN-VW")),
+        ("BAYER.MOT.WERKE-BMW", "BMW", kba_id, kba_locator("0005", "AMQ", "manufacturer", "BAYER.MOT.WERKE-BMW")),
     ]:
         mid, name, _, _ = makes[target]
         makes[alias] = (mid, name, sid, locator)
@@ -98,7 +106,7 @@ def build():
                 "vpic.model id=" + row["modelid"] + "; vpic.make_model makeid=" + row["makeid"]))
     models[("vw", "GOLF")] = ("vw:golf", "Golf", "vw-golf-v-profile", "Golf V profile; model family Golf, factory type 1K")
     models[("tesla", "MODEL Y")] = ("tesla:model-y", "Model Y", "tesla-model-y-2025-service-manual", "Model Y 2025+ service manual / VIN decoding")
-    models[("vw", "GOLF SPORTSVAN")] = ("vw:golf-sportsvan", "Golf Sportsvan", kba_id, "sourceObjectId=196017; tradeName=GOLF SPORTSVAN; case-only display normalization")
+    models[("vw", "GOLF SPORTSVAN")] = ("vw:golf-sportsvan", "Golf Sportsvan", kba_id, kba_locator("0603", "BMT", "tradeName", "GOLF SPORTSVAN") + "; case-only display normalization")
     rows = [["V", VERSION]]
     for source in sorted(sources.values(), key=lambda s: s["id"]):
         rows.append(["S", *[b64(source.get(k)) for k in SOURCE_KEYS]])

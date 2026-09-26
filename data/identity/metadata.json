@@ -4,5 +4,5 @@
   "policy": "Exact make-scoped labels only; ASCII case comparison and explicit sourced aliases. No fuzzy model-family inference. Canonical display names are ORvin policy.",
   "reviewedOn": "2026-09-26",
   "generator": "tools/identity.py",
-  "fixturesSha256": "aa87a66bff7f6afaab0f5a4b6ce0bde1d8f3caf36009d54a2402838188da7600"
+  "fixturesSha256": "1f38448dc4e5d17bd3875a9cf4754e940cf1629b2b2d6efbe2399a98345265b0"
 }

@@ -30,7 +30,8 @@ class VehicleAnswerTest {
         assertEquals(answer.shortResult(), longWithoutDetails);
         long approvals = JsonValues.object(details.get("evidence")).values().stream()
                 .filter(e -> "TYPE_APPROVAL".equals(JsonValues.object(e).get("kind"))).count();
-        assertEquals(411, approvals);
+        assertTrue(approvals > 0);
+        assertEquals(VinDecoder.bundled().decode("WVWZZZ1KZ5P000001").typeApprovals().candidates().size(), approvals);
         assertThrows(UnsupportedOperationException.class, () -> answer.shortResult().clear());
         assertThrows(UnsupportedOperationException.class, () -> ((Map<?, ?>) answer.shortResult().get("vehicle")).clear());
         assertThrows(UnsupportedOperationException.class, () -> ((Map<?, ?>) answer.longResult().get("details")).clear());

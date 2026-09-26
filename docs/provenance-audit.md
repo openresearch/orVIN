@@ -21,13 +21,14 @@ Contributor requirements are in [AGENTS.md](../AGENTS.md).
 | Behavioral comparison sources | 4 public partial-VIN API responses | Original response bytes retained and hashed; fixtures link to the source records |
 | Tesla Model Y | 2 factory layouts, 9 attribute rules and 3 production-year codes | One reviewed manual source, scope, edition, table locator and inspection hash |
 | Volkswagen Golf | 2 bounded model-year-2005 factory rules | Three source documents; field-specific references and explicit explanation of the combined evidence |
-| Research reports | 96 distinct cited URLs | Citation inventory records report/section locations; research leads are not automatically runtime evidence |
+| Research reports | 109 distinct cited URLs | Citation inventory records report/section locations; research leads are not automatically runtime evidence |
 | Shared identity catalog | 12,447 make-label bindings, 32,010 model-label bindings | Exact reconstruction from pinned source labels, stable identities, source IDs and row locators; these are label bindings, not VIN coverage counts |
 | Owner-contributed Golf 5 fixture | 1 expressly authorized VIN from Austria | Owner permission and attribution recorded; owner-reported model/country separated from the rule-derived model year |
+| Contributed BMW X1 and Subaru Legacy fixtures | 2 expressly authorized test VINs | User reports and permission retained; ownership/year not assumed; current decoding gaps recorded |
 | Entire shared data tree | 538 files | Exact inventory: undeclared new files or missing files fail validation |
 
 There are **21 bundled upstream source records** across the WMI, KBA, OEM, ASTRA and
-snapshot/review manifests, plus the separately recorded owner contribution and
+snapshot/review manifests, plus the three separately recorded user contributions and
 the separately licensed WA validation source.
 A source record may cover many rows when
 each row retains its original identity and the source projection is reproducible.
@@ -63,7 +64,7 @@ seen during review; without retaining those bytes they do not guarantee that a
 future download will reproduce them. The package retains the selected factual
 associations, exact citations, scope and reuse assessments.
 
-The 96 research citations are an inventory of leads and supporting references.
+The 109 research citations are an inventory of leads and supporting references.
 Their regional report sections preserve the document assessments, applicability
 and remaining gaps. Inventory validation checks citation continuity, not the
 current availability or accuracy of every linked document. Each newly implemented
@@ -115,3 +116,12 @@ review the citations and refresh their location inventory with
 Java validation runs via `cd libs/java && ./mvnw verify`. After fresh Java/Python
 builds, run `tools/check_parity.py` and `tools/check_packages.py` as described in
 [rich decoding](rich-decoding.md) and [NHTSA packaging](nhtsa-data.md).
+
+## Automatic-update work, 2026-09-26
+
+Added attributed BMW/Subaru fixtures and a sourced all-family BMW research report.
+The report is research only; no BMW/Subaru decoding rules have been promoted.
+Structured-source refreshes preserve the manually reviewed rule and fixture boundary;
+see [automatic updates](automatic-updates.md). The initial live comparison found no
+new NHTSA, KBA or ASTRA source content. Fresh validation results are recorded with
+the release workflow; the earlier artifact measurements above describe their original build.

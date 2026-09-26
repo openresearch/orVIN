@@ -63,7 +63,7 @@ def templates(value):
     return tuple(sorted(set(parts)))
 
 
-def compile_snapshot(snapshot, output, source):
+def compile_snapshot(snapshot, output, source, version=None):
     output.mkdir(parents=True, exist_ok=True)
     buckets = defaultdict(list)
     counts = Counter()
@@ -98,7 +98,7 @@ def compile_snapshot(snapshot, output, source):
             cells += [b64("\n".join(row[i] for i in group if row[i])) for group in positions]
             for wmi in sorted({p[:3] for p in patterns}):
                 buckets[wmi].append("\t".join(cells) + "\n")
-    index = [["V", "astra-targa-2026-07-30-v1"]]
+    index = [["V", version or json.loads((DIRECTORY / "metadata.json").read_text())["version"]]]
     source_keys = ("id", "title", "publisher", "url", "edition", "section", "retrievedOn", "reuseBasis",
                    "archivePath", "archiveSha256", "inspectedSha256", "evidencePath")
     index.append(["D", *[b64(source[k]) for k in source_keys]])
@@ -142,6 +142,10 @@ def validate(directory=DIRECTORY):
         if rebuilt != metadata:
             raise ValueError("ASTRA projection metadata is stale")
         expected = {"metadata.json", "review.json", archive.name}
+        # Older byte snapshots remain only while reviewed fixtures cite them.
+        historical = json.loads((directory.parent / "snapshots/metadata.json").read_text())
+        expected.update(Path(s["snapshot"]).name for s in historical
+                        if s.get("snapshot", "").startswith("astra/"))
         for path in generated.rglob("*"):
             if path.is_file():
                 relative = path.relative_to(generated)

@@ -17,14 +17,16 @@ from urllib.request import urlopen
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-EDITION = "2026_09"
-VERSION = "2026.09.25.2"
-RETRIEVED_ON = "2026-09-25"
-PUBLISHED_ON = "2026-09-19"
+PINS = json.loads((ROOT / "tools/source-pins.json").read_text())
+PIN = PINS["nhtsa"]
+EDITION = PIN["edition"]
+VERSION = PIN["version"]
+RETRIEVED_ON = PIN["retrievedOn"]
+PUBLISHED_ON = PIN["publishedOn"]
 FILENAME = f"vPICList_lite_{EDITION}.plain.zip"
 URL = "https://vpic.nhtsa.dot.gov/downloads/" + FILENAME
-SHA256 = "1ee4a1e22526a606b492ce4ab301894465afbf43dc00946df6d503c3102d5911"
-SOURCE_ID = "nhtsa-vpic-2026-09"
+SHA256 = PIN["sha256"]
+SOURCE_ID = PIN["sourceId"]
 TABLES = {"wmi", "manufacturer", "make", "wmi_make", "vehicletype"}
 ALIASES = {"988": "american-honda", "1057": "toyota-motor", "966": "bmw-ag",
            "1148": "volkswagen-ag", "976": "ford-motor", "971": "hombilt-trailers"}
@@ -175,9 +177,9 @@ def derive(archive):
         with zipped.open(members[0]) as stream:
             tables, inventory = read_tables(io.TextIOWrapper(stream, encoding="utf-8-sig"))
     manufacturers, assignments, exclusions = project(tables)
-    source = {"id": SOURCE_ID, "title": "NHTSA vPIC standalone database, September 2026",
+    source = {"id": SOURCE_ID, "title": PIN["title"],
               "url": URL, "publisher": "NHTSA", "retrievedOn": RETRIEVED_ON,
-              "publicationVersion": "2026-09; published " + PUBLISHED_ON,
+              "publicationVersion": EDITION.replace("_", "-") + "; published " + PUBLISHED_ON,
               "section": "WMI, manufacturer, wmi_make, make and vehicletype tables; full original database retained in snapshot.",
               "reuse": {"license": "LicenseRef-NHTSA-Public-Information",
                         "url": "https://www.nhtsa.gov/about-nhtsa/terms-use",

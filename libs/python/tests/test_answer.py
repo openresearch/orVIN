@@ -66,13 +66,29 @@ class AnswerTest(unittest.TestCase):
             self.assertTrue(source["reuseBasis"])
             self.assertTrue(source["modifications"])
 
+    def test_contributed_vehicles_never_resolve_to_a_conflicting_identity(self):
+        fixtures = json.loads((ROOT / "data/identity/fixtures.json").read_text())
+        contributed = [f for f in fixtures if "reportedExpectations" in f]
+        self.assertTrue(contributed)
+        for fixture in contributed:
+            with self.subTest(fixture=fixture["id"]):
+                self.assertTrue(fixture["source"]["permission"])
+                answer = self.decoder.decode_vehicle(fixture["vin"]).vehicle
+                for field, value in fixture["expected"].items():
+                    self.assertEqual(value, answer[field])
+                for field, value in fixture["reportedExpectations"].items():
+                    if answer[field] is not None:
+                        self.assertEqual(value, answer[field])
+
     def test_long_is_lossless_extension_with_resolvable_references(self):
         answer = self.decoder.decode_vehicle("WVWZZZ1KZ5P000001")
         short, long = answer.short(), answer.long()
         details = long.pop("details")
         self.assertEqual(short, long)
         approvals = [e for e in details["evidence"].values() if e["kind"] == "TYPE_APPROVAL"]
-        self.assertEqual(411, len(approvals))
+        raw = self.decoder.decode("WVWZZZ1KZ5P000001")
+        self.assertGreater(len(approvals), 0)
+        self.assertEqual(len(raw["typeApprovals"]["candidates"]), len(approvals))
         self.assertTrue(any("remarks" in e["record"]["fields"] for e in approvals))
         sources = {s["id"] for s in short["sources"] + details["provenance"]["additionalSources"]}
         for evidence in details["evidence"].values():
