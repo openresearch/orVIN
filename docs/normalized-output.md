@@ -1,7 +1,7 @@
 # Normalized answers and JSON output
 
-Available in the current 0.2.0 development checkout. The released 0.1.0 artifacts
-retain the earlier API. Both libraries resolve one identity and expose two views:
+Available in ORvin 0.2.0 and later. Both libraries resolve one identity and expose
+two views:
 
 - Short: `schemaVersion`, normalized `vin` (or string `hsn`/`tsn`), `inputStatus`,
   `vehicle`, `fieldStatus`, `assumptions`, and self-contained `sources` credits.

@@ -9,7 +9,7 @@ bundled for offline use.
 Offline VIN manufacturer and German HSN/TSN lookup. Python 3.10+, no runtime dependencies.
 The wheel includes the same canonical datasets used by Java: 12,998 usable NHTSA WMIs and
 63,260 KBA HSN/TSN records, plus the complete 76.2 MB NHTSA source ZIP and KBA snapshot.
-The development version after v0.1.0 uses 1,343,387 public patterns to decode model, year,
+ORvin 0.2.1 uses 1,343,387 public patterns to decode model, year,
 factory and other vehicle fields with explicit scope/provenance. Selected European Tesla
 Model Y rules distinguish production year from model year. Runtime loads required compressed
 shards through bounded caches and never executes SQL or uses a database server.
@@ -26,7 +26,7 @@ long_values = answer.long()  # same root values, plus details
 vin = VinDecoder.bundled().decode("1HGAAAAAAAAAAAAAA")  # synthetic example
 print(vin["manufacturer"]["value"]["name"])
 
-# Current development version:
+# Scoped US-market decoding:
 vehicle = VinDecoder.bundled().decode("1HGCM82603A000000", Context(market="US"))
 print(vehicle["model"]["value"])  # Accord
 print(vehicle["details"]["fields"]["PlantCity"]["value"])  # MARYSVILLE
@@ -54,12 +54,11 @@ or digits. Normalization only trims ASCII spaces and uppercases ASCII letters. L
 2.2 codes are not silently truncated. An absent type remains unknown: the KBA snapshot records
 the stock at one reference date, not every type ever assigned. VIN cannot determine HSN/TSN.
 
-Install the [0.1.0 release](https://github.com/openresearch/orvin/releases/tag/v0.1.0) wheel:
-
-That release supports manufacturer and HSN/TSN lookup. Rich decoding currently requires a source build.
+Install the [0.2.1 release](https://github.com/openresearch/orvin/releases/tag/v0.2.1) wheel,
+including normalized answers, rich decoding and the bundled dataset:
 
 ```sh
-python3 -m pip install https://github.com/openresearch/orvin/releases/download/v0.1.0/orvin-0.1.0-py3-none-any.whl
+python3 -m pip install https://github.com/openresearch/orvin/releases/download/v0.2.1/orvin-0.2.1-py3-none-any.whl
 ```
 
 The wheel/sdist are GitHub Release assets; the package is not published on PyPI.
