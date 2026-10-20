@@ -35,7 +35,7 @@
       <resource><directory>../..</directory><targetPath>META-INF</targetPath><includes><include>LICENSE</include><include>NOTICE</include></includes></resource>
     </resources>
     <plugins>
-      <plugin><groupId>org.codehaus.mojo</groupId><artifactId>exec-maven-plugin</artifactId><version>3.5.0</version>
+      <plugin><groupId>org.codehaus.mojo</groupId><artifactId>exec-maven-plugin</artifactId><version>3.6.4</version>
         <executions>
           <execution><id>validate-shared-data</id><phase>generate-resources</phase><goals><goal>exec</goal></goals><configuration>
             <executable>${python}</executable><arguments><argument>../../tools/dataset.py</argument><argument>--output</argument><argument>target/generated-resources/com/openresearch/orvin/dataset.tsv</argument></arguments>
